@@ -1,2 +1,1 @@
-# learnjs
 learn js personally
