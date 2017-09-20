@@ -8,4 +8,5 @@ categories: 学习
 ## 第一部分:基础部分
 - 基本语法
 - 数据类型和变量
-learn js personally
+- 字符串
+- 数组
