@@ -3,7 +3,7 @@ title: tool-js
 date: 2017-09-21 18:30:19
 tags: javascript
 categories: 学习
-plan: 学完廖雪峰就学阮一峰的jstraining
+plan: 学完廖雪峰就学阮一峰的js-training
 ---
 
 ## 第一部分:基础部分
@@ -19,4 +19,4 @@ plan: 学完廖雪峰就学阮一峰的jstraining
 
 ## 第二部分：函数(代码抽象的方式)
 - 函数定义和调用
-- 
+- 变量作用域
