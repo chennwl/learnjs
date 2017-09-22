@@ -14,6 +14,12 @@
     m.get('Adam'); // undefined
     ```
     - 一个Key只能对应一个value，多次对一个key放入value，后面的值会把前面的值冲掉
+    ```javascript
+    var m = new Map();
+    m.set('Adam', 67);
+    m.set('Adam', 88);
+    m.get('Adam'); // 88
+    ```
 - Set
     - 一组key的集合，但不存储value，没有重复的Key
     - 创建一个Set，需要提供一个数组作为输入，或者直接创建一个空`Set`

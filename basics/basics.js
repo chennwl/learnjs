@@ -1,4 +1,12 @@
 'use strict'
+//字符串
+var name = '小明';
+var age = 20;
+console.log(`你好, ${name}, 你今年${age}岁了!`);
+//字符串的减法
+var a = "2",
+    b = "1";
+console.log(a - b); //1
 //对象
 var xiaoming = {
     name: '小明',
@@ -54,4 +62,11 @@ a.forEach(function(element, index, array) {
     // index: 指向当前索引
     // array: 指向Array对象本身
     console.log(element);
+});
+
+m.forEach(function(value, key, map) {
+    // element: 指向当前元素的值
+    // index: 指向当前索引
+    // array: 指向Array对象本身
+    console.log(value); //x y z
 });

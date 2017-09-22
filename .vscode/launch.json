@@ -3,20 +3,28 @@
     // 悬停以查看现有属性的描述。
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [{
-            "type": "chrome",
-            "request": "launch",
-            "file": "${workspaceRoot}/basics/index.html",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:8080",
-            "runtimeExecutable": "/Applications/Google Chrome 2.app/Contents/MacOS/Google Chrome",
-            "webRoot": "${workspaceRoot}"
-        },
+    "configurations": [
+        // {
+        //     "type": "chrome",
+        //     "request": "launch",
+        //     "file": "${workspaceRoot}/basics/index.html",
+        //     "name": "Launch Chrome against localhost",
+        //     "url": "http://localhost:8080",
+        //     "runtimeExecutable": "/Applications/Google Chrome 2.app/Contents/MacOS/Google Chrome",
+        //     "webRoot": "${workspaceRoot}"
+        // },
+        // {
+        //     "type": "node",
+        //     "request": "launch",
+        //     "name": "basics",
+        //     "program": "${workspaceRoot}/basics/basics.js",
+        //     "cwd": "${workspaceRoot}"
+        // },
         {
             "type": "node",
             "request": "launch",
-            "name": "启动程序",
-            "program": "${workspaceRoot}/basics/basics.js",
+            "name": "function",
+            "program": "${workspaceRoot}/function/function.js",
             "cwd": "${workspaceRoot}"
         },
         {

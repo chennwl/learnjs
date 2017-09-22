@@ -13,10 +13,17 @@ for (var x of s) { // 遍历Set
     console.log(x);
 }
 for (var x of m) { // 遍历Map
-    console.log(x[0] + '=' + x[1]);
+    console.log(x[0] + '=' + x[1]);         //遍历出入1=x的结果
 }
 ```
 - `for...of`循环完全修复了`for...in`的问题，只会循环集合本身的元素
+```javascript
+var a = ['A', 'B', 'C'];
+a.name = 'Hello';
+for (var x of a) {
+    console.log(x); // 'A', 'B', 'C'
+}
+```
 - `iterable`内置`forEach`方法，也可以遍历
     - 以`Array`为例：
     ```javascript
