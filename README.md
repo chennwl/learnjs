@@ -25,3 +25,4 @@ plan: 学完廖雪峰就学阮一峰的js-training
     - map/reduce
     - filter
     - sort
+- 闭包

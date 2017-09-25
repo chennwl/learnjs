@@ -29,6 +29,13 @@
         },
         {
             "type": "node",
+            "request": "launch",
+            "name": "high-order-function",
+            "program": "${workspaceRoot}/function/high-order-function.js",
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "type": "node",
             "request": "attach",
             "name": "附加到进程",
             "port": 5858
