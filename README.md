@@ -26,3 +26,5 @@ plan: 学完廖雪峰就学阮一峰的js-training
     - filter
     - sort
 - 闭包
+- 箭头函数(=>)
+- generator(生成器)

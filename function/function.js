@@ -68,6 +68,55 @@ var xiaoming = {
     birth: 1990,
     age: getAge
 };
-xiaoming.age(); // 25
+xiaoming.age(); // 27
 // getAge();       //Cannot read property 'birth' of undefined
 getAge.apply(xiaoming, []);
+
+//箭头函数的this总是指向词法作用域
+var obj_1 = {
+    birth: 1990,
+    getAge: function() {
+        var b = this.birth; // 1990
+        /*
+        var fn = function () {
+            return new Date().getFullYear() - this.birth; // this指向window或undefined
+        };
+        */
+        var fn = () => new Date().getFullYear() - this.birth; // this指向obj对象
+        return fn();
+    }
+};
+obj_1.getAge(); // 25
+
+//箭头函数的call和apply时第一个参数被忽略
+var obj = {
+    birth: 1990,
+    getAge: function(year) {
+        var b = this.birth; // 1990
+        var fn = (y) => y - this.birth; // this.birth仍是1990
+        return fn.call({ birth: 2000 }, year); //{birth:2000}被忽略了
+    }
+};
+console.log(obj.getAge(2015));
+
+//generator函数next()用法
+// function* gen(x) {
+//     var y = yield x + 2;
+//     return y;
+// }
+// var g = gen(1);
+// console.log(g.next());
+// console.log(g.next());
+
+function* gen(x) {
+    try {
+        var y = yield x + 2;
+    } catch (e) {
+        console.log(e);
+    }
+    return y;
+}
+
+var g = gen(1);
+console.log(g.next());
+g.throw('出错了'); // 出错了
