@@ -28,3 +28,13 @@ plan: 学完廖雪峰就学阮一峰的js-training
 - 闭包
 - 箭头函数(=>)
 - generator(生成器)
+
+## 第三部分：对象
+- Date
+- RegExp
+- JSON
+
+## 第四部分：面向对象编程
+- 创建对象
+- 原型继承
+- class继承

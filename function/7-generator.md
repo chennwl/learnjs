@@ -6,19 +6,6 @@
 - 直接调用generator函数只会产生一个generator对象，调用generator对象有两个方法
     - 不断地调用generator对象的`next()`方法
     ```javascript
-    function* gen(x){
-    var y = yield x + 2;
-    return y;
-    }
-    var g = gen(1);
-    gen.next();     //{ value: 3, done: false }
-    gen.next();     //{ value: undefined, done: true }
-    ```
-    在这里，直接调用Generator函数，会返回一个内部指针g，即执行它不会返回结果，返回的是指针对象。调用指针g的`next()`方法，会移动内部指针（即执行异步任务的第一段），指向第一个遇到的`yield`语句并返回结果。
-    **总结：`next()`方法的作用是分阶段执行Generator函数。每次调用`next()`方法，会返回一个对象，表示当前阶段的信息（`value`属性和`done`属性）。`value`属性是 `yield`语句后面表达式的值，表示当前阶段的值；`done`属性是一个布尔值，表示Generator函数是否执行完毕，即是否还有下一个阶段。当`done`为`true`时，generator对象就已经全部执行完毕。** 
-
-    - 直接用`for ... of`循环迭代generator对象，这种方式不需要判断`done`
-    ```javascript
     function* fib(max) {
         var
             t,
@@ -34,6 +21,19 @@
         }
         return a;
     }
+    var f = fib(5);
+    f.next(); // {value: 0, done: false}
+    f.next(); // {value: 1, done: false}
+    f.next(); // {value: 1, done: false}
+    f.next(); // {value: 2, done: false}
+    f.next(); // {value: 3, done: true}
+    f.next(); //{ value: undefined, done: true }
+    ```
+    在这里，直接调用Generator函数，会返回一个内部指针f，即执行它不会返回结果，返回的是指针对象。调用指针f的`next()`方法，会移动内部指针（即执行异步任务的第一段），指向第一个遇到的`yield`语句并返回结果。  
+    **总结：`next()`方法的作用是分阶段执行Generator函数。每次调用`next()`方法，会返回一个对象，表示当前阶段的信息（`value`属性和`done`属性）。`value`属性是 `yield`语句后面表达式的值，表示当前阶段的值；`done`属性是一个布尔值，表示Generator函数是否执行完毕，即是否还有下一个阶段。当`done`为`true`时，generator对象就已经全部执行完毕。** 
+
+    - 直接用`for ... of`循环迭代generator对象，这种方式不需要判断`done`
+    ```javascript
     for (var x of fib(5)) {
         console.log(x); // 依次输出0, 1, 1, 2, 3
     }
@@ -72,13 +72,14 @@ function* gen(){
   var result = yield fetch(url);
   console.log(result.bio);
 }
+//generator函数封装了一个异步操作，该操作先读取一个异步接口，然后从JSON格式的数据解析信息
+//执行上面这段代码
 var g = gen();
 var result = g.next();
-
 result.value.then(function(data){
   return data.json();
 }).then(function(data){
   g.next(data);
 });
 ```
-首先执行Generator函数，获取遍历器对象，然后使用`next()`方法，执行异步任务的第一阶段。由于`Fetch`模块返回的是一个`Promise`对象，因此要用 `then`方法调用下一个`next()`方法。
+在执行代码中，首先执行Generator函数，获取遍历器对象，然后使用`next()`方法，执行异步任务的第一阶段。由于`Fetch`模块返回的是一个`Promise`对象，因此要用 `then`方法调用下一个`next()`方法。
