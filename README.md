@@ -46,3 +46,4 @@ plan: 学完廖雪峰就学阮一峰的js-training
     - 插入DOM
     - 删除DOM
 - 操作表单
+- 操作文件
