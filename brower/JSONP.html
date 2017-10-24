@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JSONP</title>
+</head>
+
+<body>
+    <p id="test-jsonp"></p>
+    <div id="test-promise">
+        <div class="first"></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <canvas id="test-canvas"></canvas>
+</body>
+<script>
+    var pro = document.getElementById('test-promise');
+    while (pro.children.length > 1) {
+        pro.removeChild(pro.children[pro.children.length - 1]);
+    }
+
+    function getPrice() {
+        var
+            js = document.createElement('script'),
+            head = document.getElementsByTagName('head')[0];
+        js.src = 'http://api.money.126.net/data/feed/0000002,1399001?callback=refreshPrice';
+        //返回的会是refreshPrice(data)的结果，这时callback函数就能做处理了
+        head.appendChild(js);
+    }
+
+    //callback函数
+    function refreshPrice(data) {
+        var p = document.getElementById('test-jsonp');
+        console.log(data);
+        p.innerHTML = '当前价格：' +
+            data['0000002'].name + ': ' +
+            data['0000002'].price + '；' +
+            data['1399001'].name + ': ' +
+            data['1399001'].price;
+    }
+
+    getPrice();
+
+    function sum(x, y, z) {
+        console.log(x + y + z);
+    }
+    setTimeout(sum, 1000, 1, 2, 3);
+
+    var canvas = document.getElementById("test-canvas");
+    var ctx = canvas.getContext('2d');
+    console.log(ctx);
+</script>
+
+</html>

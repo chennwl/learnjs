@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jQuery</title>
+    <style>
+        span {
+            color: red;
+        }
+        
+        div {
+            background: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <p>In this paragraph is an <span>important</span> section</p>
+
+    <div><input type="text" /></div>
+    <ul class="lang">
+        <li class="js dy">JavaScript</li>
+        <li class="dy">Python</li>
+        <li id="swift">Swift</li>
+        <li class="dy">Scheme</li>
+        <li name="haskell">Haskell</li>
+    </ul>
+
+    <div id="test-div">
+        <ul>
+            <li><span>JavaScript</span></li>
+            <li><span>Python</span></li>
+            <li><span>Swift</span></li>
+        </ul>
+    </div>
+</body>
+<script src="jquery-2.1.1.min.js"></script>
+<script>
+    //next(),prev()同理
+    var swift = $('#swift');
+    console.log(swift.next()); // Scheme
+    console.log(swift.next('[name=haskell]')); // 空的jQuery对象，因为Swift的下一个元素Scheme不符合条件[name=haskell]
+
+    //map()
+    var langs = $('ul.lang li'); // 拿到JavaScript, Python, Swift, Scheme和Haskell
+    var arr = langs.map(function() {
+        return this.innerHTML;
+    }).get(); // 用get()拿到包含string的Array：['JavaScript', 'Python', 'Swift', 'Scheme', 'Haskell']
+    console.log(arr);
+
+    //选择器
+    console.log($("*", document.body));
+    console.log($("p", document.body));
+    console.log($("body"));
+    console.log($(document.body)); //这个和下面这个是一样的
+    console.log($(document.body, "*"));
+
+    var ul = $('#test-div>ul');
+    // 创建DOM对象:
+    var ps = document.createElement('li');
+    ps.innerHTML = '<span>Pascal</span>';
+    // 添加DOM对象:
+    ul.append(ps);
+
+    // 添加jQuery对象:
+    ul.append($('#scheme'));
+
+    // 添加函数对象:
+    ul.append(function(index, html) {
+        return '<li><span>Language - ' + index + '</span></li>';
+    });
+</script>
+
+</html>
