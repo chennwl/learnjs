@@ -60,8 +60,15 @@ plan: 学完廖雪峰就学阮一峰的js-training
 - 事件
 - 动画
 - AJAX
-- 拓展
+- 扩展
 
 ## 第七部分 错误处理
 - 错误传播
 - 异步错误处理
+
+## 第八部分 underscore
+- Collections
+- Arrays
+- Functions
+- Objects
+- Chaining
