@@ -35,5 +35,5 @@
     console.log(s);     //Set { 1, 2, 3, 4 }
     s.add(4);       //Set { 1, 2, 3, 4 }没变化
     s.delete(3);
-    s; // Set {1, 2,4}
+    s; // Set {1, 2, 4}
     ```

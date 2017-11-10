@@ -66,11 +66,11 @@ function getAge() {
 var xiaoming = {
     name: '小明',
     birth: 1990,
-    age: getAge
+    age: getAge     //在这里this就是xiaoming
 };
 xiaoming.age(); // 27
 // getAge();       //Cannot read property 'birth' of undefined
-getAge.apply(xiaoming, []);
+getAge.apply(xiaoming, []); //27
 
 //箭头函数的this总是指向词法作用域
 var obj_1 = {
@@ -97,7 +97,7 @@ var obj = {
         return fn.call({ birth: 2000 }, year); //{birth:2000}被忽略了
     }
 };
-console.log(obj.getAge(2015));
+console.log(obj.getAge(2015));  //25
 
 //generator函数next()用法
 // function* gen(x) {

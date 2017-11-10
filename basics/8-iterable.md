@@ -5,7 +5,7 @@
 'use strict';
 var a = ['A', 'B', 'C'];
 var s = new Set(['A', 'B', 'C']);
-var m = new Map([[1, 'x'], [2, 'y'], [3, 'z']]);
+var m = new Map([[1, 'x'], [2, 'y'], [3, 'z']]);    //1,2,3都是键
 for (var x of a) { // 遍历Array
     console.log(x);
 }
@@ -32,14 +32,14 @@ for (var x of a) {
         // element: 指向当前元素的值
         // index: 指向当前索引
         // array: 指向Array对象本身
-        alert(element);
+        console.log(element);
     });
     ```
-    - `Set`没有索引，回调函数的前两个参数都是元素本身
+    - `Set`没有索引，回调函数的前两个参数都是element元素本身
     - `Map`的回调函数参数依次为`value`、`key`和`map`本身
     ```javascript
     var m = new Map([[1, 'x'], [2, 'y'], [3, 'z']]);
     m.forEach(function (value, key, map) {
-        alert(value);
+        console.log(value);
     });
     ```

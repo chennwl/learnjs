@@ -71,4 +71,5 @@ plan: 学完廖雪峰就学阮一峰的js-training
 - Arrays
 - Functions
 - Objects
+- 实用功能(Utility Functions)
 - Chaining

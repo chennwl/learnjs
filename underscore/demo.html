@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        p{width:200px;}
+    </style>
 </head>
 <body>
-    
+    <button type="button" class="" id="underscore_button">underscore</button>
 </body>
 <script src="underscore-min.js"></script>
 <script>
@@ -32,7 +35,7 @@
     //  console.log(_.every([1, 4, 7, -3, -9], (x) => x > 0)); //false
     //  console.log(_.some([1,4,7,-3,-9],(x) => x > 0));   //true
 
-     //groupBy
+    //groupBy
     var scores = [20, 81, 75, 40, 91, 59, 77, 66, 72, 88, 99];
     var groups = _.groupBy(scores, function (x) {
         if (x < 60) {
@@ -63,8 +66,101 @@
     //difference
     console.log(_.difference([1, 2, 3, 4, 5], [5, 2, 10])); //[1,,3,4]
 
+    //zip
+     _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);
+
     //unzip
     var namesAndScores = [['Adam', 85], ['Lisa', 92], ['Bart', 59]];
     console.log(_.unzip(namesAndScores));
+
+    //sortedIndex二分查找
+    console.log(_.sortedIndex([10, 20, 30, 40, 50], 35));   //3
+
+    //bind
+    var func = function (greeting) { return greeting + ': ' + this.name };
+    func = _.bind(func, { name: 'moe' }, 'hi','2');
+    console.log(func()); //'hi:moe'
+
+    //bindAll
+    var buttonView = {
+        label: 'underscore',
+        onClick: function () { alert('clicked: ' + this.label); },
+        onHover: function () { console.log('hovering: ' + this.label); }
+    };
+    _.bindAll(buttonView, 'onClick', 'onHover');
+    // When the button is clicked, this.label will have the correct value.
+    document.getElementById("underscore_button").onclick =  buttonView.onClick;
+
+    // var log = _.bind(console.log, console);
+    // _.delay(log, 2000, 'Hello,', 'world!');
+
+    _.defer(function () { console.log('deferred'); });
+    // Returns from the function before the alert runs.
+
+    //wrap
+    var hello = function (name) { return "hello: " + name; };
+    hello = _.wrap(hello, function (func) {
+        // console.log(func);  //ƒ (name) { return "hello: " + name; }
+        return "before, " + func("moe") + ", after";
+    });
+    hello();        //'before, hello: moe, after'
+
+    //negate
+    var isFalsy = _.negate(Boolean);
+    _.find([-2, -1, 0, 1, 2], isFalsy); //0
+
+    //compose
+    var greet = function (name) { return "hi: " + name; };
+    var exclaim = function (statement) { return statement.toUpperCase() + "!"; };
+    var welcome1 = _.compose(greet, exclaim);
+    var welcome2 = _.compose(exclaim, greet);    
+//    console.log(welcome1('moe'));    //hi: MOE!  //由后到前
+//    console.log(welcome2('moe'));    //HI: MOE!
+
+   //allKeys()
+   function Student(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    Student.prototype.school = 'No.1 Middle School';
+    var xiaoming = new Student('小明', 20);
+    console.log(_.allKeys(xiaoming)); // ['name', 'age', 'school']
+
+    //_.function(_)
+    // console.log(_.functions(_));
+
+    //extendOwn
+    var a = {name: 'Bob', age: 20};
+    function Person(){
+        this.age = 88;
+        this.city = 'beijing';
+    }
+    Person.prototype.hello = function(){
+        console.log("prototype");
+    }
+    var b = new Person();
+    _.extendOwn(a, {age: 15}, b); 
+    console.log(a);     //没有把继承过来的复制
+    //clone
+    console.log(_.clone(b));    //继承的也会复制
+
+    //tap
+    // _.chain([1, 2, 3, 200])
+    //     .filter(function (num) { return num % 2 == 0; })
+    //     .tap(alert)
+    //     .map(function (num) { return num * num })
+    //     .value();
+
+    //isError
+    // try {
+    //     throw new TypeError("Example");
+    // } catch (o_O) {
+    //     console.log(_.isError(o_O));        //true
+    // }
+
+    //isNaN
+    console.log(_.isNaN(NaN));  //true
+    console.log(isNaN(undefined));  //true
+    console.log(_.isNaN(undefined));    //false
 </script>
 </html>

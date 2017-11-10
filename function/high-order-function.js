@@ -6,8 +6,8 @@ function pow(x) {
 }
 
 var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-// var newArr = arr.map(pow); // [1, 4, 9, 16, 25, 36, 49, 64, 81]
-var newArr = arr.map(String); //['1', '2', '3', '4', '5', '6', '7', '8', '9']
+var newArr = arr.map(pow); // [1, 4, 9, 16, 25, 36, 49, 64, 81]
+    newArr = arr.map(String); //['1', '2', '3', '4', '5', '6', '7', '8', '9']
 console.log(newArr);
 
 //map()和reduce()高阶函数结合函数
@@ -85,7 +85,7 @@ function get_primes(arr) {
     });
 }
 
-// 测试:
+// 测试质数:
 var filter = {};
 filter.arr = [];
 for (var x = 1; x < 100; x++) {

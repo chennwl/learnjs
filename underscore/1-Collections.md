@@ -1,5 +1,5 @@
 ## underscore
-- `Underscore` 是一个 JavaScript 工具库，它提供了一整套函数式编程的实用功能，[Underscore.js中文文档](http://www.bootcss.com/p/underscore/);
+- `Underscore` 是一个 JavaScript 工具库（函数库），它提供了一整套函数式编程的实用功能[Underscore.js文档](http://underscorejs.org);
 
 ## Collections，这是集合类，指的是Array和Object都可以使用的方法，暂不支持Map和Set
 - `each`/`map`/`reduce`/`filter`/`find`/`reject`不但可以作用于Array，还可以作用于Object，此时，传入的参数为`function(value,key)`
@@ -32,7 +32,7 @@ var even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; }); //
     ```javascript
     _.some([1, 4, 7, -3, -9], (x) => x > 0); // true
     ```
-    - `_.contains(list,value)`，如果list包含指定的`value`则返回`true`（注：使用===检测）
+    - `_.contains(list,value)`，如果list包含指定的`value`则返回`true`（注：使用`===`检测）
     ```javascript
     _.contains([1, 2, 3], 3);       //true
     ```
@@ -48,7 +48,7 @@ _.max([])
 _.min([])
 Infinity
 
-//集合是Object
+//集合是Object会比较key值
 _.max({ a: 1, b: 2, c: 3 }); // 3   
 ```
 - `sortBy`/`groupBy`/`indexBy`/`countBy`
@@ -75,7 +75,7 @@ _.max({ a: 1, b: 2, c: 3 }); // 3
     //   C: [20, 40, 59]
     // }
     ```
-    - `_.indexBy(list, iteratee, [context])`，和`groupBy`非常像，当键是唯一的时候可以使用`indexBy`
+    - `_.indexBy(list, iteratee, [context])`，和`groupBy`非常像，而当键是唯一的时候可以使用`indexBy`
     ```javascript
     var stooges = [{name: 'moe', age: 40}, {name: 'larry', age: 50}, {name: 'curly', age: 60}];
     _.indexBy(stooges, 'age');
@@ -91,7 +91,7 @@ _.max({ a: 1, b: 2, c: 3 }); // 3
     _.countBy([1, 2, 3, 4, 5], function(num) {
         return num % 2 == 0 ? 'even': 'odd';
     });
-    //{odd: 3, even: 2}
+    //{odd: 3, even: 2}     //odd:奇数,even:偶数
     ```
 - `shuffle`/`sample`
     - `shuffle()`用洗牌算法随机打乱一个集合
@@ -118,6 +118,6 @@ _.max({ a: 1, b: 2, c: 3 }); // 3
     ```
     - `_.partition(array, predicate)`，拆分一个数组（array）为两个数组：第一个数组其元素都满足predicate迭代函数，而第二个的所有元素均不能满足predicate迭代函数
     ```javascript
-    _.partition([0, 1, 2, 3, 4, 5], isOdd); //[[1, 3, 5], [0, 2, 4]]
+    _.partition([0, 1, 2, 3, 4, 5], isOdd); //[[1, 3, 5], [0, 2, 4]]        //isOdd是否是奇数
     ```
-### 更多Collections函数可以[参考](http://underscorejs.org/#collections)
+### 更多Collections函数可以参考[网站](http://underscorejs.org/#collections)

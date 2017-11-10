@@ -63,6 +63,10 @@ a.forEach(function(element, index, array) {
     // array: 指向Array对象本身
     console.log(element);
 });
+//前两个都是元素本身
+s.forEach(function(element,element,set){
+
+});
 
 m.forEach(function(value, key, map) {
     // element: 指向当前元素的值
