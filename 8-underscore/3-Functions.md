@@ -91,4 +91,4 @@ register();
     - `_.negate(predicate)`,返回一个新的`predicate`函数的否定版本。
     - `_.compose(*functions)`,返回函数集 functions 组合后的复合函数, 也就是一个函数执行完之后把返回的结果再作为参数赋给下一个函数来执行.
 
-### 更多Arrays函数可以参考[网站](http://underscorejs.org/#functions)
+### Functions函数可以参考[网站](http://underscorejs.org/#functions)

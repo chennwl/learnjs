@@ -51,7 +51,7 @@ _.flatten([1, [2], [3, [[4]]]], true); //true是 shallow参数，[1, 2, 3, [[4]]
     _.object([['moe', 30], ['larry', 40], ['curly', 50]]);  //{moe: 30, larry: 40, curly: 50}
     ```
 - `indexOf`/`lastIndexOf`/`sortedIndex`/`findIndex`/`findLastIndex`
-    - `_.sortedIndex(list, value, [iteratee], [context])`，使用二分查找确定`value`在`list`中的位置序号，`value`按此序号插入能保持`list`原有的排序。如果提供`iterator`函数，`iterator`将作为`list`排序的依据，包括传递的`value`。`iterator`也可以是字符串的属性名用来排序(比如`length`)
+    - `_.sortedIndex(list, value, [iteratee], [context])`，使用二分查找确定`value`在`list`中的位置序号，`value`按此序号插入能保持`list`原有的排序。如果提供`iteratee`函数，`iteratee`将作为`list`排序的依据，包括传递的`value`。`iteratee`也可以是用字符串的属性名来排序(比如`length`)
     ```javascript
     _.sortedIndex([10, 20, 30, 40, 50], 35);    //3
     var stooges = [{name: 'moe', age: 40}, {name: 'curly', age: 60}];
@@ -74,4 +74,4 @@ _.range(0, -10, -1); // [0, -1, -2, -3, -4, -5, -6, -7, -8, -9]
 
 _.range(0); //[]
 ```
-### 更多Arrays函数可以参考[网站](http://underscorejs.org/#arrays)
+### Arrays函数可以参考[网站](http://underscorejs.org/#arrays)

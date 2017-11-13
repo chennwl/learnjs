@@ -113,4 +113,4 @@ var c = _.clone(b);         //{age: 88, city: "beijing", hello: ƒ}
     ```
     - `_.isEmpty(object)`,如果`object`不包含任何值，返回`true`。 对于字符串和类数组`（array-like）`对象，如果`length`属性为0，那么检查返回`true`
 
-### 更多Arrays函数可以参考[网站](http://underscorejs.org/#objects)
+### Object函数可以参考[网站](http://underscorejs.org/#objects)

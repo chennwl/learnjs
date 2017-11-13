@@ -120,4 +120,4 @@ _.max({ a: 1, b: 2, c: 3 }); // 3
     ```javascript
     _.partition([0, 1, 2, 3, 4, 5], isOdd); //[[1, 3, 5], [0, 2, 4]]        //isOdd是否是奇数
     ```
-### 更多Collections函数可以参考[网站](http://underscorejs.org/#collections)
+### Collections函数可以参考[网站](http://underscorejs.org/#collections)
