@@ -21,32 +21,52 @@
         //     "program": "${workspaceRoot}/basics/basics.js",
         //     "cwd": "${workspaceRoot}"
         // },
+        // {
+        //     "type": "node",
+        //     "request": "launch",
+        //     "name": "function",
+        //     "program": "${workspaceRoot}/function/function.js",
+        //     "cwd": "${workspaceRoot}"
+        // },
+        // {
+        //     "type": "node",
+        //     "request": "launch",
+        //     "name": "high-order-function",
+        //     "program": "${workspaceRoot}/function/high-order-function.js",
+        //     "cwd": "${workspaceRoot}"
+        // },
+        // {
+        //     "type": "node",
+        //     "request": "launch",
+        //     "name": "oop",
+        //     "program": "${workspaceRoot}/4-oop/oop.js",
+        //     "cwd": "${workspaceRoot}"
+        // },
         {
             "type": "node",
             "request": "launch",
-            "name": "function",
-            "program": "${workspaceRoot}/function/function.js",
-            "cwd": "${workspaceRoot}"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "high-order-function",
-            "program": "${workspaceRoot}/function/high-order-function.js",
-            "cwd": "${workspaceRoot}"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "oop",
-            "program": "${workspaceRoot}/oop/oop.js",
-            "cwd": "${workspaceRoot}"
-        },
-        {
-            "type": "node",
-            "request": "attach",
-            "name": "附加到进程",
-            "port": 5858
+            "name": "Run hello js",
+            "program": "${workspaceRoot}/9-nodejs/main.js",
+            "stopOnEntry": false,
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "externalConsole": false,
+            "sourceMaps": false,
+            "outDir": null
         }
+        // {
+        //     "type": "node",
+        //     "request": "attach",
+        //     "name": "附加到进程",
+        //     "port": 5858
+        // }
     ]
 }
