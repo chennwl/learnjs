@@ -2,9 +2,15 @@
 
 var s = 'Hello';
 
-function greet(name) {
-    console.log(s + ', ' + name + '!');
+function hello() {
+    console.log('Hello, world!');
 }
 
-var name = "dashauige";
-module.exports = greet;
+function greet(name) {
+    console.log('Hello, ' + name + '!');
+}
+
+module.exports = {
+    hello: hello,
+    greet: greet
+};
