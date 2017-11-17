@@ -5,19 +5,19 @@
 > process === global.process;
 true
 > process.version;
-'v5.2.0'
+'v7.6.0'
 > process.platform;
 'darwin'
 > process.arch;
 'x64'
 > process.cwd(); //返回当前工作目录
-'/Users/michael'
+'/learning/learnjs'
 > process.chdir('/private/tmp'); // 切换当前工作目录
 undefined
 > process.cwd();
 '/private/tmp'
 ```
-- JavaScript程序是由事件驱动执行的单线程模型,Node.js不断执行响应事件的JavaScript函数，直到没有任何响应事件的函数可以执行时，Node.js就退出了。如果想要在下一次事件响应中执行代码，可以调用`process.nextTick()`
+- JavaScript程序是由事件驱动执行的单线程模型，Node.js不断执行响应事件的JavaScript函数，直到没有任何响应事件的函数可以执行时，Node.js就退出了。如果想要在下一次事件响应中执行代码，可以调用`process.nextTick()`
 ```javascript
 // process.nextTick()将在下一轮事件循环中调用:
 process.nextTick(function () {
@@ -33,7 +33,7 @@ process.on('exit', function (code) {
 });
 ```
 - 常用内置模块
-    - fs
-    - stream
+    - fs(文件系统)
+    - stream(流)
     - http
     - crypto

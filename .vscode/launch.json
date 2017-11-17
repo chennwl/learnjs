@@ -47,26 +47,34 @@
             "request": "launch",
             "name": "Run hello js",
             "program": "${workspaceRoot}/9-nodejs/main.js",
-            "stopOnEntry": false,
-            "args": [],
-            "cwd": "${workspaceRoot}",
-            "preLaunchTask": null,
-            "runtimeExecutable": null,
-            "runtimeArgs": [
-                "--nolazy"
-            ],
-            "env": {
-                "NODE_ENV": "development"
-            },
-            "externalConsole": false,
-            "sourceMaps": false,
-            "outDir": null
-        }
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "fs",
+            "program": "${workspaceRoot}/9-nodejs/基本模块/fs.js",
+            "cwd": "${workspaceRoot}"
+        },
         // {
         //     "type": "node",
-        //     "request": "attach",
-        //     "name": "附加到进程",
-        //     "port": 5858
-        // }
+        //     "request": "launch",
+        //     "name": "url",
+        //     "program": "${workspaceRoot}/9-nodejs/基本模块/url.js",
+        //     "cwd": "${workspaceRoot}"
+        // },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "http",
+            "program": "${workspaceRoot}/http.js",
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "附加到进程",
+            "port": 5858
+        }
     ]
 }

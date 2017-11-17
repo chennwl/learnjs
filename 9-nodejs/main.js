@@ -1,4 +1,4 @@
-// var app = require('./hello');
+// var app = require('./module');
 // console.log(app);
 // app.hello();
 
