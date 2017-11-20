@@ -52,8 +52,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "fs",
-            "program": "${workspaceRoot}/9-nodejs/基本模块/fs.js",
+            "name": "crypto加密",
+            "program": "${workspaceRoot}/9-nodejs/基本模块/crypto.js",
             "cwd": "${workspaceRoot}"
         },
         // {

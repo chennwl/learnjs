@@ -11,8 +11,7 @@
     var rs = fs.createReadStream('sample.txt', 'utf-8');
 
     rs.on('data', function (chunk) {        //data事件可能会有多次，每次传递的chunk是流的一部分数据
-        console.log('DATA:')
-        console.log(chunk);
+        console.log('DATA:' + chunk);
     });
 
     rs.on('end', function () {
