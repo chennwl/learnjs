@@ -60,7 +60,8 @@ var server = http.createServer(function(request,response){
 
 console.log('create a server at: 127.0.0.1:8080');
 ```
-## 文件服务器：设定一个目录，然后让Web程序变成一个文件服务器。要实现这一点，只需要解析`request.url`中的路径，然后在本地找到对应的文件，把文件内容发送出去就可以了。
+## 文件服务器
+- 设定一个目录，然后让Web程序变成一个文件服务器。要实现这一点，只需要解析`request.url`中的路径，然后在本地找到对应的文件，把文件内容发送出去就可以了。
 - 解析URL需要使用Node.js提供的`url`模块，通过`url.parse()`将一个字符串解析为一个Url对象
 - 处理本地文件目录需要使用Node.js提供的`path`模块，它可以方便地构造目录.使用`path`模块可以正确处理操作系统相关的文件路径。
 ```javascript
@@ -113,5 +114,4 @@ var server = http.createServer(function (request, response) {
 server.listen(8080);
 console.log('Server is running at http://127.0.0.1:8080/');
 ```
-** 没有必要手动读取文件内容。由于`response`对象本身是一个`Writable Stream`，直接用`pipe()`方法就实现了自动读取文件内容并输出到HTTP响应
-**
+没有必要手动读取文件内容。由于`response`对象本身是一个`Writable Stream`，直接用`pipe()`方法就实现了自动读取文件内容并输出到HTTP响应

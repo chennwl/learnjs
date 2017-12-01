@@ -38,6 +38,18 @@
         console.log(x); // 依次输出0, 1, 1, 2, 3
     }
     ```
+- 利用generator写AJAX：
+```javascript
+try {
+    r1 = yield ajax('http://url-1', data1);
+    r2 = yield ajax('http://url-2', data2);
+    r3 = yield ajax('http://url-3', data3);
+    success(r3);
+}
+catch (err) {
+    handle(err);
+}
+```
 - generator函数的数据交换和错误处理
     - 数据交换：`next()`方法返回值的`value`属性，是Generator函数向外输出数据；`next()`方法还可以接受参数，这是向Generator函数体内输入数据。
     ```javascript

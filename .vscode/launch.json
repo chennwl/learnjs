@@ -72,6 +72,12 @@
         },
         {
             "type": "node",
+            "request": "launch",
+            "name": "koa",
+            "program": "${workspaceFolder}/app.js"
+        },
+        {
+            "type": "node",
             "request": "attach",
             "name": "附加到进程",
             "port": 5858
