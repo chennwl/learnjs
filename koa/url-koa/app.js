@@ -4,6 +4,7 @@ const Koa = require('koa');
 //require('koa-router')返回的是函数
 const router = require('koa-router')();
 
+//bodyParser是将formData数据放在resquest.body当中
 const bodyParser = require('koa-bodyparser');
 
 // 创建一个Koa对象表示web app本身:

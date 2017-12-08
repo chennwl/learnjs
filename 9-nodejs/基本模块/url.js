@@ -15,4 +15,4 @@ console.log(urlObj);
 // console.log(urlString);
 
 var a = url.resolve('http://dk-lan.com/', '/hahaha')
-console.log(a);     // 'http://dk-lan.com/one'
+console.log(a);     // 'http://dk-lan.com/hahaha'
