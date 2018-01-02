@@ -8,7 +8,7 @@
     var m_1 = Map([['Michael', 95], ['Bob', 75], ['Tracy', 85]]);       //以二维数组初始化
     m.set('Adam', 67); // 添加新的key-value set
     m.set('Bob', 59);
-    m.has('Adam'); // 是否存在key 'Adam': true has
+    m.has('Adam'); // 是否存在key 'Adam': true
     m.get('Adam'); // 67  get
     m.delete('Adam'); // 删除key 'Adam'  delete
     m.get('Adam'); // undefined
