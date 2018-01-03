@@ -3,11 +3,11 @@ const fs = require('fs');   //导入fs模块
 //创建router路由
 function addMapping(router, mapping){
     for(var url in mapping){
-        if(url.startsWith('GET')){  //GET路径方法
+        if(url.startsWith('GET ')){  //GET路径方法
             var path = url.substring(4);
             router.get(path, mapping[url]);     //mapping[url]为该路径的异步处理方法，即async(ctx, next) => {}
             console.log(`register URL mapping: GET ${path}`);
-        } else if(url.startsWith('POST')){
+        } else if(url.startsWith('POST ')){
             var path = url.substring(5);
             router.post(path, mapping[url]);
             console.log(`register URL mapping: POST ${path}`);

@@ -36,8 +36,7 @@ var env = createEnv('views',{
         hex: function (n) {
             return '0x' + n.toString(16);
         }
-    },
-
+    }
 }); 
 var s = env.render('hello.html', { name: '小明'});
 console.log(s);
