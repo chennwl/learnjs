@@ -70,12 +70,12 @@
             "program": "${workspaceRoot}/http.js",
             "cwd": "${workspaceRoot}"
         },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "koa",
-            "program": "${workspaceFolder}/app.js"
-        },
+        // {
+        //     "type": "node",
+        //     "request": "launch",
+        //     "name": "koa",
+        //     "program": "${workspaceFolder}/app.js"
+        // },
         {
             "type": "node",
             "request": "attach",
