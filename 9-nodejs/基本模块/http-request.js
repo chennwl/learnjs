@@ -16,7 +16,7 @@ var options = {
 		'Accept-Encoding': 'gzip, deflate, br',
 		'Accept-Language': 'zh-CN,zh;q=0.9',
 		'Connection': 'keep-alive',
-		'Content-Length': '161',
+		'Content-Length': postData.length,
 		'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 		'Cookie': 'imooc_uuid=d08d9722-bf57-4e86-97bb-baf340b0dd6a; imooc_isnew_ct=1513351411; loginstate=1; apsid=FkNjU4MDZmNjU2ZDU4MDBiZDFlNjI1YzAyYzk4M2UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANDMwODcyNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4NDExMzE3ODBAcXEuY29tAAAAAAAAAAAAAAAAAAAAADgxNDBjNDg3MDVmNTc3ZWU4ZGQ2M2YyNmY1MmRkMTc5DekzWg3pM1o%3DOG; imooc_isnew=2; IMCDNS=0; PHPSESSID=b0lgpl435nmc6h906aa87tp5h6; Hm_lvt_f0cfcccd7b1393990c78efdeebff3968=1513516597,1513687241,1515072257,1515163224; Hm_lpvt_f0cfcccd7b1393990c78efdeebff3968=1515338977; cvde=5a4f8d6b923af-207',
 		'Host': 'www.imooc.com',
@@ -29,12 +29,12 @@ var options = {
 
 var req = http.request(options, function(res){
 
-	console.log('Status: ' + res.statusCode);
-	console.log('headers: ' + JSON.stringify(res.headers));
+	console.log('Status: ' + res.statusCode);	//正常是200
+	console.log('headers: ' + JSON.stringify(res.headers));	//响应头
 
 	res.on('data',function(chunk){
-		console.log(Buffer.isBuffer(chunk));
-		console.log(typeof chunk);
+		console.log(Buffer.isBuffer(chunk));	//true
+		console.log(typeof chunk);	//object
 	});
 
 	res.on('end', function(){
@@ -46,5 +46,5 @@ req.on('error', function(e){
 	console.log('Error: ' + e.message);
 });
 
-req.write(postData);
+req.write(postData);	//出错才运行
 req.end();
