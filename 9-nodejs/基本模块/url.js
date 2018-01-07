@@ -8,11 +8,23 @@ console.log(urlObj);
 urlObj = url.parse("http://www.williamChann.com/one?a=index&t=article&m=default#cwl", false);
 console.log(urlObj);
 
-//url.format(url)
-// const { URL } = require('url');
-// const myURL = new URL('https://a:b@你好你好?abc#foo');
-// var urlString = url.format(myURL, { fragment: false, unicode: true, auth: false });
-// console.log(urlString);
+// var url = require('url');
 
-var a = url.resolve('http://dk-lan.com/', '/hahaha')
-console.log(a);     // 'http://dk-lan.com/hahaha'
+// var urlObj = {
+// 	protocol: 'http:',
+// 	slashes: true,
+// 	hostname: 'baidu.com',
+// 	port: 80,
+// 	hash: '#hash',
+// 	pathname: '/nodejs',
+// 	search: '?query=string',
+// 	path: '/nodejs?query=string'
+// }
+
+// var result = url.format(urlObj);
+// console.log(result);
+// //http://baidu.com:80/nodejs?quert=string#hash
+
+
+var a = url.resolve('http://william.com/', '/hahaha')
+console.log(a);     // 'http://william.com/hahaha'

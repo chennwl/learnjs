@@ -32,24 +32,25 @@ urlObj = url.parse('http://www.william-Chan.com/one:/8080?a=index&t=article&m=de
 console.log(urlObj);
 ```
 
-## URL的序列化的字符串
-- 格式：url.format(URL[,options])
-    - 参数URL
-    - options 数组
-        - `auth <boolean>` 如果序列化的URL字符串应该包含用户名和密码为`true`，否则为`false`。默认为`true`。
-        - `fragment <boolean>` 如果序列化的URL字符串应该包含分段为`true`，否则为`false`。默认为`true`。
-        - `search <boolean>` 如果序列化的URL字符串应该包含搜索查询为`true`，否则为`false`。默认为`true`。
-        - `unicode <boolean>` true 如果出现在URL字符串主机元素里的`Unicode`字符应该被直接编码而不是使用`Punycode`编码为`true`，默认为`false`。
+## URL的序列化字符串
+- 格式：url.format(urlObj);
 
 ```javascript
-const { URL } = require('url');
-const myURL = new URL('https://a:b@你好你好?abc#foo');
+var url = require('url');
 
-console.log(myURL.href); // 输出 https://a:b@xn--6qqa088eba/?abc#foo
+var urlObj = {
+    protocol: 'http:',
+    slashes: true,
+    hostname: 'baidu.com',
+    port: 80,
+    hash: '#hash',
+    pathname: '/nodejs',
+    search: '?query=string',
+    path: '/nodejs?query=string'
+}
 
-console.log(myURL.toString());// 输出 https://a:b@xn--6qqa088eba/?abc#foo
-
-console.log(url.format(myURL, { fragment: false, unicode: true, auth: false })); // 输出 'https://你好你好/?abc'
+var result = url.format(urlObj);
+console.log(result);    //http://baidu.com:80/nodejs?quert=string#hash
 ```
 
 ## url.resolve

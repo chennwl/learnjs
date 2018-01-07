@@ -4,7 +4,7 @@
 ## 字符串转对象
 ```javascript
 var querystring = require('querystring');
-var str = 'firstname=william&url=http%3A%2F%2Fwilliam-Chan.com&lastname=tom&passowrd=123456';
+var str = 'firstname=william&url=http%3A%2F%2Fwilliam-Chan.com&lastname=tom&passowrd=123456';   //符号转义了
 var param = querystring.parse(str);
 //结果
 //{firstname:"william", url:"http://william-Chan.com", lastname: 'tom', passowrd: 123456};
