@@ -46,5 +46,5 @@ req.on('error', function(e){
 	console.log('Error: ' + e.message);
 });
 
-req.write(postData);	//出错才运行
+req.write(postData);	//request.body请求体
 req.end();
