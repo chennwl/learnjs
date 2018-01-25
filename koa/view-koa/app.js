@@ -24,6 +24,7 @@ app.use(async (ctx, next) => {
 // static file support:处理静态文件
 if (!isProduction) {
     let staticFiles = require('./static-files');
+    //__dirname为/learning/learnjs/koa/view-koa
     app.use(staticFiles('/static/', __dirname + '/static'));
 }
 
