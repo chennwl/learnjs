@@ -3,7 +3,7 @@
 - MySQL Node.js驱动程序是开源的`mysql`，可以直接使用npm安装`(npm install mysql)`
 
 ## ORM(Object-Relational Mapping)，把关系数据库的表结构映射到对象上
-- 选择Node的ORM框架Sequelize来操作数据库，这样读写的都是JavaScript对象,Sequelize可以把对象变成数据库中的行。
+- 选择Node的ORM框架Sequelize来操作数据库，这样读写的都是JavaScript对象，Sequelize可以把对象变成数据库中的行。
 - Sequelize返回的对象是Promise，所以可以用`then()`和`catch()`分别异步响应成功和失败
 ```javascript
 /**
@@ -70,41 +70,42 @@ var now = Date.now();
 /**
  * 用Promise的方式往数据库添加数据
  */
-// Pet.create({
-//     id: 'g-' + now,
-//     name: 'Gaffey',
-//     gender: false,
-//     birth: '2007-07-07',
-//     createdAt: now,
-//     updatedAt: now,
-//     version: 0
-// }).then(function(p){
-//     console.log('created.' + JSON.stringify(p));
-// }).catch(function(err){
-//     console.log('failed: ' + err);
-// });
+Pet.create({
+    id: 'g-' + now,
+    name: 'Gaffey',
+    gender: false,
+    birth: '2007-07-07',
+    createdAt: now,
+    updatedAt: now,
+    version: 0
+}).then(function(p){
+    console.log('created.' + JSON.stringify(p));
+}).catch(function(err){
+    console.log('failed: ' + err);
+});
 
-// /**
-//  * 使用await
-//  */
-// (async() => {
-//     var dog = await Pet.create({
-//         id: 'd-' + now,
-//         name: 'Odie',
-//         gender: false,
-//         birth: '2008-08-08',
-//         createdAt: now,
-//         updatedAt: now,
-//         version: 0
-//     });
-//     console.log('created.' + JSON.stringify(dog));
-// })();
+/**
+ * 使用await
+ */
+(async() => {
+    var dog = await Pet.create({
+        id: 'd-' + now,
+        name: 'Odie',
+        gender: false,
+        birth: '2008-08-08',
+        createdAt: now,
+        updatedAt: now,
+        version: 0
+    });
+    console.log('created.' + JSON.stringify(dog));
+})();
 
 /**
  * 查询数据 findAll()方法
  */
 (async() => {
-    var pets = await Pet.findAll({  //先查找出对应条件的数据记录
+    //先查找出对应条件的数据记录 findAll()
+    var pets = await Pet.findAll({
         where: {
             name: 'Gaffey'
         }
@@ -116,9 +117,11 @@ var now = Date.now();
         p.gender = true;
         p.updatedAt = Date.now();
         p.version++;
-        await p.save();     //更新数据 save()方法
+        //更新数据 save()方法
+        await p.save();
         if (p.version === 3) {
-            await p.destroy();  //删除数据 destroy()方法
+            //删除数据 destroy()方法
+            await p.destroy();
             console.log(`${p.name} was destroyed.`);
         }
     }
@@ -127,5 +130,5 @@ var now = Date.now();
 
 ## Model
 - `sequelize.define()`返回的`Pet`称之为Model，它表示一个数据模型
-- 通过`Pet.findAll()`返回的一个或一组对象称为Model实例，每个实例都可以直接通过`JSON.stringify`序列化为JSON字符串。但是它们和普通JSON对象相比，多了一些由Sequelize添加的方法，比如`save()`和`destroy()`。调用这些方法就可以执行更新或者删除操作
+- 通过`Pet.findAll()`从数据库返回的一个或一组对象称为Model实例，每个实例都可以直接通过`JSON.stringify`序列化为JSON字符串。但是它们和普通JSON对象相比，多了一些由Sequelize添加的方法，比如`save()`和`destroy()`。调用这些方法就可以执行更新或者删除操作
 - `findAll()`方法可以接收`where`、`order`这些参数，这和将要生成的SQL语句是对应的。

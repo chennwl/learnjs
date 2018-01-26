@@ -41,7 +41,7 @@ let id = process.argv[2]; //根据命令行中的参数的id来查询一个todo
 // console.log(process);
 
 //可疑用户可能通过传递参数中的SQL代码来利用该程序
-//防止SQL注入，需要使用占位符(?)，或者使用mysql或连接对象的excape()方法
+//防止SQL注入，需要使用占位符(?)，或者使用mysql或连接对象的escape()方法
 let sql = `SELECT * FROM todos WHERE id=` + mysql.escape(id);
 
 connection.query(sql, (error, results, fields) => {
