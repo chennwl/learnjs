@@ -2,8 +2,10 @@ const path = require('path');
 const mime = require('mime');
 const fs = require('mz/fs');
 
-// url: 类似 '/static/'
-// dir: 类似 __dirname + '/static'
+/**
+ *  url: 类似 '/static/'
+ * dir: 类似 __dirname + '/static'
+*/
 function staticFiles(url, dir) {
     return async (ctx, next) => {
         let rpath = ctx.request.path;

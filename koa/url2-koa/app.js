@@ -2,7 +2,7 @@ const Koa = require('koa');
 
 const bodyParser = require('koa-bodyparser');
 //导入controller middleware
-const controller = require('./controllers');       
+const controller = require('./controllers');
 
 const app = new Koa();
 // log request URL:

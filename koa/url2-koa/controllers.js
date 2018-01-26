@@ -40,7 +40,7 @@ function addControllers(router, dir) {
     for(var f of js_files){     //es6循环方式
         console.log(`process controller: ${f}...`);         //f为controllers里面的js文件
         let mapping = require(__dirname + '/' + dir + '/' + f);     //导入js模块文件
-        console.log(mapping);   //mapping就是module.exports暴露出的对象
+        console.log(mapping);   //mapping就是controllers文件夹里面的js文件的module.exports暴露出的对象
         addMapping(router, mapping);    //对js模块文件暴露出来的URL进行处理
     }
 }
