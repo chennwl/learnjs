@@ -2,7 +2,7 @@ var http = require('http');
 var querystring = require('querystring');
 
 var postData = querystring.stringify({
-	'content' : '测试测试,laoshihaoshuai',
+	'content' : '测试测试',
 	'mid' : 8837
 });
 
@@ -33,7 +33,7 @@ var req = http.request(options, function(res){
 	console.log('headers: ' + JSON.stringify(res.headers));	//响应头
 
 	res.on('data',function(chunk){
-		console.log(Buffer.isBuffer(chunk));	//true
+		console.log(Buffer.isBuffer(chunk));	//true Buffer:二进制数据
 		console.log(typeof chunk);	//object
 	});
 
