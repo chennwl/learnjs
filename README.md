@@ -1,9 +1,8 @@
 ---
-title: tool-js
-date: 2017-09-22 18:46:19
+title: review-js
+date: 2018-1-27 16:08:19
 tags: javascript
 categories: 学习
-plan: 学完廖雪峰就学阮一峰的js-training
 ---
 
 ## 第一部分:基础部分

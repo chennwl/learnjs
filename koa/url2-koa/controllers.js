@@ -46,7 +46,7 @@ function addControllers(router, dir) {
 }
 
 module.exports = function (dir) {
-    let 
+    let
         controllers_dir = dir || 'controllers',
         router = require('koa-router')();       //require('koa-router')返回的是函数
     addControllers(router, controllers_dir);
