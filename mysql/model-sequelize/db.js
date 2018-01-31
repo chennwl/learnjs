@@ -1,9 +1,9 @@
 /**
- * 如何定义Model
+ * 统一Model的定义
  */
 
  const Sequelize = require('sequelize');
- const uuid = require('nodejs-uuid');   //唯一标识符，便于寻找，关联
+ const uuid = require('node-uuid');   //唯一标识符，便于寻找，关联
  const config = require('./config');
 
  console.log('init sequelize...');
@@ -82,7 +82,7 @@
         hooks: {
            beforeValidate: function(obj){
                let now = Date.now();
-               if(obj.isNewRecord){
+               if (obj.isNewRecord) { //根据是否是isNewRecord设置主键
                    console.log('will create entity...' + obj);
                    if(!obj.id){
                        obj.id = generateId();
