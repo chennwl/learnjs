@@ -9,9 +9,10 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 
-//dest的属性为文件上传后存放的文件夹，上传后生成二进制文件
+//dest的属性为文件上传后存放的文件夹，存放的是上传后生成二进制文件
 var upload = multer({dest: path.join(__dirname, 'temp')});
 
+//使用中间件
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 //注意上传界面中的 <input type="file" name="image"/>中的name必须是下面代码中指定的名称

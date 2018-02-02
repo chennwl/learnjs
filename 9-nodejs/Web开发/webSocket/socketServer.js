@@ -1,6 +1,6 @@
 var socketServer = require('ws').Server;
 
-//服务端开启一个服务
+//服务端开启一个服务 实例化socketServer
 var wss = new socketServer({
     port: 8080
 });
@@ -14,7 +14,7 @@ var wss = new socketServer({
 // var wss = new socketServer({server: server, port: 8080});
 
 //连接监听，当客户端连接到服务器时触发该事件
-wss.on('connection', function (client) {  
+wss.on('connection', function (client) { 
     //消息接受监听，当客户端向服务端发送信息时触发该事件
     client.on('message', function (_message) {  
         var _messageObj = JSON.parse(_message);
@@ -39,8 +39,10 @@ wss.on('connection', function (client) {
     });
 });
 
-wss.broadcast = function broadcast(_messageObj) {  
+wss.broadcast = function broadcast(_messageObj) { 
+    //wss.clients为所有在线的用户 
+    // console.log(wss.clients);
     wss.clients.forEach(function (client) {
-        client.send(JSON.stringify(_messageObj))
+        client.send(JSON.stringify(_messageObj));
     });
 }
