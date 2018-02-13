@@ -13,11 +13,13 @@ var multer = require('multer');
 var upload = multer({dest: path.join(__dirname, 'temp')});
 
 //使用中间件
-app.use(express.static('public'));
+app.use(express.static('public'));      //托管静态文件
 app.use(bodyParser.urlencoded({extended: false}));
-//注意上传界面中的 <input type="file" name="image"/>中的name必须是下面代码中指定的名称
-//这种写法也可以，同时这也是多文件上传
-// app.use(multer({ dest: "/temp/" }).array("image"));   
+/**
+ * 注意上传界面中的 <input type="file" name="image"/>中的name必须是下面代码中指定的名称
+ * 这种写法也可以，同时这也是多文件上传
+**/
+// app.use(multer({ dest: "/temp/" }).array("image"));      //使用中间件
 
 app.get('/upload.html', function (req, res) {  
     res.sendFile(__dirname + "/upload.html");
