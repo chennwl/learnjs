@@ -20,9 +20,9 @@
         username: req.query.username,
         age: req.query.age
     }
-     console.log(req.originalUrl);
+    console.log(req.originalUrl);
     //  console.log(res.get());
-    res.send(params);
+    res.send(params);   //页面上显示一个对象
  });
 
 var server = app.listen(3000, function () {
