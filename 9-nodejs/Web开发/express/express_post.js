@@ -9,16 +9,17 @@ var bodyParser = require('body-parser');
 // 没有挂载路径的中间件，应用的每个请求都会执行该中间件
 app.use(express.static('public'));
 
-app.get('/index.html', function (req, res) {  
+app.get('/index.html', function (req, res) {
+    console.log(__dirname); //  /learning/learnjs/9-nodejs/Web开发/express  
     res.sendFile(__dirname + '/index.html');
 });
 
 //创建 application/x-www-form-urlencoded 编码解析
-var urlencodedParser = bodyParser.urlencoded({extended: false});
+var urlencodedParser = bodyParser.urlencoded({extended: false});    //用来解析post表单信息
 
 app.post('/process_post', urlencodedParser, function (request, response) {  
     var params = {
-        //post参数在请求体里面
+        //post参数在body请求体里面
         "first_name": request.body.first_name,
         "last_name": request.body.last_name
     }

@@ -49,7 +49,8 @@ app.post('/file_upload', upload.single('avatar'), function (req, res, next) {
 });
 
 //多文件上传 array
-//注意上传界面中的 <input type="file" name="photos"/>中的name必须是下面代码中指定的名  
+//注意上传界面中的 <input type="file" name="photos"/>中的name必须是下面代码中指定的名称
+// '/mulUpload'为form表单action的地址或者$.post的地址 
 app.post('/mulUpload', upload.array('photos', 12), function (req, res, next) {
     console.log(req.files);
     console.log(req.body);
