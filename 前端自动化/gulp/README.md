@@ -19,6 +19,7 @@ gulp.task('default', function() {
 ```
 3. 运行gulp：`gulp`
 ## gulp API
+<<<<<<< Updated upstream
 1. `gulp.src(globs[,options])`，输出（Emits）符合所提供的匹配模式（glob）或者匹配模式的数组（array of globs）的文件
     ```javascript
     gulp.src('client/templates/*.jade')
@@ -142,3 +143,14 @@ gulp.task('default', function() {
 ## gulp 插件
 
 
+=======
+- `gulp.src(globs[,options])`，输出（Emits）符合所提供的匹配模式（glob）或者匹配模式的数组（array of globs）的文件
+    - globs：所要读取的 `glob` 或者包含 `globs` 的数组。
+    - options：通过 `glob-stream` 所传递给 `node-glob` 的参数。
+    ```javascript
+    gulp.src('client/templates/*.jade')
+      .pipe(jade()) //返回一个流可以被piped到别的插件中
+      .pipe(minify())
+      .pipe(gulp.dest('build/minified_templates'));
+    ```
+>>>>>>> Stashed changes
