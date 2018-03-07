@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>模板语法－插值</title>
+    <script src="../vue.min.js"></script>
+</head>
+<body>
+    <div id="app1">
+        <h2>文本插值</h2>
+        <!--双大括号会把数据解析为普通文本-->
+        <span>Message: {{ msg }}</span>
+        <span v-once>这个将不会改变: {{ msg }}</span>
+    </div>
+    <script>
+        var app1 = new Vue({
+            el: "#app1",
+            data: {
+                msg: "文本插值实例"
+            }
+        });
+    </script>
+
+    <div id="app2">
+        <h2>原始HTML</h2>        
+        <p>Using mustaches: {{ rawHtml }}</p>
+        <p>Using v-html directive:<span v-html="rawHtml"></span></p>
+    </div>
+    <script>
+        var app2 = new Vue({
+            el: "#app2",
+            data: {
+                rawHtml: "<span style='color:red;'>This should be red</span>"
+            }
+        });
+    </script>
+
+    <div id="app3">
+        <h2>HTML特性</h2>        
+        <div v-bind:id="dynamicId">第三个</div>
+        <button v-bind:disabled="isButtonDisabled">Button</button>
+    </div>
+    <script>
+        var app3 = new Vue({
+            el: "#app3",
+            data: {
+                dynamicId: "texting",
+                isButtonDisabled: "null"
+            }
+        });
+    </script>
+
+    <div id="app4">
+        <h2>使用Javascript表达式</h2>     
+        <!-- 每个绑定都只能包含单个表达式 -->   
+        <div>{{ number + 1 }}</div>
+        <div>{{ ok ? 'YES' : 'NO' }}</div> 
+        <div>{{ message.split('').reverse().join('') }}</div>
+        <div v-bind:id="'list-' + id">绑定id</div>
+        <div>加载页面时间:{{ Date().toString() }}</div>
+    </div>
+    <script>
+        var app4 = new Vue({
+            el: "#app4",
+            data: {
+                number: 10,
+                ok: "true",
+                message: "This can reverse",
+                id: 3
+            }
+        }); 
+    </script>
+</body>
+</html>
