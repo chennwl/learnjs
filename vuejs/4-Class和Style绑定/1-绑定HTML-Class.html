@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>绑定HTML Class</title>
+    <script src="../vue.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        语法：v-bind:class
+        <h2>对象语法</h2>
+        <!--对象语法-->
+        <div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError }">对象语法1</div>
+        <div v-bind:class="classObject">对象语法2</div>
+        <!-- 返回对象的计算属性 -->
+        <div v-bind:class="classObject">返回对象的计算属性</div>
+
+        <h2>数组语法</h2>
+        <!--始终添加-->
+        <div v-bind:class="[activeClass, errorClass]">数组语法1</div>
+        <!--始终添加errorClass，isActive为true时才添加activeClass -->
+        <div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
+        <div v-bind:class="[{ active: isActive }, errorClass]">数组语法中使用对象语法</div>
+
+        <h2>用在组件上</h2>
+        <div>回头再看</div>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                isActive: true,
+                hasError: false,
+                error: null,
+                // classObject: {
+                //     active: true,
+                //     'text-danger': false
+                // },
+
+                activeClass: 'active',
+                errorClass: 'text-danger'
+            },
+            computed: {     //计算属性  computed:计算的意思
+                classObject: function () {  
+                    return {    //classObject返回一个对象
+                        active: this.isActive && !this.error,
+                        'text-danger': this.error && this.error.type === 'fatal'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

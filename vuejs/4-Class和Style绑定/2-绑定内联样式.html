@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>绑定内联样式</title>
+    <script src="../vue.min.js"></script>
+</head>
+<body>
+    <div id="app">
+         语法：v-bind:style
+        <h2>对象语法</h2>
+        <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">内联对象语法</div>
+
+        <h2>数组语法</h2>
+        <div :style="[styleObject, {backgroundColor: '#ccc'}]">内联数组语法</div>
+
+        <h2>自动添加前缀</h2>
+        <div>当 v-bind:style 使用需要添加浏览器引擎前缀的 CSS 属性时，如 transform，Vue.js 会自动侦测并添加相应的前缀。</div>
+
+        <h2>多重值</h2>
+        <!--这样写只会渲染数组中最后一个被浏览器支持的值。在这里只会渲染 display: flex -->
+        <div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }">渲染</div>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                activeColor: 'red',
+                fontSize: 30,
+                styleObject: {
+                    color: 'blue',
+                    fontSize: '12px'
+                }
+            }
+        });
+    </script>
+</body>
+</html>

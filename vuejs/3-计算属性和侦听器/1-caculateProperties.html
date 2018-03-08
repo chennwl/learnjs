@@ -12,7 +12,11 @@
         <p>Original message: "{{ message }}"</p>
         <p>Computed reversed message: "{{ reversedMessage }}"</p>
     </div>
-    <div id="demo">{{ fullName }}</div>
+    <div id="demo">
+        <div>{{ fullName }}</div>
+        <div>{{ firstName }}</div>
+        <div>{{ lastName }}</div>
+    </div>
 </body>
 <script>
     var vm_1 = new Vue({
