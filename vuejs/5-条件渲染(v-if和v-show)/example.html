@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>条件渲染</title>
+    <script src="../vue.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <fieldset>
+            <legend>指令：v-if</legend>
+            <h3>在 &lt;template&gt; 元素上使用 v-if 条件渲染分组;最终的渲染结果将不包含 &lt;template&gt; 元素</h3> 
+            <template v-if="ok">
+                <h2>Title</h2>
+                <p>Paragraph 1</p>
+                <p>Paragraph 2</p>
+            </template>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-else，要接在v-if或者v-else-if上</legend>
+            <div v-if="Math.random() > 0.5">
+                Now you see me
+            </div>
+            <div v-else>
+                Now you don't
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-else-if</legend>
+            <div v-if="type === 'A'">
+                A
+            </div>
+            <div v-else-if="type === 'B'">
+                B
+            </div>
+            <div v-else-if="type === 'C'">
+                C
+            </div>
+            <div v-else>
+                Not A/B/C
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-show</legend>
+            <h3>带有v-show的元素始终会被渲染保留在DOM中，只是简单地切换元素的display属性</h3>
+            <div>v-show 不支持 &lt;template&gt; 元素，也不支持 v-else</div>
+            <div>不管初始条件是什么，元素总是被渲染，并且只是简单地基于CSS进行切换</div>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-if和v-show</legend>
+            <h3>v-if 是“真正”的条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建</h3>
+            <h3>v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。</h3>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-if和v-for</legend>
+            <div>当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级</div>
+        </fieldset>
+    </div>
+    <fieldset>
+        <legend>用 key 管理可复用的元素</legend>
+        <div id="key-example" class="demo">
+            <div>
+                <template v-if="loginType === 'username'">
+                    <label>Username</label>
+                    <input placeholder="Enter your username" key="username-input" />
+                </template>
+                <template v-else="">
+                    <label>Email</label>
+                    <input placeholder="Enter your email address" key="email-input" />
+                </template>
+            </div>
+            <button @click="toggleLoginType">Toggle login type</button>
+        </div>
+    </fieldset>
+    
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                ok: true,
+                type: 'A'
+            }
+        });
+        
+        //用 key 管理可复用的元素
+        new Vue({
+            el: '#key-example',
+            data: {
+                loginType: 'username'
+            },
+            methods: {
+                toggleLoginType: function () {
+                    return this.loginType = this.loginType === 'username' ? 'email' : 'username'
+                }
+            }
+        })
+    </script>
+</body>
+</html>

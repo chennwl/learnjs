@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>列表渲染</title>
+    <style>
+        .red{color: red;}
+    </style>
+    <script src="../vue.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h2>数组的v-for</h2>
+        <fieldset>
+            <legend>(v-for)简单demo</legend>
+            <ul id="example-1">
+                <li v-for="item in items"> <!-- of可替代in -->
+                    {{ item.message }}
+                </li>
+            </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-for拥有父作用域属性的完全访问权限。</legend>
+            <ul id="example-2">
+                <!--
+                     尽可能在使用 v-for 时提供 key，除非遍历输出的 DOM 内容非常简单，或者是刻意依赖默认行为以获取性能上的提升
+                -->
+                <li v-for="(item, index) in items" :key="item.id"> {{ parentMessage }} - {{ index }} - {{ item.message }}</li>
+            </ul>
+        </fieldset>
+        
+        <fieldset>
+            <legend>一个对象的v-for</legend>
+            <h3>在遍历对象时，是按 Object.keys() 的结果遍历，但是不能保证它的结果在不同的 JavaScript 引擎下是一致的。</h3>
+            <div>Object.keys(vforObject.object) =>  ["name", "age", "sex"] 这是在Chrome的结果</div>
+            <ul id="v-for-object" class="demo">
+                <li v-for = "(value, key, index) in object" key="key">{{ index }} . {{key }} : {{ value }}</li>
+            </ul>
+            <script>
+                var vforObject = new Vue({
+                    el: "#v-for-object",
+                    data: {
+                        object: {
+                            name: "williamChann",
+                            sex: "Male",
+                            age: 18,
+                            hobby: "basketball"
+                        }
+                    }
+                });
+            </script>
+        </fieldset>
+
+        <fieldset>
+            <legend>数组更新检测</legend>
+            <h2>变异方法：可以改变原数组，触发视图更新</h2>
+            <ul>
+                <li>push()</li>
+                <li>pop()</li>
+                <li>shift()</li>
+                <li>unshift()</li>
+                <li>splice()</li>
+                <li>sort()</li>
+                <li>reverse()</li>    
+            </ul>
+            <h2>替换数组：不会改变原始数组，但会返回一个新数组</h2>
+            <ul>
+                <li>filter()</li>
+                <li>concat()</li>
+                <li>slice()</li>                
+            </ul>
+            <h2>注意事项</h2>
+            <ol>
+                <li>当利用索引直接设置一个项时，例如：<span class="red">vm.items[indexOfItem] = newValue</span></li>
+                <li>当修改数组的长度时，例如：<span class="red">vm.items.length = newLength</span></li>
+            </ol>
+            <h4>实现<span class="red">vm.items[indexOfItem] = newValue</span>的效果：</h4>
+            <ol>
+                <li>Vue.set(example1.items, indexOfItem, newValue)</li>
+                <li>example1.items.splice(indexOfItem, 1, newValue)</li>            
+            </ol>
+            <h4>实现<span class="red">vm.items.length = newLength</span></h4>
+            <ul>
+                <li>example1.items.splice(newLength)</li>
+            </ul>    
+        </fieldset>
+
+        <fieldset>
+            <legend>对象更改检测注意事项</legend>
+            <h4>对于已经创建的实例，Vue 不能动态添加根级别的响应式属性。但是，可以使用 <span class="red">Vue.set(object, key, value)或vm.$set(object, key, value)</span> 方法向嵌套对象添加响应式属性，vm是Vue实例化之后的变量名</h4>
+            <ol>
+                <li>Vue.set(vm.userProfile, 'age', 27)</li>
+                <li>vm.$set(vm.userProfile, 'age', 27)</li>
+            </ol>
+            <h4>为已有对象赋予多个新属性，比如使用 Object.assign() 或 _.extend()。在这种情况下，应该用两个对象的属性创建一个新的对象：</h4>
+            <pre>vm.userProfile = Object.assign({}, vm.userProfile, { 
+    age: 27, 
+    favoriteColor: 'Vue Green' 
+})
+            </pre>
+        </fieldset>
+
+        <fieldset>
+            <legend>显示过滤/排序结果</legend>
+            <h3>显示一个数组的过滤或排序副本，但不实际改变或重置原始数据，可以创建返回过滤或排序数组的计算属性</h3>
+            <ul id="example-3">
+                <li v-for="n in evenNumbers">{{ n }}</li>
+                <!-- 在计算属性不适用的情况下 (例如，在嵌套 v-for 循环中) 你可以使用一个 method 方法 -->
+                <li v-for="n in even(numbers)">{{ n }}</li>
+            </ul>
+            <script>
+                var example3 = new Vue({
+                    el: "#example-3",
+                    data: {
+                        numbers: [1, 2, 3, 4, 5]
+                    },
+                    computed: {
+                        evenNumbers: function () {  
+                            return this.numbers.filter(function (number) {  
+                                return number % 2 === 0;
+                            });
+                        }
+                    },
+                    methods: {
+                        even: function (numbers) {  
+                            return numbers.filter(function (number) {  
+                                return number % 2 === 0;
+                            });
+                        }
+                    }
+                });
+            </script>
+
+
+        </fieldset>
+    </div>
+    <script>
+        var example1 = new Vue({
+            el: "#example-1",
+            data: {
+                items: [
+                    { message: 'Foo' },
+                    { message: 'Bar' }
+                ]
+            }
+        });
+
+        var example2 = new Vue({
+            el: '#example-2',
+            data: {
+                parentMessage: 'Parent',
+                items: [
+                    { message: 'Foo' },
+                    { message: 'Bar' }
+                ]
+            }
+        });
+
+    </script>
+</body>
+</html>
