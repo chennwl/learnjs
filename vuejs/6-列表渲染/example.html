@@ -31,7 +31,7 @@
                 <li v-for="(item, index) in items" :key="item.id"> {{ parentMessage }} - {{ index }} - {{ item.message }}</li>
             </ul>
         </fieldset>
-        
+
         <fieldset>
             <legend>一个对象的v-for</legend>
             <h3>在遍历对象时，是按 Object.keys() 的结果遍历，但是不能保证它的结果在不同的 JavaScript 引擎下是一致的。</h3>
@@ -64,13 +64,13 @@
                 <li>unshift()</li>
                 <li>splice()</li>
                 <li>sort()</li>
-                <li>reverse()</li>    
+                <li>reverse()</li>
             </ul>
             <h2>替换数组：不会改变原始数组，但会返回一个新数组</h2>
             <ul>
                 <li>filter()</li>
                 <li>concat()</li>
-                <li>slice()</li>                
+                <li>slice()</li>
             </ul>
             <h2>注意事项</h2>
             <ol>
@@ -80,12 +80,12 @@
             <h4>实现<span class="red">vm.items[indexOfItem] = newValue</span>的效果：</h4>
             <ol>
                 <li>Vue.set(example1.items, indexOfItem, newValue)</li>
-                <li>example1.items.splice(indexOfItem, 1, newValue)</li>            
+                <li>example1.items.splice(indexOfItem, 1, newValue)</li>
             </ol>
             <h4>实现<span class="red">vm.items.length = newLength</span></h4>
             <ul>
                 <li>example1.items.splice(newLength)</li>
-            </ul>    
+            </ul>
         </fieldset>
 
         <fieldset>
@@ -96,9 +96,9 @@
                 <li>vm.$set(vm.userProfile, 'age', 27)</li>
             </ol>
             <h4>为已有对象赋予多个新属性，比如使用 Object.assign() 或 _.extend()。在这种情况下，应该用两个对象的属性创建一个新的对象：</h4>
-            <pre>vm.userProfile = Object.assign({}, vm.userProfile, { 
-    age: 27, 
-    favoriteColor: 'Vue Green' 
+            <pre>vm.userProfile = Object.assign({}, vm.userProfile, {
+    age: 27,
+    favoriteColor: 'Vue Green'
 })
             </pre>
         </fieldset>
@@ -118,23 +118,70 @@
                         numbers: [1, 2, 3, 4, 5]
                     },
                     computed: {
-                        evenNumbers: function () {  
-                            return this.numbers.filter(function (number) {  
+                        evenNumbers: function () {
+                            return this.numbers.filter(function (number) {
                                 return number % 2 === 0;
                             });
                         }
                     },
                     methods: {
-                        even: function (numbers) {  
-                            return numbers.filter(function (number) {  
+                        even: function (numbers) {
+                            return numbers.filter(function (number) {
                                 return number % 2 === 0;
                             });
                         }
                     }
                 });
             </script>
+        </fieldset>
 
+        <fieldset>
+            <legend>一段取值范围的v-for</legend>
+            <div id="example-4">
+                <span v-for="n in 10">{{ n }}</span>
+            </div>
+            <script type="text/javascript">
+                var example4 = new Vue({
+                    el: "#example-4"
+                });
+            </script>
+        </fieldset>
 
+        <fieldset>
+            <legend>v-for on a &lt;tenplate&gt;</legend>
+            <h4>类似于 v-if，你也可以利用带有 v-for 的 &t;template&gt; 渲染多个元素</h4>
+            <ul id="example-5">
+                <template v-for="item in items"> <!-- 循环的时候没有template这个标签 -->
+                    <li>{{ item.msg }}</li>
+                    <li class="divider">{{ name }}</li>
+                </template>
+            </ul>
+            <script>
+                var example5 = new Vue({
+                    el: "#example-5",
+                    data: {
+                        items: [
+                            {
+                                msg: "test1"
+                            },
+                            {
+                                msg: "wei"
+                            }
+                        ],
+                        name: 'shuaige'
+                    }
+                });
+            </script>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-for with v-if</legend>
+            <h4>当它们处于同一节点，v-for 的优先级比 v-if 更高，这意味着 v-if 将分别重复运行于每个 v-for 循环中</h4>
+        </fieldset>
+
+        <fieldset>
+            <legend>一个组件的v-for</legend>
+            <h4>以后再看</h4>
         </fieldset>
     </div>
     <script>
