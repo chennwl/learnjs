@@ -225,8 +225,169 @@ Vue.component('child', {
 ## 自定义事件(子组件跟父组件通信)
 - 使用v-on绑定自定义事件
 
-    每个 Vue 实例都实现了事件接口，即：
-    - 使用 ｀$on(eventName)` 监听事件
-    - 使用 ｀$emit(eventName, optionalPayload)` 触发事件
+    - 每个 Vue 实例都实现了事件接口，即：
+      - 使用 ｀$on(eventName)` 监听事件
+      - 使用 ｀$emit(eventName, optionalPayload)` 触发事件
+    - 父组件可以在使用子组件的地方直接用 `v-on` 来监听子组件触发的事件
+      - 不能用 `$on` 监听子组件释放的事件，而必须在模板里直接用 `v-on` 绑定
+
+    ```html
+    <div id="counter-event-example">
+      <p>{{ total }}</p>
+      <!-- 在模板里直接用 v-on 绑定子组件释放的事件 -->
+      <button-center v-on:increment="incrementTotal"></button-center>
+      <button-center v-on:increment="incrementTotal"></button-center>
+    </div>
+    ```
+    ```javascript
+    Vue.component('button-center', {
+      template: '<button v-on:click="incrementCounter">{{ counter }}</button>',
+      data: function(){
+        //data必须是函数，返回的要是一个对象，不然定义的变量会指向同一个内存
+        return {
+          counter: 0
+        }
+      },
+      methods: {
+        incrementCounter: function(){
+          this.counter += 1;
+          //子组件$emit触发increment操作，eventName要加冒号，不然就是变量了
+          this.$emit('increment');
+        }
+      }
+    });
+
+    new Vue({
+      el: '#counter-event-example',
+      data: {
+        total: 0
+      },
+      methods: {
+        incrementTotal: function(){
+          this.total += 1;
+        }
+      }
+    });
+    ```
+
+- 给组件绑定原生事件
+
+  在某个组件的根元素上监听一个原生事件。可以使用 `v-on` 的修饰符 `.native`。原生事件触发就不用 `$emit()` 去触发了。例如：
+  ```html
+  <!--监听原生click事件-->
+  <my-component v-on:click.native="doTheThing"></my-component>
+  ```
+
+- `.sync`修饰符
+
+  只是作为一个编译时的语法糖存在。它会被拓展为一个自动更新父组件属性的 `v-on` 监听器
+  ```html
+  <comp :foo.sync="bar"></comp>
+  <!-- 会被拓展为 ==> -->
+  <comp :foo="bar" @update:foo="val => bar = val"></comp>
+
+  <!-- 多个属性时会添加多个用于用于更新的v-on监听器 -->
+  <comp v-bind.sync="{ foo: 1, bar: 2 }"></comp>
+  ```
+  当子组件需要更新 `foo` 的值时，它需要显式地触发一个更新事件：
+  ```javascript
+  this.$emit('update:foo', newValue);
+  ```
+
+- 使用自定义事件的表单输入组件
+
+  要让组件的 `v-model` 生效，它应该：
+  - 接受一个 `value` prop
+  - 在有新的值时触发 `input` 事件并将新值作为参数
+
+```html
+<div id="currency-event-example">
+  <currency-input v-model="price"></currency-input>
+</div>
+```
+```javascript
+Vue.component('currency-input', {
+  template: '\
+      <span>\
+        $\
+        <input\
+          ref="input"\
+          v-bind:value="value"\
+          v-on:input="updateValue($event.target.value)"\
+        >\
+      </span>\
+    ',
+    props: ['value'],
+    methods: {
+      // 不是直接更新值，而是使用此方法来对输入值进行格式化和位数限制
+      updateValue: function (value) {
+        var formattedValue = value
+          // 删除两侧的空格符
+          .trim()
+          // 保留 2 位小数
+          .slice(
+            0,
+            value.indexOf('.') === -1
+              ? value.length
+              : value.indexOf('.') + 3
+          )
+        // 如果值尚不合规，则手动覆盖为合规的值
+        if (formattedValue !== value) {
+          this.$refs.input.value = formattedValue
+        }
+        // 通过 input 事件带出数值
+        this.$emit('input', Number(formattedValue))
+      }
+    }
+});
+
+new Vue({
+  el: '#currency-event-example',
+  data: {
+    price: ''
+  }
+});
+```
+
+- 自定义组件的 `v-model`
+
+  一个组件的 `v-model` 会使用 `value` prop 和 `input` 事件。但是诸如单选框、复选框之类的输入类型可能把 `value` 用作了别的目的。`model` 选项可以避免这样的冲突：
+  ```javascript
+  Vue.component('my-checkbox', {
+    model: {
+      prop: 'checked',
+      event: 'change'
+    },
+    props: {
+      checked: Boolean,
+      // 这样就允许拿 `value` 这个 prop 做其它事了
+      value: String
+    },
+    // ...
+  });
+  ```
+  ```html
+  <my-checkbox v-model="foo" value="some value"></my-checkbox>
+  <!-- 这时等价于 ==> -->
+  <my-checkbox
+    :checked="foo"
+    @change="val => { foo = val }"
+    value="some value">
+  </my-checkbox>
+  ```
+
+- 非父子组件的通信
+```javascript
+//使用一个空的Vue实例作为事件总栈
+var bus = new Vue();
+
+//触发组件A中的事件
+bus.$emit('id-selected', 1);
+
+//在组件B中创建的钩子中的监听事件
+bus.$on('id-selected', function (id) {
+  // ...
+});
+```
 
 

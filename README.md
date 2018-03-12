@@ -1,8 +1,7 @@
 ---
 title: review-js
-date: 2018-1-27 16:08:19
 tags: javascript
-categories: 学习
+categories: 温故而知新
 ---
 
 ## 第一部分:基础部分
