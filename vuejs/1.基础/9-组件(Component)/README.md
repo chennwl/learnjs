@@ -823,6 +823,65 @@ var vm = new Vue({
     ```
     ##### 总结： 在字符串模板中，PascalCase 是最通用的声明约定而 kebab-case 是最通用的使用约定
 
+- 递归组件
+  + 组件在它的模板内可以递归调用自己。不过，只有当它有 `name` 选项时才可以这么做：
+  ```javascript
+  name: 'unique-name-of-my-component'
+  ```
+  + 当利用 `Vue.component` 全局注册了一个组件，全局的 ID 会被自动设置为组件的 `name`。
+  ```javascript
+  Vue.component('unique-name-of-my-component', {
+    // ...
+  });
+  ```
+  + 要确保递归调用有终止条件(比如递归调用时使用 `v-if` 并最终解析为 `false` )
+
+- 组件间的循环引用
+  + 当两个组件同时为对方的父节点和子节点--这是矛盾的。当使用 `Vue.component` 将这两个组件注册为全局组件的时候，框架会解决这个矛盾
+  + 使用诸如 `webpack` 或者 `Browserify` 之类的模块化管理工具来 `require/import` 组件的话，就会有问题。假设引起矛盾的子组件是 `tree-folder-contents`，所以可以等到 `beforeCreate` 生命周期钩子中才去注册它：
+  ```javascript
+  beforeCreate: function () {
+    this.$options.components.TreeFolderContents = require('./tree-folder-contents.vue').default
+  }
+  ```
+
+- 内联模板
+
+  如果子组件有 `inline-template` 特性，组件将把它的内容当作它的模板，而不是把它当作分发内容
+  ```html
+  <my-component inline-template>
+    <div>
+      <p>这些将作为组件自身的模板。</p>
+      <p>而非父组件透传进来的内容。</p>
+    </div>
+  </my-component>
+  ```
+
+- X-Template
+
+  另一种定义模板的方式是在 JavaScript 标签里使用 `text/x-template` 类型，并且指定一个 id：
+  ```javascript
+  <script type="text/x-template" id="hello-world-template">
+    <p>Hello hello hello</p>
+  </script>
+
+  Vue.component('hello-world', {
+    template: '#hello-world-template'
+  });
+  ```
+- 对低开销的静态组件使用 `v-once`
+  
+  尽管在 Vue 中渲染 HTML 很快，不过当组件中包含大量静态内容时，可以考虑使用 `v-once` 将渲染结果缓存起来，就像这样：
+  ```javascript
+  Vue.component('terms-of-service', {
+    template: '\
+      <div v-once>\
+        <h1>Terms of Service</h1>\
+        ...很多静态内容...\
+      </div>\
+    '
+  });
+  ```
 
 
 
