@@ -27,8 +27,35 @@ new Vue({
 });
 ```
 - DOM 模板解析注意事项
+##### 特殊的 HTML 结构中使用 is
+比如在下拉列表（select）元素里面，子元素必须为 option，则在使用组件的时候用 is
+```html
+    <div id="app">
+        <select>
+            <option is="privateOption"></option>
+        </select>
+    </div>
+```
+```javascript
+    var vm = new Vue({
+        el: '#app',
+        components: {
+            'privateOption': {
+                template: '<option value=1>1</otpion>'
+            }
+        }
+    })
+```
+渲染结果
+```html
+    <div id="app">
+        <select>
+            <option value="1">1</option>
+        </select>
+    </div>
+```
 
-  当使用 DOM 作为模板时，会受到 HTML 本身的一些限制。使用来自以下来源之一的字符串模板，则没有这些限制
+  当使用 DOM 作为模板时，会受到类似上述的 HTML 本身的一些限制。使用来自以下来源之一的字符串模板，则没有这些限制
     - `<script type="text/x-template">`
     - JavaScript 内联模板字符串
     ```html
@@ -117,7 +144,7 @@ Vue.component('child', {
 
 - 动态prop
 
-    用 ｀v-bind｀ 来动态地将 prop 绑定到父组件的数据。每当父组件的数据变化时，该变化也会传导给子组件：
+    用 `v-bind` 来动态地将 prop 绑定到父组件的数据。每当父组件的数据变化时，该变化也会传导给子组件：
     ```javascript
     new Vue({
       el: '#prop-example-2',
@@ -176,35 +203,47 @@ Vue.component('child', {
 - Prop验证
 
     为组件的prop指定验证规则。如果传入的数据不符合要求，Vue 会发出警告。
+    ```html
+    <div id="prop-example-3">
+      <!-- 不加v-bind是字面量语法name字符串 -->
+      <example prop-C="name"></example>
+    </div>
+    ```
     ```javascript
-    Vue.component('example', {
-      props: {
-        // 基础类型检测 (`null` 指允许任何类型)
-        propA: Number,
-        // 可能是多种类型
-        propB: [String, Number],
-        // 必传且是字符串
-        propC: {
-          type: String,
-          required: true
-        },
-        // 数值且有默认值
-        propD: {
-          type: Number,
-          default: 100
-        },
-        // 数组/对象的默认值应当由一个工厂函数返回
-        propE: {
-          type: Object,
-          default: function () {
-            return { message: 'hello' }
-          }
-        },
-        // 自定义验证函数
-        propF: {
-          validator: function (value) {
-            return value > 10
-          }
+    new Vue({
+      el: '#prop-example-3',
+      components: {
+        'example': {
+          props: {
+            // 基础类型检测 (`null` 指允许任何类型)
+            propA: Number,
+            // 可能是多种类型
+            propB: [String, Number],
+            // 必传且是字符串
+            propC: {
+              type: String,
+              required: true
+            },
+            // 数值且有默认值
+            propD: {
+              type: Number,
+              default: 100
+            },
+            // 数组/对象的默认值应当由一个工厂函数返回
+            propE: {
+              type: Object,
+              default: function () {
+                return { message: 'hello' }
+              }
+            },
+            // 自定义验证函数
+            propF: {
+              validator: function (value) {
+                return value > 10
+              }
+            }
+          },
+          template: '<div>{{propC + propD}}</div>' //渲染成name100
         }
       }
     });
@@ -228,8 +267,8 @@ Vue.component('child', {
 - 使用v-on绑定自定义事件
 
     - 每个 Vue 实例都实现了事件接口，即：
-      - 使用 ｀$on(eventName)` 监听事件
-      - 使用 ｀$emit(eventName, optionalPayload)` 触发事件
+      - 使用 `$on(eventName)` 监听事件
+      - 使用 `$emit(eventName, optionalPayload)` 触发事件
     - 父组件可以在使用子组件的地方直接用 `v-on` 来监听子组件触发的事件
       - 不能用 `$on` 监听子组件释放的事件，而必须在模板里直接用 `v-on` 绑定
 
@@ -237,6 +276,7 @@ Vue.component('child', {
     <div id="counter-event-example">
       <p>{{ total }}</p>
       <!-- 在模板里直接用 v-on 绑定子组件释放的事件 -->
+      <!-- increment是事件名称，incrementTotal是事件处理函数 -->
       <button-center v-on:increment="incrementTotal"></button-center>
       <button-center v-on:increment="incrementTotal"></button-center>
     </div>
@@ -379,6 +419,7 @@ new Vue({
   ```
 
 - 非父子组件的通信
+
 ```javascript
 //使用一个空的Vue实例作为事件总栈
 var bus = new Vue();
@@ -391,5 +432,400 @@ bus.$on('id-selected', function (id) {
   // ...
 });
 ```
+
+## 使用插槽(`<slot>`元素)分发内容
+- 编译作用域
+  
+  组件的作用域：父组件模板的内容在父组件作用域内编译；子组件模板的内容在子组件作用域内编译。
+  ```html
+  <div id="compiling-scope-1">
+    <!--无效：Property or method "someChildProperty" is not defined on the instance but referenced during render-->
+    <child-component v-show="someChildProperty"></child-component>
+
+    <child-component></child-component>
+  </div>
+  ```
+  ```javascript
+  new Vue({
+    el: '#compiling-scope-1',
+    components: {
+      childComponent: {
+        // 有效，因为是在正确的作用域内
+        template: '<div v-show="someChildProperty">Child</div>',
+        data: function(){ //data必须是函数
+          return {
+            someChildProperty: true
+          }
+        }
+      }
+    }
+  });
+  ```
+
+- 单个插槽
+
+  除非子组件模板包含至少一个 ｀<slot>｀ 插口，否则父组件的内容将会被丢弃。当子组件模板只有一个没有属性的插槽时，父组件传入的整个内容片段将插入到插槽所在的 DOM 位置，并替换掉插槽标签本身。
+  ```html
+  <div id="single-slot">
+    <h1>这是父组件的标题</h1>
+    <!-- 没有slot标签my-component中的内容都会被丢弃 -->
+    <my-component>
+      <!-- 要分发的内容 -->
+      <p>这是一些初始内容</p>
+      <p>这是更多的初始内容</p>
+    </my-component>
+  </div>
+  ```
+  ```javascript
+  new Vue({
+    el: '#single-slot',
+    components: {
+      myComponent: {
+        template: `<div>
+          <h2>这是子标题</h2>
+          <slot>
+            只有在没有要分发的内容时才会显示，这里分发的内容是my-component中的两个p标签
+          </slot>
+        </div>`
+      }
+    }
+  });
+  ```
+  渲染结果：
+  ```html
+  <div id="single-slot">
+    <h1>这是父组件的标题</h1> 
+    <div>
+      <h2>这是子标题</h2> 
+      <p>这是一些初始内容</p>
+      <p>这是更多的初始内容</p>
+    </div>
+  </div>
+  ```
+
+- 具名插槽
+  +  `<slot>` 元素可以用一个特殊的特性 `name` 来进一步配置如何分发内容。多个插槽可以有不同的名字。具名插槽将匹配内容片段中有对应 `slot` 特性的元素。
+  + 仍然可以有一个匿名插槽，它是默认插槽，作为找不到匹配的内容片段的备用插槽。如果没有默认插槽，这些找不到匹配的内容片段将被抛弃
+
+  ```html
+  <div id="name-slot">
+    <app-layout>
+        <h1 slot="header">这里可能是一个页面标题</h1>
+
+        <p>主要内容的一个段落。</p>
+        <p>另一个主要段落。</p>
+
+        <p slot="footer">这里有一些联系信息</p>
+    </app-layout>
+  </div>
+  ```
+  ```javascript
+  //slot为插槽，有name属性的为具名插槽，单纯只有slot标签的是匿名插槽
+  new Vue({
+    el: '#name-slot',
+    components: {
+      appLayout: {
+        template: `<div class="container">
+            <header>
+              <slot name="header"></slot>
+            </header>
+            <main>
+              <slot></slot>
+            </main>
+            <footer>
+              <slot name="footer"></slot>
+            </footer>
+        </div>`
+      }
+    }
+  });
+  ```
+  渲染结果：
+  ```html
+  <div class="container">
+    <header>
+      <h1>这里可能是一个页面标题</h1>
+    </header>
+    <main>
+      <p>主要内容的一个段落。</p>
+      <p>另一个主要段落。</p>
+    </main>
+    <footer>
+      <p>这里有一些联系信息</p>
+    </footer>
+  </div>
+  ```
+
+- 作用域插槽
+  + 作用域插槽是一种特殊类型的插槽，用作一个 (能被传递数据的) 可重用模板，来代替已经渲染好的元素
+  + 2.5.0+以前的示例：
+  ```html
+  <div id="slot-scope-1">
+    <div class="parent">
+      <child>
+        <!-- 2.5.0+以前，在父级中，具有特殊特性的slot-scope和<template>元素必须存在 -->
+        <template slot-scope="props">
+          <span>hello from parent</span>
+          <span>{{props.text}}</span>
+        </template>
+      </child>
+    </div>
+  </div>
+  ```
+  ```javascript
+  new Vue({
+    el: '#slot-scope-1',
+    components: {
+      'child': {
+        template: `<div class="child">
+          <!-- 数据传递到插槽 -->
+          <slot text="hello from child"></slot>
+        </div>`
+      }
+    }
+  });
+  ```
+  + 在 2.5.0+，`slot-scope` 能被用在任意元素或组件中而不再局限于 `<template>`
+  ```html
+  <!-- 在列表组件中，允许使用者自定义如何渲染列表的每一项： -->
+  <div id="slot-scope-2">
+    <!-- 前面的items属于子组件的，后面的items属于父组件的 -->
+    <my-awesome-list :items="items">
+      <!-- 作用域插槽也可以是具名的，slot-scope可以放在任意元素或组件中 -->
+      <li
+        slot="item"
+        slot-scope="props"
+        class="my-fancy-item">{{ props.text }}</li>
+    </my-awesome-list>
+  </div>
+  ```
+  ```javascript
+  new Vue({
+    el: '#slot-scope-2',
+    data: {
+      items: [
+        {text: 'chen'},
+        {text: 'wei'},
+        {text: 'liang'}
+      ]
+    },
+    components: {
+      'my-awesome-list': {
+        template: `<ul>
+          <slot name="item"
+            v-for="item in items"
+            :text="item.text">
+            <!-- 这里写入备用内容 -->
+          </slot>
+        </ul>`,
+        props: ['items']    //父组件通过prop传递数据给子组件
+      }
+    }
+  });
+  ```
+
+  + 解构
+
+  `slot-scope` 的值实际上是一个可以出现在函数签名参数位置的合法的 JavaScript 表达式。在表达式中使用ES2015解构：
+  ```html
+  <child>
+    <span slot-scope="{ text }">{{ text }}</span>
+  </child>
+  ```
+
+## 动态组件
+- 通过使用保留的 `<component>` 元素，并对其 `is`  特性进行动态绑定，可以在同一个挂载点动态切换多个组件：
+```html
+<div id="active-component">
+    <input type="button" value="changeLight" @click="changeLight" />
+    <br/>
+    <component v-bind:is="currentview">
+    <!-- 组件在 vm.currentview 变化时改变！ -->
+    </component>
+</div>
+```
+```javascript
+var vm = new Vue({
+    el: '#active-component',
+    data: {
+        currentview: 'red',
+    },
+    methods:{
+        changeLight: function(){
+            this.currentview = this.currentview == 'red' ? 'green' : 'red';
+        }
+    },
+    components: {
+        red: {
+            template: '<h2>Red</h2>'
+        },
+        green: {
+            template: '<h2>Green</h2>'
+        }
+    }
+})
+//也可以直接绑定到组件对象上
+var Red = {
+  template: '<h2>Red</h2>'
+}
+var vm = new Vue({
+  el: '#active-component',
+  data: {
+    currentView: Red
+  }
+})
+```
+- 添加`keep-alive`指令参数可以把切换出去的组件保留在内存中，可以保留它的状态或避免重新渲染
+```html
+<keep-alive>
+  <component :is="currentView">
+    <!-- 非活动组件将被缓存！ -->
+  </component>
+</keep-alive>
+```
+
+## 杂项
+- 编写可复用组件
+##### Vue组件的API来自三部分－－prop、事件和插槽：
+    - Prop 允许外部环境传递数据给组件；
+    - 事件允许从组件内触发外部环境的副作用；
+    - 插槽允许外部环境将额外的内容组合在组件中。
+    ```html
+    <!-- 使用 v-bind 和 v-on 的简写语法，模板的意图会更清楚且简洁：-->
+    <my-component
+      :foo="baz"
+      :bar="qux"
+      @event-a="doThis"
+      @event-b="doThat"
+    >
+      <img slot="icon" src="...">
+      <p slot="main-text">Hello!</p>
+    </my-component>
+    ```
+
+- 子组件引用
+
+  在Javascript中直接访问子组件，可以使用 `ref` 为子组件指定一个引用ID
+  ```html
+ <div id="parent">
+      <user-profile ref="profile" v-for="item in items" :item="item"></user-profile>
+  </div>
+  ```
+  ```javascript
+  var parent = new Vue({
+    el: '#parent',
+    data: {
+      items: [
+        {text: 1},
+        {text: 2}
+      ]
+    },
+    components: {
+      'user-profile': {
+        props: ['item'],
+        template: '<p>{{ item.text }}</p>',
+      }
+    }
+  });
+
+  var childs = parent.$refs.profile;
+  console.log(childs); //输出的是一个数组
+  ```
+  ##### 注意：
+    - 当 `ref` 和 `v-for` 一起使用时，获取到的引用会是一个数组，包含和循环数据源对应的子组件。
+    - `$refs` 只在组件渲染完成后才填充，并且它是非响应式的。它仅仅是一个直接操作子组件的应急方案——应当避免在模板或计算属性中使用 `$refs`。
+
+- 异步组件
+  + 将组件定义为一个工厂函数，异步地解析组件的定义。Vue.js只在组件需要渲染时触发工厂函数，并且将结果缓存起来，用于后面的再次渲染。例如：
+  ```javascript
+  Vue.component('async-example', function (resolve, reject) { //可以调用 reject(reason) 指示加载失败
+    setTimeout(function () {
+      // 将组件定义传入 resolve 回调函数
+      resolve({ //接收一个 resolve 回调，在收到从服务器下载的组件定义时调用
+        template: '<div>I am async!</div>'
+      })
+    }, 1000)
+  });
+  ```
+  + 获取组件可以配合 `webpack` 的代码分割功能 来使用：
+  ```javascript
+  Vue.component('async-webpack-example', function (resolve) {
+    // 这个特殊的 require 语法告诉 webpack
+    // 自动将编译后的代码分割成不同的块，
+    // 这些块将通过 Ajax 请求自动下载。
+    require(['./my-async-component'], resolve)
+  });
+  ```
+  + `webpack2` + `ES6`的语法在工厂函数函数中返回一个 `Promise`：
+  ```javascript
+  Vue.component(
+    'async-webpack-example',
+    // 该 `import` 函数返回一个 `Promise` 对象。
+    () => import('./my-async-component')
+  );
+  ```
+
+- 高级异步组件
+
+  自 2.3.0 起，异步组件的工厂函数也可以返回一个如下的对象：
+  ```javascript
+  const AsyncComp = () => ({
+    // 需要加载的组件。应当是一个 Promise
+    component: import('./MyComp.vue'),
+    // 加载中应当渲染的组件
+    loading: LoadingComp,
+    // 出错时渲染的组件
+    error: ErrorComp,
+    // 渲染加载中组件前的等待时间。默认：200ms。
+    delay: 200,
+    // 最长等待时间。超出此时间则渲染错误组件。默认：Infinity
+    timeout: 3000
+  });
+  ```
+
+- 组件命名约定
+  + 当注册组件 (或者 `prop`) 时，可以使用 kebab-case (短横线分隔命名)、camelCase (驼峰式命名) 或 PascalCase (单词首字母大写命名)。
+  ```javascript
+  // 在组件定义中
+  components: {
+    // 使用 kebab-case 注册
+    'kebab-cased-component': { /* ... */ },
+    // 使用 camelCase 注册
+    'camelCasedComponent': { /* ... */ },
+    // 使用 PascalCase 注册
+    'PascalCasedComponent': { /* ... */ }
+  }
+  ```
+  ```html
+  <!-- 在 HTML 模板中始终使用 kebab-case -->
+  <kebab-cased-component></kebab-cased-component>
+  <camel-cased-component></camel-cased-component>
+  <pascal-cased-component></pascal-cased-component>
+  ```
+  + 当使用字符串模式时，可以不受 HTML 大小写不敏感的限制。这意味实际上在模板中，可以使用下面的方式来引用组件：
+    - kebab-case
+    - camelCase 或 kebab-case (如果组件已经被定义为 camelCase)
+    - kebab-case、camelCase 或 PascalCase (如果组件已经被定义为 PascalCase)
+    ```javascript
+    components: {
+      'kebab-cased-component': { /* ... */ },
+      camelCasedComponent: { /* ... */ },
+      PascalCasedComponent: { /* ... */ }
+    }
+    ```
+    ```html
+    <kebab-cased-component></kebab-cased-component>
+    <camel-cased-component></camel-cased-component>
+    <camelCasedComponent></camelCasedComponent>
+    <pascal-cased-component></pascal-cased-component>
+    <pascalCasedComponent></pascalCasedComponent>
+    <PascalCasedComponent></PascalCasedComponent>
+    ```
+    ##### 总结： 在字符串模板中，PascalCase 是最通用的声明约定而 kebab-case 是最通用的使用约定
+
+
+
+
+
 
 
