@@ -6,7 +6,7 @@
 	<style type="text/css">
 		h3{color: red;}
 	</style>
-	<script src="../vue.js"></script>
+	<script src="../../vue.js"></script>
 </head>
 <body>
 	<fieldset>
@@ -501,15 +501,16 @@
 		<legend>杂项</legend>
 		<h3>子组件引用</h3>
 		<div id="parent">
-		    <user-profile ref="profile" v-for="item in items" :item="item"></user-profile>
+			<!--在组件中用 v-for要必须加上key-->
+		    <user-profile ref="profile" v-for="item in items" :item="item" :key="item.id"></user-profile>
 		</div>
 		<script>
 			var parent = new Vue({
 				el: '#parent',
 				data: {
 					items: [
-						{text: 1},
-						{text: 2}
+						{text: 1,id: 1},
+						{text: 2,id: 2}
 					]
 				},
 				components: {

@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>模板语法－指令</title>
-    <script src="../vue.min.js"></script>
+    <script src="../../vue.min.js"></script>
 </head>
 <body>
     <div id="app1">
-        <h2>参数</h2>
+        <h2>参数绑定v-bind</h2>
         <!--响应式地更新HTMl属性-->
         <a v-bind:href="url">更新HTML属性</a>
         <!--响应式地修改DOM状态-->
@@ -21,10 +21,10 @@
                 el: "#app1",
                 data: {
                     seen: "true",
-                    url: ""
+                    url: "https://www.baidu.com"
                 },
                 methods: {
-                    doSomething: function () { 
+                    doSomething: function () {
                         alert("通过v-on:click或@click绑定的事件");
                      }
                 }
@@ -34,6 +34,7 @@
     <div id="app2">
         <h2>修饰符</h2>
         <p>修饰符 (Modifiers) 是以半角句号 <mark>.</mark> 指明的特殊后缀，用于指出一个指令应该以特殊方式绑定。例如，<mark>.prevent</mark>(v-on:submit.prevent="onSubmit") 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault()</p>
+        <!-- 加了prevent就是提交表单的时候不跳转页面 -->
         <form v-on:submit.prevent="onSubmit">...</form>
     </div>
 
@@ -48,6 +49,6 @@
     <p>v-model，仅作用于表单元素，双向绑定</p>
     <p>v-pre，不编译，当字符串输出</p>
     <p>v-cloak，用于解决转换的过程不友好的显示，尤其是在页面加载过慢的情况很容易出现这种情况</p>
-    <p>v-once，内容只解析一次</p> 
+    <p>v-once，内容只解析一次</p>
 </body>
 </html>

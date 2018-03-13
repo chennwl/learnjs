@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>计算属性</title>
-    <script src="../vue.min.js"></script>
+    <script src="../../vue.min.js"></script>
 </head>
 <body>
     <div id="example">
@@ -24,17 +24,19 @@
         data: {
             message: 'Hello'
         },
-        computed: {         //计算属性
+        computed: {         //计算属性是基于它们的依赖进行缓存的
             // 计算属性的 getter
             reversedMessage: function () {
                 // `this` 指向 vm 实例
                 return this.message.split('').reverse().join('')
             }
         },
-        watch: {    //监听
-
+        methods: {  //method可达到同样的效果，不希望有缓存，可以用方法代替
+          reversedMessage: function () {
+            return this.message.split('').reverse().join('')
+          }
         },
-        methods: {  //方法
+        watch: {    //监听
 
         }
     });
@@ -52,7 +54,7 @@
                     return this.firstName + ' ' + this.lastName
                 },
                 // setter 运行 vm_2.fullName = 'John Doe' 时，setter 会被调用，vm_2.firstName 和 vm_2.lastName 也会相应地被更新
-                set: function (newValue) {
+                set: function (newValue) {  //newValue就是fullName的值
                     var names = newValue.split(' ')
                     this.firstName = names[0]
                     this.lastName = names[names.length - 1]

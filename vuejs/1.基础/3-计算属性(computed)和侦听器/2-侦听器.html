@@ -15,7 +15,7 @@
         <p>{{ answer }}</p>
     </div>
 </body>
-<script src="../vue.min.js"></script>
+<script src="../../vue.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
 <script>
@@ -27,9 +27,9 @@
         },
         watch: {
             //如果 question 发生变化，这个函数就会运行
-            question: function (newQuestion, oldQuestion) {  
+            question: function (newQuestion, oldQuestion) {
                 this.answer = 'Waiting for you to stop typing...';
-                this.getAnswer();
+                this.getAnswer();   //调用实例自身的函数
             }
         },
         methods: {
@@ -41,12 +41,12 @@
                         return;
                     }
                     this.answer = 'Thinking...';
-                    var vm = this;
+                    var vm = this; //this代表Vue实例
                     axios.get('https://yesno.wtf/api')      //访问api
-                        .then(function (response) {  
+                        .then(function (response) {
                             vm.answer = _.capitalize(response.data.answer)
                         })
-                        .catch(function (error) {  
+                        .catch(function (error) {
                             vm.answer = 'Error! Could not reach the API. ' + error
                         });
                 },

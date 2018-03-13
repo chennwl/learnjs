@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>条件渲染</title>
-    <script src="../vue.min.js"></script>
+    <script src="../../vue.min.js"></script>
 </head>
 <body>
     <div id="app">
         <fieldset>
             <legend>指令：v-if</legend>
-            <h3>在 &lt;template&gt; 元素上使用 v-if 条件渲染分组;最终的渲染结果将不包含 &lt;template&gt; 元素</h3> 
+            <h3>在 &lt;template&gt; 元素上使用 v-if 条件渲染分组;最终的渲染结果将不包含 &lt;template&gt; 元素</h3>
             <template v-if="ok">
                 <h2>Title</h2>
                 <p>Paragraph 1</p>
@@ -79,7 +79,7 @@
             <button @click="toggleLoginType">Toggle login type</button>
         </div>
     </fieldset>
-    
+
     <script>
         var vm = new Vue({
             el: "#app",
@@ -88,7 +88,7 @@
                 type: 'A'
             }
         });
-        
+
         //用 key 管理可复用的元素
         new Vue({
             el: '#key-example',
