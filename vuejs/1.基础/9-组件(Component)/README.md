@@ -180,7 +180,7 @@ Vue.component('child', {
     <comp v-bind:some-prop="1"></comp>
     ```
 
-- 单向数据流
+- 单向数据流(父组件到子组件)
 
     子组件内部的prop中的数据不应该改变。如果忍不住想去修改 prop 中的数据，正确的应对方法是：
     1. 定义一个局部变量，并用 prop 的值初始化它：
@@ -260,8 +260,8 @@ Vue.component('child', {
     - prop 会在组件实例创建之前进行校验，所以在 `default` 或 `validator` 函数里，诸如 `data`、`computed` 或 `methods` 等实例属性还无法使用
 
 ## 非Prop特性
-- 指它可以直接传入组件，而不需要定义相应的 ｀prop｀
-- 尽管为组件定义明确的 ｀prop｀ 是推荐的传参方式，组件的作者却并不总能预见到组件被使用的场景。所以，组件可以接收任意传入的特性，这些特性都会被添加到组件的根元素上。 
+- 指它可以直接传入组件，而不需要定义相应的 `prop`
+- 尽管为组件定义明确的 `prop` 是推荐的传参方式，组件的作者却并不总能预见到组件被使用的场景。所以，组件可以接收任意传入的特性，这些特性都会被添加到组件的根元素上。 
 
 ## 自定义事件(子组件跟父组件通信)
 - 使用v-on绑定自定义事件
@@ -319,6 +319,46 @@ Vue.component('child', {
   <!--监听原生click事件-->
   <my-component v-on:click.native="doTheThing"></my-component>
   ```
+- 如何使用载荷(payload)数据的示例：
+```html
+<div id="message-event-example" class="demo">
+    <p v-for="msg in messages">{{ msg }}</p>
+    <button-message v-on:message="handleMessage"></button-message>
+</div>
+```
+```javascript
+new Vue({
+  el: '#message-event-example',
+  data: {
+    messages: []
+  },
+  components: {
+    'button-message': {
+      template: `<div><input type="text" v-model="message" />
+        <button v-on:click="handleSendMessage">Send</button></div>`,
+      data: function(){
+        return {
+          message: 'test message'
+        }
+      },
+      methods: {
+        handleSendMessage: function(){
+          this.$emit('message', {
+            message: this.message,
+            name: 'text'
+          })
+        }
+      }
+    }
+  },
+  methods: {
+    handleMessage: function(payload){
+      console.log(payload); //payload：{message: this.message,name: 'text'}}
+      this.messages.push(payload.message);
+    }
+  }
+});
+```
 
 - `.sync`修饰符
 
@@ -348,45 +388,46 @@ Vue.component('child', {
 </div>
 ```
 ```javascript
-Vue.component('currency-input', {
-  template: '\
-      <span>\
-        $\
-        <input\
-          ref="input"\
-          v-bind:value="value"\
-          v-on:input="updateValue($event.target.value)"\
-        >\
-      </span>\
-    ',
-    props: ['value'],
-    methods: {
-      // 不是直接更新值，而是使用此方法来对输入值进行格式化和位数限制
-      updateValue: function (value) {
-        var formattedValue = value
-          // 删除两侧的空格符
-          .trim()
-          // 保留 2 位小数
-          .slice(
-            0,
-            value.indexOf('.') === -1
-              ? value.length
-              : value.indexOf('.') + 3
-          )
-        // 如果值尚不合规，则手动覆盖为合规的值
-        if (formattedValue !== value) {
-          this.$refs.input.value = formattedValue
-        }
-        // 通过 input 事件带出数值
-        this.$emit('input', Number(formattedValue))
-      }
-    }
-});
-
 new Vue({
   el: '#currency-event-example',
   data: {
     price: ''
+  },
+  components: {
+    'currency-input': {
+      template: '\
+          <span>\
+            $\
+            <input\
+              ref="input"\
+              v-bind:value="value"\
+              v-on:input="updateValue($event.target.value)"\
+            >\
+          </span>\
+        ',
+      props: ['value'],
+      methods: {
+          // 不是直接更新值，而是使用此方法来对输入值进行格式化和位数限制
+          updateValue: function (value) {
+            var formattedValue = value
+              // 删除两侧的空格符
+              .trim()
+              // 保留 2 位小数
+              .slice(
+                0,
+                value.indexOf('.') === -1
+                  ? value.length
+                  : value.indexOf('.') + 3
+              )
+            // 如果值尚不合规，则手动覆盖为合规的值
+            if (formattedValue !== value) {
+              this.$refs.input.value = formattedValue
+            }
+            // 通过 input 事件带出数值
+            this.$emit('input', Number(formattedValue))
+          }
+      }
+    }
   }
 });
 ```
@@ -464,7 +505,7 @@ bus.$on('id-selected', function (id) {
 
 - 单个插槽
 
-  除非子组件模板包含至少一个 ｀<slot>｀ 插口，否则父组件的内容将会被丢弃。当子组件模板只有一个没有属性的插槽时，父组件传入的整个内容片段将插入到插槽所在的 DOM 位置，并替换掉插槽标签本身。
+  除非子组件模板包含至少一个 `<slot>` 插口，否则父组件的内容将会被丢弃。当子组件模板只有一个没有属性的插槽时，父组件传入的整个内容片段将插入到插槽所在的 DOM 位置，并替换掉插槽标签本身。
   ```html
   <div id="single-slot">
     <h1>这是父组件的标题</h1>
@@ -614,7 +655,7 @@ bus.$on('id-selected', function (id) {
         template: `<ul>
           <slot name="item"
             v-for="item in items"
-            :text="item.text">
+            :text="item.text">  <!-- 绑定:text后，父组件就可以通过props.text拿数据了-->
             <!-- 这里写入备用内容 -->
           </slot>
         </ul>`,
@@ -686,10 +727,10 @@ var vm = new Vue({
 
 ## 杂项
 - 编写可复用组件
-##### Vue组件的API来自三部分－－prop、事件和插槽：
-    - Prop 允许外部环境传递数据给组件；
-    - 事件允许从组件内触发外部环境的副作用；
-    - 插槽允许外部环境将额外的内容组合在组件中。
+  - Vue组件的API来自三部分－－prop、事件和插槽：
+    + Prop 允许外部环境传递数据给组件；
+    + 事件允许从组件内触发外部环境的副作用；
+    + 插槽允许外部环境将额外的内容组合在组件中。
     ```html
     <!-- 使用 v-bind 和 v-on 的简写语法，模板的意图会更清楚且简洁：-->
     <my-component
@@ -704,36 +745,35 @@ var vm = new Vue({
     ```
 
 - 子组件引用
-
-  在Javascript中直接访问子组件，可以使用 `ref` 为子组件指定一个引用ID
-  ```html
- <div id="parent">
-      <user-profile ref="profile" v-for="item in items" :item="item"></user-profile>
-  </div>
-  ```
-  ```javascript
-  var parent = new Vue({
-    el: '#parent',
-    data: {
-      items: [
-        {text: 1},
-        {text: 2}
-      ]
-    },
-    components: {
-      'user-profile': {
-        props: ['item'],
-        template: '<p>{{ item.text }}</p>',
+  - 在Javascript中直接访问子组件，可以使用 `ref` 为子组件指定一个引用ID
+    ```html
+    <div id="parent">
+        <user-profile ref="profile" v-for="item in items" :item="item"></user-profile>
+    </div>
+    ```
+    ```javascript
+    var parent = new Vue({
+      el: '#parent',
+      data: {
+        items: [
+          {text: 1},
+          {text: 2}
+        ]
+      },
+      components: {
+        'user-profile': {
+          props: ['item'],
+          template: '<p>{{ item.text }}</p>',
+        }
       }
-    }
-  });
+    });
 
-  var childs = parent.$refs.profile;
-  console.log(childs); //输出的是一个数组
-  ```
-  ##### 注意：
-    - 当 `ref` 和 `v-for` 一起使用时，获取到的引用会是一个数组，包含和循环数据源对应的子组件。
-    - `$refs` 只在组件渲染完成后才填充，并且它是非响应式的。它仅仅是一个直接操作子组件的应急方案——应当避免在模板或计算属性中使用 `$refs`。
+    var childs = parent.$refs.profile;
+    console.log(childs); //输出的是一个数组
+    ```
+  - 注意：
+    + 当 `ref` 和 `v-for` 一起使用时，获取到的引用会是一个数组，包含和循环数据源对应的子组件。
+    +  `$refs` 只在组件渲染完成后才填充，并且它是非响应式的。它仅仅是一个直接操作子组件的应急方案——应当避免在模板或计算属性中使用 `$refs`。
 
 - 异步组件
   + 将组件定义为一个工厂函数，异步地解析组件的定义。Vue.js只在组件需要渲染时触发工厂函数，并且将结果缓存起来，用于后面的再次渲染。例如：
