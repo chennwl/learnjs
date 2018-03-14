@@ -76,27 +76,27 @@ new Vue({
 
   构造 Vue 实例时传入的各种选项大多数都可以在组件里使用。只有一个例外：data 必须是函数。
 
-```html
-<div id="example-2">
-  <simple-counter></simple-counter>
-  <simple-counter></simple-counter>
-  <simple-counter></simple-counter>
-</div>
-```
-```javascript
-Vue.component('simple-counter', {
-    template: '<button v-on:click="counter += 1">{{ counter }}</button>',
-    data: function () {
-        return {
-            counter: 0
-        }
-    }
-})
+  ```html
+  <div id="example-2">
+    <simple-counter></simple-counter>
+    <simple-counter></simple-counter>
+    <simple-counter></simple-counter>
+  </div>
+  ```
+  ```javascript
+  Vue.component('simple-counter', {
+      template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+      data: function () {
+          return {
+              counter: 0
+          }
+      }
+  })
 
-new Vue({
-    el: '#example-2'
-});
-```
+  new Vue({
+      el: '#example-2'
+  });
+  ```
 
 - 组件组合
 
@@ -144,7 +144,7 @@ Vue.component('child', {
 
 - 动态prop
 
-    用 `v-bind` 来动态地将 prop 绑定到父组件的数据。每当父组件的数据变化时，该变化也会传导给子组件：
+    用 `v-bind` 和 `v-model` 来动态地将 prop 绑定到父组件的数据。每当父组件的数据变化时，该变化也会传导给子组件：
     ```javascript
     new Vue({
       el: '#prop-example-2',
