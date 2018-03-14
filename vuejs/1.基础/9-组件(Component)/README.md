@@ -56,21 +56,21 @@ new Vue({
 ```
 
   当使用 DOM 作为模板时，会受到类似上述的 HTML 本身的一些限制。使用来自以下来源之一的字符串模板，则没有这些限制
-    - `<script type="text/x-template">`
-    - JavaScript 内联模板字符串
-    ```html
-    <template v-if="ok">
-        <h2>Title</h2>
-        <p>Paragraph 1</p>
-        <p>Paragraph 2</p>
-    </template>
-    ```
-    - `.vue` 组件
-    ```javascript
-    var p = new Vue({
-        template: '<MyComponent></MyComponent>'
-    });
-    ```
+      - `<script type="text/x-template">`
+      - JavaScript 内联模板字符串
+      ```html
+      <template v-if="ok">
+          <h2>Title</h2>
+          <p>Paragraph 1</p>
+          <p>Paragraph 2</p>
+      </template>
+      ```
+      - `.vue` 组件
+      ```javascript
+      var p = new Vue({
+          template: '<MyComponent></MyComponent>'
+      });
+      ```
 
 - 在组件里面data必须是函数并返回一个对象
 
