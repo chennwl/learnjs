@@ -21,6 +21,17 @@
                 </li>
             </ul>
         </fieldset>
+        <script>
+            var example1 = new Vue({
+                el: "#example-1",
+                data: {
+                    items: [
+                        { message: 'Foo' },
+                        { message: 'Bar' }
+                    ]
+                }
+            });
+        </script>
 
         <fieldset>
             <legend>v-for拥有父作用域属性的完全访问权限。</legend>
@@ -31,11 +42,23 @@
                 <li v-for="(item, index) in items" :key="item.id"> {{ parentMessage }} - {{ index }} - {{ item.message }}</li>
             </ul>
         </fieldset>
+         <script>
+            var example2 = new Vue({
+                el: '#example-2',
+                data: {
+                    parentMessage: 'Parent',
+                    items: [
+                        { message: 'Foo', id: 1 },
+                        { message: 'Bar', id: 2 }
+                    ]
+                }
+            });
+        </script>
 
         <fieldset>
             <legend>一个对象的v-for</legend>
             <h3>在遍历对象时，是按 Object.keys() 的结果遍历，但是不能保证它的结果在不同的 JavaScript 引擎下是一致的。</h3>
-            <div>Object.keys(vforObject.object) =>  ["name", "age", "sex"] 这是在Chrome的结果</div>
+            <div>Object.keys(vforObject.object) =>  ["name", "age", "sex", "hobby"] 这是在Chrome的结果</div>
             <ul id="v-for-object" class="demo">
                 <li v-for = "(value, key, index) in object" key="key">{{ index }} . {{key }} : {{ value }}</li>
             </ul>
@@ -72,7 +95,7 @@
                 <li>concat()</li>
                 <li>slice()</li>
             </ul>
-            <h2>注意事项</h2>
+            <h2>注意事项：下述两种情况Vue是不能检测到数组的变动的</h2>
             <ol>
                 <li>当利用索引直接设置一个项时，例如：<span class="red">vm.items[indexOfItem] = newValue</span></li>
                 <li>当修改数组的长度时，例如：<span class="red">vm.items.length = newLength</span></li>
@@ -96,7 +119,7 @@
                 <li>vm.$set(vm.userProfile, 'age', 27)</li>
             </ol>
             <h4>为已有对象赋予多个新属性，比如使用 Object.assign() 或 _.extend()。在这种情况下，应该用两个对象的属性创建一个新的对象：</h4>
-            <pre>vm.userProfile = Object.assign({}, vm.userProfile, {
+            <pre>vm.userProfile = Object.assign({}, vm.userProfile, {   //vm.userProfile为原属性
     age: 27,
     favoriteColor: 'Vue Green'
 })
@@ -148,8 +171,8 @@
         </fieldset>
 
         <fieldset>
-            <legend>v-for on a &lt;tenplate&gt;</legend>
-            <h4>类似于 v-if，你也可以利用带有 v-for 的 &t;template&gt; 渲染多个元素</h4>
+            <legend>v-for on a &lt;template&gt;</legend>
+            <h4>类似于 v-if，可以利用带有 v-for 的 &lt;template&gt; 渲染多个元素</h4>
             <ul id="example-5">
                 <template v-for="item in items"> <!-- 循环的时候没有template这个标签 -->
                     <li>{{ item.msg }}</li>
@@ -162,13 +185,13 @@
                     data: {
                         items: [
                             {
-                                msg: "test1"
+                                msg: "msg1",
                             },
                             {
-                                msg: "wei"
+                                msg: "msg2"
                             }
                         ],
-                        name: 'shuaige'
+                        name: 'change'
                     }
                 });
             </script>
@@ -177,6 +200,27 @@
         <fieldset>
             <legend>v-for with v-if</legend>
             <h4>当它们处于同一节点，v-for 的优先级比 v-if 更高，这意味着 v-if 将分别重复运行于每个 v-for 循环中</h4>
+            <div id="example-6">
+                <!-- 只传递了未完成的 todos -->
+                <li v-for="todo in todos" v-if="!todo.isComplete">
+                  {{ todo }}
+                </li>
+            </div>
+            <script>
+                var example6 = new Vue({
+                    el: '#example-6',
+                    data: {
+                        todos: [
+                            {
+                                isComplete: false
+                            },
+                            {
+                                isComplete: true
+                            }
+                        ]
+                    }
+                })
+            </script>
         </fieldset>
 
         <fieldset>
@@ -242,28 +286,5 @@
             </script>
         </fieldset>
     </div>
-    <script>
-        var example1 = new Vue({
-            el: "#example-1",
-            data: {
-                items: [
-                    { message: 'Foo' },
-                    { message: 'Bar' }
-                ]
-            }
-        });
-
-        var example2 = new Vue({
-            el: '#example-2',
-            data: {
-                parentMessage: 'Parent',
-                items: [
-                    { message: 'Foo' },
-                    { message: 'Bar' }
-                ]
-            }
-        });
-
-    </script>
 </body>
 </html>

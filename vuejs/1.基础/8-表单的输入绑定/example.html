@@ -12,39 +12,40 @@
 			<div id="example-1">
 				<p>可以用v-model指令在表单&lt;input&gt;及&lt;textarea&gt;元素上创建双向数据绑定。它负责监听用户的输入事件以更新数据，并对一些极端场景进行一些特殊处理。</p>
 				<p>v-model会忽略所有表单元素的value、checked、selected特性的初始值而总是将Vue实例的数据作为数据来源</p>
+
 				<h3>文本</h3>
 				<input v-model="message_1" placeholder="edit me">
 				<p>Message is: {{ message_1 }}</p> <!--message需在data中定义-->
+
 				<h3>多行文本</h3>
 				<span>Multiline message is:</span>
 				<p style="white-space: pre-line;">{{ message_2 }}</p>
 				<br>
 				<textarea v-model="message_2" placeholder="add multiple lines"></textarea>
 				<div><mark>在文本区域插值 (&lt;textarea&gt;&lt;/textarea&gt;) 并不会生效，应用 v-model 来代替</mark></div>
+
 				<h3>复选框</h3>
-				<input type="checkbox" id="checkbox" v-model="checked">
+				<input type="checkbox" id="checkbox" v-model="checked" />
 				<label for="checkbox">{{ checked }}（checked的初始值应在Vue实例中设置）</label>
+
 				<h4>多个复选框绑定到同一个数组</h4>
 				<div>
-				  <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
-				  <label for="jack">Jack</label>
-				  <input type="checkbox" id="john" value="John" v-model="checkedNames">
-				  <label for="john">John</label>
-				  <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
-				  <label for="mike">Mike</label>
+				  <input type="checkbox" id="jack" value="Jack" v-model="checkedNames"><label for="jack">Jack</label>
+				  <input type="checkbox" id="john" value="John" v-model="checkedNames"><label for="john">John</label>
+				  <input type="checkbox" id="mike" value="Mike" v-model="checkedNames"><label for="mike">Mike</label>
 				  <br>
 				  <span>Checked names: {{ checkedNames }}（绑定的是多选框的value值）</span>
 				</div>
+
 				<h3>单选按钮</h3>
 				<div>
-				  <input type="radio" id="one" value="One" v-model="picked">
-				  <label for="one">One</label>
+				  <input type="radio" id="one" value="One" v-model="picked"><label for="one">One</label>
 				  <br>
-				  <input type="radio" id="two" value="Two" v-model="picked">
-				  <label for="two">Two</label>
+				  <input type="radio" id="two" value="Two" v-model="picked"><label for="two">Two</label>
 				  <br>
 				  <span>Picked: {{ picked }}（绑定的是单选框的value值）</span>
 				</div>
+
 				<h3>选择框</h3>
 				<div>
 					<h4>单选时：</h4>
@@ -57,6 +58,7 @@
 				  	</select>
 				  	<span>Selected: {{ selected_1 }}</span>
 				</div>
+
 				<div>
 					<h4>多选时 (绑定到一个数组)：</h4>
 				  	<select v-model="selected_2" multiple style="width: 50px;">
@@ -67,12 +69,13 @@
 				  	<br>
 				 	<span>Selected: {{ selected_2 }}</span>
 				</div>
+
 				<div>
 					<h4>用v-for渲染的动态选项：</h4>
 					<select v-model="selected_3">
 					  	<option v-for="option in options" v-bind:value="option.value">{{ option.text }}</option>
 					</select>
-					<span>Selected: {{ selected_3 }}</span>
+					<span>Selected: {{ selected_3 }} (显示的是对应选项的value值)</span>
 				</div>
 			</div>
 			<script type="text/javascript">
@@ -167,7 +170,7 @@
 					<h3>.number</h3>
 					<p>如果想自动将用户的输入值转为数值类型，可以给 v-model 添加 number 修饰符：</p>
 					<input v-model.number="age" type="number">
-					<p>input框在 type="number" 时，HTML 输入元素的值也总会返回字符串</p>
+					<p>这通常很有用，因为input框即使在 type="number" 时，HTML 输入元素的值也总会返回字符串</p>
 				</div>
 				<div>
 					<h3>.trim</h3>

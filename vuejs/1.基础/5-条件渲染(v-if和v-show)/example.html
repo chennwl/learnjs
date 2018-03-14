@@ -11,7 +11,7 @@
     <div id="app">
         <fieldset>
             <legend>指令：v-if</legend>
-            <h3>在 &lt;template&gt; 元素上使用 v-if 条件渲染分组;最终的渲染结果将不包含 &lt;template&gt; 元素</h3>
+            <h3>在 &lt;template&gt; 元素（字符串模板）上使用 v-if 条件渲染分组;最终的渲染结果将不包含 &lt;template&gt; 元素</h3>
             <template v-if="ok">
                 <h2>Title</h2>
                 <p>Paragraph 1</p>
@@ -22,10 +22,10 @@
         <fieldset>
             <legend>v-else，要接在v-if或者v-else-if上</legend>
             <div v-if="Math.random() > 0.5">
-                Now you see me
+                Now bigger than 0.5
             </div>
             <div v-else>
-                Now you don't
+                Now smaller than 0.5
             </div>
         </fieldset>
 

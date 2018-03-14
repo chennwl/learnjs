@@ -38,12 +38,12 @@
 				},
 				methods: {
 					greet: function(event){
-						alert("Hi " + this.name);
+						alert("Hi " + this.name);	//this代表Vue实例
 						/*
 						 event 是原生DOM事件。在 js 的事件中默认会有个 event 对象，Vue 在事件上对 event 对象进行继承二次封装，改名为 $event，在事件当中默认传过去
 						*/
 						if(event){
-							console.log(event.target.tagName); //BUTTON
+							alert(event.target.tagName); //BUTTON
 						}
 					}
 				}
@@ -95,13 +95,13 @@
 			<!-- 阻止单击事件继续传播，即阻止事件冒泡 -->
 			<div id="div1" class="stop" @click.stop="event1(1)"></div>
 			<!--阻止浏览器默认行为.prevent-->
-		 	<a href="https://github.com/williamChann" target="_blank" @click.prevent="prevent">william's github</a>
+		 	<a href="https://github.com/williamChann" target="_blank" @click.prevent="prevent">william's github</a><span>跳转不了</span>
 			<!--使用事件捕获模式.capture-->
 	    	<div id="div4" class="stop" @click.capture="event1(4)"></div>
 	    	<!--只当在 event.target 是当前元素自身时触发处理函数，类似于已阻止事件冒泡-->
 	    	<div id="div7" class="stop" @click.self="event1(7)"></div>
 	    	<!-- 点击事件将只会触发一次 -->
-			<a v-on:click.once="doThis">点击事件只会触发一次</a>
+			<button v-on:click.once="doThis">点击事件只会触发一次</button>
 			<!-- 修饰符可以串联 -->
 			<a v-on:click.stop.prevent="doThat"></a>
 			<!-- 只有修饰符没有事件 -->
@@ -196,7 +196,7 @@ Vue.config.keyCodes.f1 = 112
 
 	<fieldset>
 		<legend>在HTML中监听事件</legend>
-		<h3>所有的 Vue.js 事件处理方法和表达式都严格绑定在当前视图的 ViewModel 上，它不会导致任何维护上的困难。使用v-on的好处</h3>
+		<h3>所有的 Vue.js 事件处理方法和表达式都严格绑定在当前视图的 ViewModel 上，它不会导致任何维护上的困难。实际上，使用v-on有好几个好处：</h3>
 		<ol>
 			<li>扫一眼 HTML 模板便能轻松定位在 JavaScript 代码里对应的方法。</li>
 			<li>因为无须在 JavaScript 里手动绑定事件，ViewModel 代码可以是非常纯粹的逻辑，和 DOM 完全解耦，更易于测试。</li>

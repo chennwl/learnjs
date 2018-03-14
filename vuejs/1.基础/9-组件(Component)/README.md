@@ -27,35 +27,35 @@ new Vue({
 });
 ```
 - DOM 模板解析注意事项
-##### 特殊的 HTML 结构中使用 is
-比如在下拉列表（select）元素里面，子元素必须为 option，则在使用组件的时候用 is
-```html
-    <div id="app">
-        <select>
-            <option is="privateOption"></option>
-        </select>
-    </div>
-```
-```javascript
-    var vm = new Vue({
-        el: '#app',
-        components: {
-            'privateOption': {
-                template: '<option value=1>1</otpion>'
-            }
-        }
-    })
-```
-渲染结果
-```html
-    <div id="app">
-        <select>
-            <option value="1">1</option>
-        </select>
-    </div>
-```
-
-  当使用 DOM 作为模板时，会受到类似上述的 HTML 本身的一些限制。使用来自以下来源之一的字符串模板，则没有这些限制
+  - 特殊的 HTML 结构中使用 is
+  
+    比如在下拉列表（select）元素里面，子元素必须为 option，则在使用组件的时候用 is
+  ```html
+      <div id="app">
+          <select>
+              <option is="privateOption"></option>
+          </select>
+      </div>
+  ```
+  ```javascript
+      var vm = new Vue({
+          el: '#app',
+          components: {
+              'privateOption': {
+                  template: '<option value=1>1</otpion>'
+              }
+          }
+      });
+  ```
+  渲染结果
+  ```html
+      <div id="app">
+          <select>
+              <option value="1">1</option>
+          </select>
+      </div>
+  ```
+  - 当使用 DOM 作为模板时，会受到类似上述的 HTML 本身的一些限制。使用来自以下来源之一的字符串模板，则没有这些限制
       - `<script type="text/x-template">`
       - JavaScript 内联模板字符串
       ```html
