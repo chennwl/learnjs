@@ -3,7 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<title>进入/离开 and 列表过渡</title>
+	<!-- 引入animate.css库 -->
+	<link rel="stylesheet" type="text/css" href="../css/animate.css">
 	<script src="../../vue.js"></script>
+	<script src="../js/Velocity.js"></script>
 </head>
 <body>
 	<div id="#app">
@@ -34,12 +37,134 @@
 			</style>
 
 			<h3>CSS过渡</h3>
+			<style>
+				/* 可以设置不同的进入和离开动画 */
+				/* 设置持续时间和动画函数 */
+				.slide-fade-enter-active {
+				  transition: all 3s ease;
+				}
+				.slide-fade-leave-active {
+				 	transition: all 2s cubic-bezier(1.0, 0.5, 0.8, 1.0);	/*贝塞尔曲线*/
+				}
+				.slide-fade-enter, .slide-fade-leave-to
+				/* .slide-fade-leave-active for below version 2.1.8 */ {
+				  	transform: translateX(50px);
+				  	opacity: 0;
+				  	color: green;
+				}
+				.slide-fade-leave,.slide-fade-enter-to{
+					color: red;
+				}
+			</style>
 			<div id="example-1">
-				<button @click="show = !show">Toggle render</button>
+				<button @click="show = !show">点击使用CSS过渡transtion</button>
 				<transition name="slide-fade">
 				    <p v-if="show">hello</p>
 				</transition>
 			</div>
+			<script>
+				new Vue({
+					el: '#example-1',
+					data: {
+						show: true
+					}
+				})
+			</script>
+
+			<h3>CSS动画</h3>
+			<style type="text/css">
+				.bounce-enter-active {
+				  animation: bounce-in 2s; /* 0=>1.5=>1 */
+				}
+				.bounce-leave-active {
+				  animation: bounce-in 2s reverse; /* 1=>1.5=>0 */
+				}
+				@keyframes bounce-in {
+				  0% {
+				    transform: scale(0);
+				  }
+				  50% {
+				    transform: scale(1.5);
+				  }
+				  100% {
+				    transform: scale(1);
+				  }
+				}
+			</style>
+			<div id="example-2">
+				<button @click="show = !show">点击使用CSS动画animation</button>
+				<transition name="bounce" :duration="500">
+				    <p v-if="show">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis enim libero, at lacinia diam fermentum id. Pellentesque habitant morbi tristique senectus et netus.</p>
+				</transition>
+			</div>
+			<script>
+				new Vue({
+					el: "#example-2",
+					data: {
+						show: true
+					}
+				});
+			</script>
+
+			<h3>自定义过渡的类名</h3>
+			<div id="example-3">
+				<button @click="show = !show">点击使用自定义过渡</button>
+				<transition name="bounce"
+					enter-active-class="animated fadeInDownBig"
+					leave-active-class="animated bounceOutRight"
+				>
+				    <p v-if="show">Hello World!</p>
+				</transition>
+			</div>
+			<script>
+				new Vue({
+					el: '#example-3',
+					data: {
+						show: true
+					}
+				})
+			</script>
+
+			<h3>JavaScript钩子</h3>
+			<div id="example-4">
+			  	<button @click="show = !show">JavaScript钩子函数的动画</button>
+			  	<transition
+			    	v-on:before-enter="beforeEnter"
+			    	v-on:enter="enter"
+			    	v-on:leave="leave"
+			    	v-bind:css="false"
+			  	>
+			    	<p v-if="show">Demo</p>
+			  </transition>
+			</div>
+			<script>
+				new Vue({
+				  el: '#example-4',
+				  data: {
+				    show: false
+				  },
+				  methods: {
+				    beforeEnter: function (el) {
+				      el.style.opacity = 0
+				      el.style.transformOrigin = 'left'
+				    },
+				    enter: function (el, done) {
+				      Velocity(el, { opacity: 1, fontSize: '1.4em' }, { duration: 800 })
+				      Velocity(el, { fontSize: '1em' }, { duration: 500 }, { complete: done })
+				    },
+				    leave: function (el, done) {
+				      Velocity(el, { translateX: '15px', rotateZ: '50deg' }, { duration: 2000 })
+				      Velocity(el, { rotateZ: '100deg' }, { loop: 2 })	//重复两遍动作
+				      Velocity(el, {
+				        rotateZ: '45deg',
+				        translateY: '30px',
+				        translateX: '30px',
+				        opacity: 0
+				      }, { complete: done })
+				    }
+				  }
+				})
+			</script>
 		</fieldset>
 	</div>
 </body>
