@@ -166,6 +166,30 @@
 				})
 			</script>
 		</fieldset>
+
+		<fieldset>
+			<legend>初始渲染的过渡</legend>
+			<style type="text/css">
+			    .fade-enter{opacity: 0;}
+			    .fade-enter-active{transition: all 3s;}
+			</style>
+			<div id="example-5">
+				<transition appear appear-class="fade-enter" appear-active-class="fade-enter-active">
+        			<img src="../transition.png" />
+    			</transition>
+			</div>
+			<script type="text/javascript">
+			    new Vue({
+			        el: '#example-5'
+			    })
+			</script>
+		</fieldset>
+
+		<fieldset>
+			<legend>多个元素之间的过渡</legend>
+			<h3>out-in</h3>
+			<h3>in-out</h3>
+		</fieldset>
 	</div>
 </body>
 </html>

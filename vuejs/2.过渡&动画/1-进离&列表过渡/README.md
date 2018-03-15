@@ -157,40 +157,46 @@ SPA 中组件的切换有一种生硬的隐藏显示感觉，为了更好的用�
     ```javascript
     // ...
     methods: {-
-      // 进入中
-      beforeEnter: function (el) {
-        // ...
-      },
-      // done回调函数是可选项的设置
-      // 与 CSS 结合时使用
-      enter: function (el, done) {
-        // ...
-        done()
-      },
-      afterEnter: function (el) {
-        // ...
-      },
-      enterCancelled: function (el) {
-        // ...
-      },
+        // 过渡进入
+        // 设置过渡进入之前的组件状态
+        beforeEnter: function (el) {
+            // ...
+        },
+        // 设置过渡进入完成时的组件状态
+        // done回调函数是可选项的设置
+        // 与 CSS 结合时使用
+        enter: function (el, done) {
+            // ...
+            done()
+        },
+        // 设置过渡进入完成之后的组件状态
+        afterEnter: function (el) {
+            // ...
+        },
+        enterCancelled: function (el) {
+            // ...
+        },
 
-      // 离开时
-      beforeLeave: function (el) {
-        // ...
-      },
-      // done回调函数是可选项的设置
-      // 与 CSS 结合时使用
-      leave: function (el, done) {
-        // ...
-        done()
-      },
-      afterLeave: function (el) {
-        // ...
-      },
-      // leaveCancelled 只用于 v-show 中
-      leaveCancelled: function (el) {
-        // ...
-      }
+        // 过渡离开
+        // 设置过渡离开之前的组件状态
+        beforeLeave: function (el) {
+            // ...
+        },
+        // 设置过渡离开完成时地组件状态
+        // done回调函数是可选项的设置
+        // 与 CSS 结合时使用
+        leave: function (el, done) {
+            // ...
+            done()
+        },
+        // 设置过渡离开完成之后的组件状态
+        afterLeave: function (el) {
+            // ...
+        },
+        // leaveCancelled 只用于 v-show 中
+        leaveCancelled: function (el) {
+            // ...
+        }
     }
     ```
     + 钩子函数可以结合 `transitions/animations` 使用，也可以单独使用
@@ -199,3 +205,39 @@ SPA 中组件的切换有一种生硬的隐藏显示感觉，为了更好的用�
         - 对于仅使用 JavaScript 过渡的元素添加 `v-bind:css="false"`，Vue 会跳过 CSS 的检测。这也可以避免过渡过程中 CSS 的影响
 
 ## 初始渲染的过渡
+- 节点第一次加载时的过渡效果，使用到组件 `transition` 的属性: `appear` `appear-class` `appear-to-class` `appear-active-class`
+```html
+<transition
+  appear
+  appear-class="custom-appear-class"
+  appear-to-class="custom-appear-to-class" (2.1.8+)
+  appear-active-class="custom-appear-active-class"
+>
+  <!-- ... -->
+</transition>
+```
+- 自定义钩子
+```html
+<transition
+  appear
+  v-on:before-appear="customBeforeAppearHook"
+  v-on:appear="customAppearHook"
+  v-on:after-appear="customAfterAppearHook"
+  v-on:appear-cancelled="customAppearCancelledHook"
+>
+  <!-- ... -->
+</transition>
+```
+
+## 多个元素的过渡
+- 当有相同标签名的元素切换时，需要通过 `key` 特性设置唯一的值来标记以让 Vue 区分它们，否则 Vue 为了效率只会替换相同标签内部的内容。
+```html
+<!-- 示例：带key值 -->
+<transition>
+    <button v-if="isEditing" key="save">Save</button>
+    <button v-else key="edit">Edit</button>
+</transition>
+```
+- 过渡模式(`<transition>`进入和离开的效果默认是同时进行的)
+    + `in-out`:新元素先进行过渡，完成之后当前元素过渡离开
+    + `out-in`:当前元素先进行过渡，完成之后新元素过渡进入
