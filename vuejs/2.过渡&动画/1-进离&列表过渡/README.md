@@ -240,4 +240,414 @@ SPA 中组件的切换有一种生硬的隐藏显示感觉，为了更好的用�
 ```
 - 过渡模式(`<transition>`进入和离开的效果默认是同时进行的)
     + `in-out`:新元素先进行过渡，完成之后当前元素过渡离开
+    ```html
+    <style>
+        .mode-translate-fade-enter-active{transition: all 2s;}
+        .mode-translate-fade-leave-active{transition: all .5s;}
+        .mode-translate-fade-enter,
+        .mode-translate-fade-leave-active{opacity: 0;transform: translateX(60px);}
+    </style>
+    <div id="mode-demo">
+        <transition name="mode-translate-fade" mode="out-in">
+            <button v-if='on'  key='on' @click='on = false'>ON</button>
+            <button v-else='' key='off' @click='on = true'>OFF</button>
+        </transition>
+    </div>
+    <script>
+        new Vue({
+            el: '#mode-demo',
+            data: {
+                on: false
+            }
+        });
+    </script>
+    ```
     + `out-in`:当前元素先进行过渡，完成之后新元素过渡进入
+    ```html
+    <style>
+    .in-out-translate-demo-wrapper {position: relative;height: 18px;}
+    .in-out-translate-demo-wrapper button {position: absolute;}
+    .in-out-translate-fade-enter-active, .in-out-translate-fade-leave-active {transition: all .5s;}
+    .in-out-translate-fade-enter, .in-out-translate-fade-leave-active {opacity: 0;}
+    .in-out-translate-fade-enter {transform: translateX(31px);}
+    .in-out-translate-fade-leave-active {transform: translateX(-31px);}
+    </style>
+    <div id="in-out-translate-demo" class="demo">
+      <div class="in-out-translate-demo-wrapper">
+        <transition name="in-out-translate-fade" mode="in-out">
+          <button v-if="on" key="on" @click="on = false">
+            on
+          </button>
+          <button v-else="" key="off" @click="on = true">
+            off
+          </button>
+        </transition>
+      </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#in-out-translate-demo',
+            data: {
+                on: false
+            }
+        });
+    </script>
+    ```
+
+## 多个组件的过渡(使用动态组件)
+```html
+<style type="text/css">
+    .component-fade-enter-active,
+    .component-fade-leave-active{transition: all .5s ease-in;}
+    .component-fade-enter,
+    .component-fade-leave-active{opacity: 0;}
+</style>
+<div id="transition-components-demo" class="demo">
+    <input v-model="view" type="radio" value="v-a" id="a" name="view"><label for="a">A</label>
+    <input v-model="view" type="radio" value="v-b" id="b" name="view"><label for="b">B</label>
+  <transition name="component-fade" mode="out-in">
+        <component v-bind:is="view"></component>
+  </transition>
+</div>
+<script>
+    new Vue({
+        el: "#transition-components-demo",
+        data: {
+            view: 'v-a'
+        },
+        components: {
+            'v-a': {
+                template: '<p>This is A view</p>'
+            },
+            'v-b': {
+                template: '<p>This is B view</p>'
+            }
+        }
+    })
+</script>
+```
+
+## 列表(v-for)过渡
+- `transition-group` 介绍
+    - `v-for` 生成列表过渡效果要使用组件 `transition-group`，它默认以一个 `<span>`元素呈现。组件提供属性 `tag` 可以更换为其他元素，其它的使用和 `transition` 一样。
+    - 内部元素总是需要提供唯一的 `key` 属性值
+- 列表的进入/离开过渡
+```html
+<style type="text/css">
+    .list-item {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .list-enter-active, .list-leave-active {
+      transition: all 1s;
+    }
+    .list-enter, .list-leave-to
+    /* .list-leave-active for below version 2.1.8 */ {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+</style>
+<div id="list-demo" class="demo">
+    <button v-on:click="add">Add</button>
+    <button v-on:click="remove">Remove</button>
+    <transition-group name="list" tag="h4" style="color: red;">
+        <!-- key是必须的 -->
+        <span v-for="item in items" v-bind:key="item" class="list-item">{{ item }}</span>
+    </transition-group>
+</div>
+<script>
+    new Vue({
+      el: '#list-demo',
+      data: {
+        items: [1,2,3,4,5,6,7,8,9],
+        nextNum: 10
+      },
+      methods: {
+        randomIndex: function () {
+          return Math.floor(Math.random() * this.items.length)
+        },
+        add: function () {
+          this.items.splice(this.randomIndex(), 0, this.nextNum++)  //先操作后自增
+        },
+        remove: function () {
+          this.items.splice(this.randomIndex(), 1)
+        },
+      }
+    });
+</script>
+```
+- 列表的排序过渡
+    + `<transition-group>`除了可以进入和离开动画，还可以改变定位，这个功能的实现靠的是 `v-move` 特性，它会在元素的改变定位的过程中应用
+    + 可以通过 `name` 属性来自定义前缀，也可以通过 `move-class` 属性手动设置
+    + 排序过渡的实现，Vue使用了一个叫 `FLIP` 简单的动画队列使用transform 将元素从之前的位置平滑过渡新的位置。需要注意的是使用 FLIP 过渡的元素不能设置为 `display: inline`。作为替代方案，可以设置为 `display: inline-block` 或者放置于 flex 中
+    ```html
+    <style>
+        .flip-list-move{transition: transform 2s;}
+    </style>
+    <div id="flip-list-demo" class="demo">
+      <button v-on:click="shuffle">Shuffle</button>
+      <transition-group name="flip-list" tag="ul">
+        <li v-for="item in items" v-bind:key="item">
+          {{ item }}
+        </li>
+      </transition-group>
+    </div>
+    <script>
+        new Vue({
+            el: '#flip-list-demo',
+            data: {
+                items: [0,1,2,3,4,5,6,7,8,9]
+            },
+            methods: {
+                shuffle: function(){
+                    this.items = _.shuffle(this.items); //打乱一个数组
+                    console.log(this.items);
+                }
+            }
+        });
+    </script>
+    ```
+    ```html
+    <!--有进入、离开和排序的例子-->
+    <style type="text/css">
+        .list-item {
+          display: inline-block;
+          margin-right: 10px;
+          transition: all 1s;
+        }
+        .list-leave-active {
+            position: absolute;
+        }
+        .list-enter, .list-leave-to
+        /* .list-leave-active for below version 2.1.8 */ {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+    </style>
+    <div id="list-demo" class="demo">
+        <button v-on:click="shuffle">Shuffle</button>
+        <button v-on:click="add">Add</button>
+        <button v-on:click="remove">Remove</button>
+        <transition-group name="list" tag="h4" style="color: red;">
+            <!-- key是必须的 -->
+            <span v-for="item in items" v-bind:key="item" class="list-item">{{ item }}</span>
+        </transition-group>
+    </div>
+    <script>
+        new Vue({
+          el: '#list-demo',
+          data: {
+            items: [1,2,3,4,5,6,7,8,9],
+            nextNum: 10
+          },
+          methods: {
+            randomIndex: function () {
+              return Math.floor(Math.random() * this.items.length)
+            },
+            add: function () {
+              this.items.splice(this.randomIndex(), 0, this.nextNum++)  //先操作后自增
+            },
+            remove: function () {
+              this.items.splice(this.randomIndex(), 1)
+            },
+            shuffle: function(){
+                this.items = _.shuffle(this.items);
+            }
+          }
+        });
+    </script>
+    ```
+- 列表的交错过渡
+
+    通过 `data` 属性与JavaScript进行通信，就可以实现列表的交错过渡
+    ```html
+    <div id="staggered-list-demo">
+        <input v-model="query">
+        <!--transtion里面的所有元素进入或离开都会触发过渡效果-->
+        <transition-group
+            name="staggered-fade"
+            tag="ul"
+            v-bind:css="false"
+            v-on:before-enter="beforeEnter"
+            v-on:enter="enter"
+            v-on:leave="leave"
+        >
+            <li
+                v-for="(item, index) in computedList"
+                v-bind:key="item.msg"
+                v-bind:data-index="index"
+            >{{ item.msg }}</li>
+        </transition-group>
+    </div>
+    <script>
+        new Vue({
+            el: '#staggered-list-demo',
+            data: {
+                query: '',
+                list: [
+                    { msg: 'Bruce Lee' },
+                    { msg: 'Jackie Chan' },
+                    { msg: 'Chuck Norris' },
+                    { msg: 'Jet Li' },
+                    { msg: 'Kung Fury' }
+                ]
+            },
+            computed: {
+                computedList: function(){
+                    var vm = this;
+                    return this.list.filter(function(item){
+                        return item.msg.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1
+                    });
+                }
+            },
+            methods: {
+                beforeEnter: function (el) {
+                  el.style.opacity = 0
+                  el.style.height = 0
+                },
+                enter: function (el, done) {
+                  var delay = el.dataset.index * 150
+                  setTimeout(function () {
+                    Velocity(
+                      el,
+                      { opacity: 1, height: '2em' },
+                      { complete: done }
+                    )
+                  }, delay)
+                },
+                leave: function (el, done) {
+                  var delay = el.dataset.index * 150
+                  setTimeout(function () {
+                    Velocity(
+                      el,
+                      { opacity: 0, height: 0 },
+                      { complete: done }
+                    )
+                  }, delay)
+                }
+            }
+        });
+    </script>
+    ```
+
+## 可复用的过渡
+过渡可以通过 Vue 的组件系统实现复用。要创建一个可复用过渡组件，需要做的就是将 `<transition>` 或者 `<transition-group>` 作为根组件，然后将任何子组件放置在其中就可以了。
+- 简单示例：
+```javascript
+Vue.component('my-special-transition', {
+  template: '\
+    <transition\
+      name="very-special-transition"\
+      mode="out-in"\
+      v-on:before-enter="beforeEnter"\
+      v-on:after-enter="afterEnter"\
+    >\
+      <slot></slot>\
+    </transition>\
+  ',
+  methods: {
+    beforeEnter: function (el) {
+      // ...
+    },
+    afterEnter: function (el) {
+      // ...
+    }
+  }
+});
+```
+- 函数组件实现可复用的过渡：
+```javascript
+Vue.component('my-special-transition', {
+  functional: true,
+  render: function (createElement, context) {
+    var data = {
+        props: {
+            name: 'very-special-transition',
+            mode: 'out-in'
+        },
+        on: {
+            beforeEnter: function (el) {
+             // ...
+            },
+            afterEnter: function (el) {
+                // ...
+            }
+        }
+    }
+    return createElement('transition', data, context.children)
+    // return createElement('transition-group', data, context.children)
+  }
+});
+```
+
+## 动态过渡
+- 基本例子：通过 `name` 特性来绑定动态值
+```html
+<transition v-bind:name="transitionName">
+  <!-- ... -->
+</transition>
+```
+- 可以根据组件的状态通过 JavaScript 过渡设置不同的过渡效果
+```html
+<div id="dynamic-fade-demo" class="demo">
+    Fade In: <input type="range" v-model="fadeInDuration" min="0" v-bind:max="maxFadeDuration">
+    Fade Out: <input type="range" v-model="fadeOutDuration" min="0" v-bind:max="maxFadeDuration">
+    <transition
+        v-bind:css="false"
+        v-on:before-enter="beforeEnter"
+        v-on:enter="enter"
+        v-on:leave="leave"
+    >
+        <p v-if="show">hello</p>
+    </transition>
+    <button v-if="stop" v-on:click="stop = false; show = false">Start animating</button>
+    <button v-else v-on:click="stop = true">Stop it!</button>
+</div>
+<script>
+    new Vue({
+      el: '#dynamic-fade-demo',
+      data: {
+        show: true,
+        fadeInDuration: 1000,
+        fadeOutDuration: 1000,
+        maxFadeDuration: 5000,
+        stop: true
+      },
+      mounted: function () { //mounted:挂载
+        this.show = false
+      },
+      methods: {
+        beforeEnter: function (el) {
+          el.style.opacity = 0
+        },
+        enter: function (el, done) {
+          var vm = this;
+          Velocity(el,
+            { opacity: 1 },
+            {
+              duration: this.fadeInDuration,
+              complete: function () {
+                done()
+                if (!vm.stop) vm.show = false
+              }
+            }
+          )
+        },
+        leave: function (el, done) {
+          var vm = this;
+          Velocity(el,
+            { opacity: 0 },
+            {
+              duration: this.fadeOutDuration,
+              complete: function () {
+                done()
+                vm.show = true
+              }
+            }
+          )
+        }
+      }
+    });
+</script>
+```
+- 创建动态过渡的最终方案是组件通过接受 `props` 来动态修改之前的过渡
