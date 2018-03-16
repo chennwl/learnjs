@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>自定义指令</title>
+	<script src="../../vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<fieldset>
+			<legend>简介</legend>
+			<div id="global-directive-demo">
+				<h3>全局自定义指令</h3>
+				<input type="text" value="" v-focus="" />
+			</div>
+			<script>
+				//注册一个全局自定义指令  `v-focus`
+				//当元素使用了 v-focus 这个指令时会触发对应的 function
+				//参数el：使用指令的元素
+				Vue.directive('focus', {
+					// 当被绑定的元素插入到 DOM 中时......
+					inserted: function(el){
+						el.focus();
+						el.value = '世界和平'
+					}
+				});
+
+				new Vue({
+					el: '#global-directive-demo'
+				})
+			</script>
+
+			<div id="private-directive-demo">
+				<h3>局部自定义指令</h3>
+				<input type="text" value="" v-private="" />
+			</div>
+			<script>
+				new Vue({
+					el: '#private-directive-demo',
+					directives: {
+						private: function(el){
+							el.style.background = '#ccc';
+							el.value = 'private'
+						}
+					}
+				})
+			</script>
+		</fieldset>
+
+		<fieldset>
+			<legend>钩子函数</legend>
+			<div id="hook-example">
+		        <input type="text" v-model="text" v-function="{color:'red'}">
+		    </div>
+		    <script>
+		    	 Vue.directive('function', {
+			        //默认触发此方法 Vue.directive('function',  function(element){})
+			        inserted: function(element, binding, vnode){
+			            console.log('inserted');
+			        },
+			        bind: function(element, binding, vnode){
+			            console.log('bind');
+			            element.style.color = binding.value.color //binding.value为{color: 'red'}
+			        },
+			        update: function(element, binding, vnode){
+			            console.log('update');
+			        },
+			        componentUpdated: function(element, binding, vnode){
+			            console.log('componentUpdated');
+			        }
+			    })
+
+			    var vm = new Vue({
+			        el: '#hook-example',
+			        data:{
+			            text: '钩子函数'
+			        }
+			    });
+		    </script>
+		</fieldset>
+
+		<fieldset>
+			<legend>钩子函数参数</legend>
+			<div id="hook-arguments-example" v-demo:foo.a.b="message"></div>
+			<script>
+				Vue.directive('demo', {
+				  bind: function (el, binding, vnode) {
+				    var s = JSON.stringify
+				    el.innerHTML =
+				      'name: '       + s(binding.name) + '<br>' +
+				      'value: '      + s(binding.value) + '<br>' +
+				      'expression: ' + s(binding.expression) + '<br>' +
+				      'argument: '   + s(binding.arg) + '<br>' +
+				      'modifiers: '  + s(binding.modifiers) + '<br>' +
+				      'vnode keys: ' + Object.keys(vnode).join(', ')
+				  }
+				})
+
+				new Vue({
+				  el: '#hook-arguments-example',
+				  data: {
+				    message: 'hello!'
+				  }
+				})
+			</script>
+		</fieldset>
+
+		<fieldset>
+			<legend>对象字面量</legend>
+			<div id="objectString">
+				<div v-string="{ color: 'white', text: 'hello!', showText: '这是el.binding.value绑定的值' }"></div>
+			</div>
+			<script>
+				new Vue({
+					el: '#objectString',
+					directives: {
+						string: function(el, binding){
+							console.log(binding.value.color) // => "white"
+				    		console.log(binding.value.text)  // => "hello!"
+				    		el.innerHTML = binding.value.showText;
+						}
+					}
+				});
+			</script>
+		</fieldset>
+
+		<h3>$set介绍</h3>
+		<div id="set-example">
+			<input type="button" value="set" @click="set">
+        	<p><span>{{dataform.username}}</span></p>
+		</div>
+		<script>
+			new Vue({
+		        el: '#set-example',
+		        data: {
+		            dataform: {}
+		        },
+		        methods: {
+		            set: function(){
+		                // 直接赋值不会显示在视图上
+		                // this.dataform.username = '123'
+		                //改用 $set 更新可以在视图上显示
+		                this.$set(this.dataform, 'username', '新添加的字符串')
+		            }
+		        }
+		    });
+		</script>
+	</div>
+</body>
+</html>

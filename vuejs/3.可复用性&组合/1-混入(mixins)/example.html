@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>混入(mixins)</title>
+	<script src="../../vue.js"></script>
+</head>
+<body>
+	<h3>基础(Vue.extend())</h3>
+	<script>
+		// 定义一个混入对象
+		var myMixin = {
+		  	created: function () {
+		    	this.hello();
+		  	},
+		  	methods: {
+		    	hello: function () {
+		      		console.log('hello from mixin!')	//第二执行
+		    	}
+		  	},
+		  	data: function(){	//data要是函数
+				return {
+					name: 'hello world'
+				}
+			}
+		}
+
+		var test = {
+			created: function(){
+				console.log(this.name);		// =>hello world先执行
+			},
+			data: function(){	//data要是函数
+				return {
+					name: 'hello vue'
+				}
+			}
+		}
+
+		// 定义一个使用混入对象的组件
+		var Component = Vue.extend({
+		  	mixins: [test, myMixin]	//后面同样的数据值会合并前面的
+		})
+
+		var component = new Component() // => "hello from mixin!"
+		console.log(component.name); // =>hello world，最后执行
+	</script>
+
+	<h3>选项合并</h3>
+	<script>
+		var mixin = {
+		  data: function () {
+		    return {
+		      message: 'hello',
+		      foo: 'abc'
+		    }
+		  }
+		}
+
+		new Vue({
+		  mixins: [mixin],
+		  data: function () {
+		    return {
+		      message: 'goodbye',
+		      bar: 'def'
+		    }
+		  },
+		  created: function () {
+		    console.log(this.$data)
+		    // => { message: "goodbye", foo: "abc", bar: "def" }
+		  }
+		});
+	</script>
+</body>
+</html>

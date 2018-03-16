@@ -305,9 +305,9 @@ SPA 中组件的切换有一种生硬的隐藏显示感觉，为了更好的用�
 <div id="transition-components-demo" class="demo">
     <input v-model="view" type="radio" value="v-a" id="a" name="view"><label for="a">A</label>
     <input v-model="view" type="radio" value="v-b" id="b" name="view"><label for="b">B</label>
-  <transition name="component-fade" mode="out-in">
-        <component v-bind:is="view"></component>
-  </transition>
+    <transition name="component-fade" mode="out-in">
+          <component v-bind:is="view"></component>
+    </transition>
 </div>
 <script>
     new Vue({

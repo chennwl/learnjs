@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>生命周期</title>
+	<script src="../../vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<h2>{{ name }}</h2>
+		<h3>{{ text }}</h3>
+		<p>{{ number }}</p>
+		<my-template>
+			<p>这是slot里面的内容</p>
+			<p>这是slot里面的内容</p>
+		</my-template>
+	</div>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el: '#app',
+			data: {
+				name: '生命周期',
+				text: '测试文本',
+				number: 0
+			},
+			components: {
+				'my-template': {
+					template: `<div class="test">
+						<slot></slot>
+					</div>`
+				}
+			},
+			beforeCreate: function(){
+				console.log("创建实例之前执行的钩子函数(beforeCreate)");
+			},
+			created: function(){
+				console.log("实例创建之后的钩子函数(created)");
+			},
+			beforeMount: function(){
+				this.number++;
+				console.log("将编译完成的HTML挂载到对应虚拟dom时触发的钩子(beforeMount)");
+			},
+			mounted: function(){
+				console.log("编译好的HTML挂载到页面完成后执行的事件钩子，一般会做一些ajax请求获取数据进行数据初始化，在实例中只执行一次(mounted)");
+			},
+			beforeUpdate: function(){
+				console.log("Vue会实时监听数据的变化并更新DOM，这是更新之前的钩子(beforeUpdate)");
+			},
+			updated: function(){
+				console.log("更新之后的钩子(update)");
+			},
+			beforeDestroy: function(){
+				console.log("实例销毁之前执行的钩子(beforeDestroy)");
+			},
+			destroyed: function(){
+				console.log("实例销毁完成执行的钩子，实例销毁会拆除数据监听，子组件和事件监听(destroyed)");
+			}
+		});
+
+		// vm.$destroy(); //销毁实例
+		// vm.$mount("#app");	//可重新挂载模板
+	</script>
+</body>
+</html>
