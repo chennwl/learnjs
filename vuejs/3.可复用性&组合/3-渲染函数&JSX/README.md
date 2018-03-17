@@ -37,6 +37,7 @@ new Vue({
 Vue通过建立一个虚拟 DOM 对真实 DOM 发生的变化保持追踪。在 `return createElement('h1', this.blogTitle)` 中，`createElement`更准确的名字可能是 `createNodeDescription`，因为它所包含的信息会告诉 Vue 页面上需要渲染什么样的节点，及其子节点。这样的节点描述为“虚拟节点 (Virtual Node)”，也常简写它为“VNode”。“虚拟 DOM”是对由 Vue 组件树建立起来的整个 VNode 树的称呼。
 
 ## `createElement`参数
+`createElement` 接受的参数
 ```javascript
 // @returns {VNode}
 createElement(
@@ -127,3 +128,55 @@ createElement(
   ref: 'myRef'
 }
 ```
+- 完整示例
+```javascript
+var getChildrenTextContent = function (children) {
+  return children.map(function (node) {
+    return node.children
+      ? getChildrenTextContent(node.children)
+      : node.text
+  }).join('')
+}
+
+Vue.component('anchored-heading', {
+  render: function (createElement) {
+    // create kebabCase id
+    var headingId = getChildrenTextContent(this.$slots.default)
+      .toLowerCase()
+      .replace(/\W+/g, '-')
+      .replace(/(^\-|\-$)/g, '')
+
+    return createElement(
+      'h' + this.level,
+      [
+        createElement('a', {
+          attrs: {
+            name: headingId,
+            href: '#' + headingId
+          }
+        }, this.$slots.default)
+      ]
+    )
+  },
+  props: {
+    level: {
+      type: Number,
+      required: true
+    }
+  }
+});
+```
+- 约束
+
+    组件树中的所有的VNodes必须是唯一的。如果需要重复很多的元素或者组件，可以用工厂函数来实现。
+    ```javascript
+    render: function (createElement) {
+      return createElement('div',
+        Array.apply(null, { length: 20 }).map(function () {
+          return createElement('p', 'hi')
+        })
+      )
+    }
+    ```
+
+## 使用JavaScript代替模板功能
