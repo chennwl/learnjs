@@ -93,8 +93,12 @@
 			    	}
 			  	},
 			  	methods: {
-			  		clickHandler: function(){
-						console.log("test");
+			  		clickHandler: function(event){
+			  			//event.currentTarget:事件绑定的元素
+			  			//event;target:事件触发的元素
+						if(event.target === event.currentTarget){
+							console.log(event.target);
+						}
 					}
 			  	}
 			});

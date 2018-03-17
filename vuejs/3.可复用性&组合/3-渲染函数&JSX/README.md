@@ -57,8 +57,8 @@ createElement(
   // 子节点 (VNodes)，由 `createElement()` 构建而成，
   // 或使用字符串来生成“文本节点”。可选参数。
   [
-    '先写一些文字',       //字符串生成文本子节点
-    createElement('h1', '一则头条'),        //h1标签加文字
+    '先写一些文字',
+    createElement('h1', '一则头条'),
     createElement(MyComponent, {
       props: {
         someProp: 'foobar'
@@ -253,33 +253,33 @@ render: function (createElement) {
 ```
 - 事件 & 按键修饰符 
   - 对于 `.passive`、`.capture` 和 `.once`事件修饰符, Vue 提供了相应的前缀可以用于 `on`：
-<table>
-<thead>
-<tr>
-<th>Modifier(s)</th>
-<th>Prefix</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.passive</code></td>
-<td><code>&amp;</code></td>
-</tr>
-<tr>
-<td><code>.capture</code></td>
-<td><code>!</code></td>
-</tr>
-<tr>
-<td><code>.once</code></td>
-<td><code>~</code></td>
-</tr>
-<tr>
-<td><code>.capture.once</code> or<br><code>.once.capture</code></td>
-<td><code>~!</code></td>
-</tr>
-</tbody>
-</table>
-  
+  <table>
+  <thead>
+  <tr>
+  <th>Modifier(s)</th>
+  <th>Prefix</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td><code>.passive</code></td>
+  <td><code>&amp;</code></td>
+  </tr>
+  <tr>
+  <td><code>.capture</code></td>
+  <td><code>!</code></td>
+  </tr>
+  <tr>
+  <td><code>.once</code></td>
+  <td><code>~</code></td>
+  </tr>
+  <tr>
+  <td><code>.capture.once</code> or<br><code>.once.capture</code></td>
+  <td><code>~!</code></td>
+  </tr>
+  </tbody>
+  </table>
+
   ```javascript
   on: {
     '!click': this.doThisInCapturingMode,
@@ -288,11 +288,135 @@ render: function (createElement) {
   }
   ```
   - 对于其他的修饰符，前缀不是很重要，因为可以在事件处理函数中使用事件方法：
-    Modifier(s) | Equivalent in Handler
-    .stop event.stopPropagation()
-    .prevent  event.preventDefault()
-    .self if (event.target !== event.currentTarget) return
-    Keys:
-    .enter, .13 if (event.keyCode !== 13) return (change 13 to another key code for other key modifiers)
-    Modifiers Keys:
-    .ctrl, .alt, .shift, .meta  if (!event.ctrlKey) return (change ctrlKey to altKey, shiftKey, or metaKey, respectively)
+  <table>
+  <thead>
+  <tr>
+  <th>Modifier(s)</th>
+  <th>Equivalent in Handler</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td><code>.stop</code></td>
+  <td><code>event.stopPropagation()</code></td>
+  </tr>
+  <tr>
+  <td><code>.prevent</code></td>
+  <td><code>event.preventDefault()</code></td>
+  </tr>
+  <tr>
+  <td><code>.self</code></td>
+  <td><code>if (event.target !== event.currentTarget) return</code></td>
+  </tr>
+  <tr>
+  <td>Keys:<br><code>.enter</code>, <code>.13</code></td>
+  <td><code>if (event.keyCode !== 13) return</code> (change <code>13</code> to <a href="http://keycode.info/" target="_blank" rel="noopener">another key code</a> for other key modifiers)</td>
+  </tr>
+  <tr>
+  <td>Modifiers Keys:<br><code>.ctrl</code>, <code>.alt</code>, <code>.shift</code>, <code>.meta</code></td>
+  <td><code>if (!event.ctrlKey) return</code> (change <code>ctrlKey</code> to <code>altKey</code>, <code>shiftKey</code>, or <code>metaKey</code>, respectively)</td>
+  </tr>
+  </tbody>
+  </table>
+
+  ```javascript
+  on: {
+    keyup: function (event) {
+      // 如果触发事件的元素不是事件绑定的元素
+      // 则返回
+      if (event.target !== event.currentTarget) return
+      // 如果按下去的不是 enter 键或者
+      // 没有同时按下 shift 键
+      // 则返回
+      if (!event.shiftKey || event.keyCode !== 13) return
+      // 阻止 事件冒泡
+      event.stopPropagation()
+      // 阻止该元素默认的 keyup 事件
+      event.preventDefault()
+      // ...
+    }
+  }
+  ```
+  - 插槽
+    + 从 `this.$slots` 可以获取 VNodes 列表中的静态内容：
+    ```javascript
+    render: function (createElement) {
+      // `<div><slot></slot></div>`
+      return createElement('div', this.$slots.default)
+    }
+    ```
+    + 从 `this.$scopedSlots` 中可以获得能用作函数的作用域插槽，这个函数返回 VNodes：
+    ```javascript
+    props: ['message'],
+    render: function (createElement) {
+        // `<div><slot :text="message"></slot></div>`
+        return createElement('div', [
+          this.$scopedSlots.default({
+            text: this.message
+          })
+        ])
+    }
+    ```
+    + 如果要用渲染函数向子组件中传递作用域插槽，可以利用 VNode 数据中的 `scopedSlots` 域：
+    ```javascript
+    render: function (createElement) {
+      return createElement('div', [
+        createElement('child', {
+          // pass `scopedSlots` in the data object
+          // in the form of { name: props => VNode | Array<VNode> }
+          scopedSlots: {
+            default: function (props) {
+              return createElement('span', props.text)
+            }
+          }
+        })
+      ])
+    }
+    ```
+
+## JSX
+Babel 插件，可用于在 Vue 中使用 JSX 语法，它可以让代码回到更接近于模板的语法上
+```javascript
+import AnchoredHeading from './AnchoredHeading.vue'
+
+new Vue({
+  el: '#demo',
+  render: function (h) {
+    return (
+      <AnchoredHeading level={1}>
+        <span>Hello</span> world!
+      </AnchoredHeading>
+    )
+  }
+});
+```
+## 函数式组件
+- 示例：标记组件为 `functional`，这意味它是无状态 (没有 `data`)，无实例 (没有 `this` 上下文)
+```javascript
+//函数式组件
+Vue.component('my-component', {
+  functional: true,
+  // 为了弥补缺少的实例
+  // 提供第二个参数作为上下文
+  render: function (createElement, context) {
+    // ...
+  },
+  // Props 可选
+  props: {
+    // ...
+  }
+});
+```
+  - 组件需要的一切都是通过上下文传递，包括：
+    * `props`：提供 `props` 的对象
+    * `children`: VNode 子节点的数组
+    * `slots`: `slots` 对象
+    * `data`：传递给组件的 `data` 对象
+    * `parent`：对父组件的引用
+    * `listeners`: (2.3.0+) 一个包含了组件上所注册的 `v-on`侦听器的对象。这只是一个指向 `data.on` 的别名。
+    * `injections`: (2.3.0+) 如果使用了 `inject` 选项，则该对象包含了应当被注入的属性。
+  - 在添加 `functional: true` 之后，锚点标题组件的 `render` 函数之间简单更新增加 `context` 参数，`this.$slots.default` 更新为 `context.children`，之后`this.level` 更新为 `context.props.level`
+- 向子元素或子组件传递特性和事件
+- `slots()` 和 `children` 对比
+
+## 模板编译
