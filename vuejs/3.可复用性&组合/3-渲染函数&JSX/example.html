@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>渲染函数 and JSX</title>
+	<script src="../../vue.js"></script>
+</head>
+<body>
+	<div>
+		<div id="example-1">
+			<anchored-heading :level="2">Hello world!</anchored-heading>
+		</div>
+		<script>
+			Vue.component('anchored-heading', {
+				render: function(createElement){
+					return createElement(
+						'h' + this.level,	// tag name 标签名称
+						/*
+						* 用来访问被插槽分发的内容。每个具名插槽 有其相应的属性 (例如：slot="foo" 中的内容将会在 vm.$slots.foo 中被找到)。default 属性包括了所有没有被包含在具名插槽中的节点
+						 */
+						this.$slots.default //子组件中的阵列
+					)
+				},
+				props: {
+					level: {
+						type: Number,
+						required: true
+					}
+				}
+			});
+
+			new Vue({
+				el: '#example-1'
+			})
+		</script>
+	</div>
+</body>
+</html>
