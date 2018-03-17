@@ -253,10 +253,32 @@ render: function (createElement) {
 ```
 - 事件 & 按键修饰符 
   - 对于 `.passive`、`.capture` 和 `.once`事件修饰符, Vue 提供了相应的前缀可以用于 `on`：
-  ---
-  Modifier(s): `.passive`, `.capture`, `.once`, `.capture.once` or `.once.capture
-  Prefix: `&`, `!`, `~`, `~!`
-  ---
+<table>
+<thead>
+<tr>
+<th>Modifier(s)</th>
+<th>Prefix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.passive</code></td>
+<td><code>&amp;</code></td>
+</tr>
+<tr>
+<td><code>.capture</code></td>
+<td><code>!</code></td>
+</tr>
+<tr>
+<td><code>.once</code></td>
+<td><code>~</code></td>
+</tr>
+<tr>
+<td><code>.capture.once</code> or<br><code>.once.capture</code></td>
+<td><code>~!</code></td>
+</tr>
+</tbody>
+</table>
   
   ```javascript
   on: {
