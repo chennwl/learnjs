@@ -8,7 +8,10 @@
 <body>
 	<div>
 		<div id="example-1">
-			<anchored-heading :level="2">Hello world!</anchored-heading>
+			<anchored-heading :level="2">
+				Hello world!
+				<p>slot中的内容</p>
+			</anchored-heading>
 		</div>
 		<script>
 			Vue.component('anchored-heading', {
@@ -32,6 +35,76 @@
 			new Vue({
 				el: '#example-1'
 			})
+		</script>
+
+		<div id="example-2">
+			<anchored-heading-2 :level="1" :id="msg">HEllo WOrld
+				<p>demo</p>
+			</anchored-heading-2>
+		</div>
+		<script>
+			var getChildrenTextContent = function (children) {
+				console.log(children); //[VNode, VNode]
+			  	return children.map(function (node) {
+			    	return node.children
+			      		? getChildrenTextContent(node.children)
+			      		: node.text
+			  	}).join('')
+			}
+
+			Vue.component('anchored-heading-2', {
+			  	render: function (createElement) {
+			    	// create kebabCase id
+			    	var headingId = getChildrenTextContent(this.$slots.default)
+			      		.toLowerCase()
+			      		.replace(/\W+/g, '-')
+			      		.replace(/(^\-|\-$)/g, '');
+
+			    	return createElement(
+			      		'h' + this.level,
+			      		{	//data 对象
+		      				'class': {
+			          			foo: true,
+			          			bar: false
+			          		},
+							on: {
+								//this指的是<anchored-heading-2>这个组件
+								click: this.clickHandler
+							}
+			      		},
+			      		[
+				        	createElement('a', {
+				         	 	attrs: {
+				            		name: headingId,
+				            		href: '#' + headingId
+				          		},
+				          		style: {
+								    color: 'red',
+								    fontSize: '20px'
+								}
+				        	}, this.$slots.default)
+			      		]
+			    	)
+			  	},
+			  	props: {
+			    	level: {
+		      			type: Number,
+		      			required: true
+			    	}
+			  	},
+			  	methods: {
+			  		clickHandler: function(){
+						console.log("test");
+					}
+			  	}
+			});
+
+			new Vue({
+				el: '#example-2',
+				data: {
+					msg: 'child-node'
+				}
+			});
 		</script>
 	</div>
 </body>

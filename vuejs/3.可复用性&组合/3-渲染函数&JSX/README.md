@@ -37,7 +37,7 @@ new Vue({
 Vue通过建立一个虚拟 DOM 对真实 DOM 发生的变化保持追踪。在 `return createElement('h1', this.blogTitle)` 中，`createElement`更准确的名字可能是 `createNodeDescription`，因为它所包含的信息会告诉 Vue 页面上需要渲染什么样的节点，及其子节点。这样的节点描述为“虚拟节点 (Virtual Node)”，也常简写它为“VNode”。“虚拟 DOM”是对由 Vue 组件树建立起来的整个 VNode 树的称呼。
 
 ## `createElement`参数
-`createElement` 接受的参数
+`createElement` 接受的参数：
 ```javascript
 // @returns {VNode}
 createElement(
@@ -50,15 +50,15 @@ createElement(
   // 一个包含模板相关属性的数据对象
   // 这样，可以在 template 中使用这些属性。可选参数。
   {
-    // 
+    // 看下一节
   },
 
   // {String | Array}
   // 子节点 (VNodes)，由 `createElement()` 构建而成，
   // 或使用字符串来生成“文本节点”。可选参数。
   [
-    '先写一些文字',
-    createElement('h1', '一则头条'),
+    '先写一些文字',       //字符串生成文本子节点
+    createElement('h1', '一则头条'),        //h1标签加文字
     createElement(MyComponent, {
       props: {
         someProp: 'foobar'
@@ -129,42 +129,83 @@ createElement(
 }
 ```
 - 完整示例
+```html
+<div id="example-2">
+    <anchored-heading-2 :level="1" :id="msg">HEllo WOrld!</anchored-heading-2>
+</div>
+```
 ```javascript
 var getChildrenTextContent = function (children) {
-  return children.map(function (node) {
-    return node.children
-      ? getChildrenTextContent(node.children)
-      : node.text
-  }).join('')
+    console.log(children); //[VNode, VNode]
+    //map() 方法返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值
+    return children.map(function (node) {
+        return node.children
+            ? getChildrenTextContent(node.children)
+            : node.text
+    }).join('')   //join() 方法用于把数组中的所有元素放入一个字符串
 }
 
-Vue.component('anchored-heading', {
-  render: function (createElement) {
-    // create kebabCase id
-    var headingId = getChildrenTextContent(this.$slots.default)
-      .toLowerCase()
-      .replace(/\W+/g, '-')
-      .replace(/(^\-|\-$)/g, '')
+Vue.component('anchored-heading-2', {
+    render: function (createElement) {
+        // create kebabCase id
+        var headingId = getChildrenTextContent(this.$slots.default)
+            .toLowerCase()
+            .replace(/\W+/g, '-')
+            .replace(/(^\-|\-$)/g, '')
 
-    return createElement(
-      'h' + this.level,
-      [
-        createElement('a', {
-          attrs: {
-            name: headingId,
-            href: '#' + headingId
-          }
-        }, this.$slots.default)
-      ]
-    )
-  },
-  props: {
-    level: {
-      type: Number,
-      required: true
+        return createElement(
+            'h' + this.level,
+            {   //data 对象
+                'class': {
+                    foo: true,
+                    bar: false
+                },
+                on: {
+                    //this指的是<anchored-heading-2>这个组件
+                    click: this.clickHandler
+                }
+            },
+            [   //子节点
+                createElement('a', { //data对象
+                    attrs: {
+                        name: headingId,
+                        href: '#' + headingId
+                    },
+                    style: {
+                        color: 'red',
+                        fontSize: '20px'
+                    }
+                }, this.$slots.default)
+            ]
+        )
+    },
+    props: {
+        level: {
+            type: Number,
+            required: true
+        }
+    },
+    methods: {
+        clickHandler: function(){
+            console.log("test");
+        }
     }
-  }
 });
+
+new Vue({
+    el: '#example-2',
+    data: {
+        msg: 'child-node'
+    }
+});
+```
+编译成
+```html
+<div id="example-2">
+    <h1 class="foo" id="child-node">
+        <a name="hello-world" href="#hello-world" style="color: red; font-size: 20px;">HEllo WOrld!</a>
+    </h1>
+</div>
 ```
 - 约束
 
@@ -180,3 +221,57 @@ Vue.component('anchored-heading', {
     ```
 
 ## 使用JavaScript代替模板功能
+- `v-if` 和 `v-for` 可以在 `render` 函数中被JavaScript的 `if` / `else` 和 `map` 重写：
+```javascript
+props: ['items'],
+render: function (createElement) {
+    if (this.items.length) {
+        return createElement('ul', this.items.map(function (item) {
+            return createElement('li', item.name)
+        }))
+    } else {
+        return createElement('p', 'No items found.')
+    }
+}
+```
+- `v-model` 用JavaScript实现：
+```javascript
+props: ['value'],
+render: function (createElement) {
+    var self = this;
+    return createElement('input', {
+        domProps: { //DOM 属性
+            value: self.value
+        },
+        on: {
+            input: function (event) {
+                self.$emit('input', event.target.value)
+            }
+        }
+    });
+}
+```
+- 事件 & 按键修饰符 
+  - 对于 `.passive`、`.capture` 和 `.once`事件修饰符, Vue 提供了相应的前缀可以用于 `on`：
+  Modifier(s) | Prefix
+  - | :-:
+  `.passive` | `&`
+  `.capture` | `!`
+  `.once` | `~`
+  `.capture.once` or `.once.capture` | `~!`
+  ```javascript
+  on: {
+    '!click': this.doThisInCapturingMode,
+    '~keyup': this.doThisOnce,
+    '~!mouseover': this.doThisOnceInCapturingMode
+  }
+  ```
+  - 对于其他的修饰符，前缀不是很重要，因为可以在事件处理函数中使用事件方法：
+    Modifier(s) | Equivalent in Handler
+    .stop event.stopPropagation()
+    .prevent  event.preventDefault()
+    .self if (event.target !== event.currentTarget) return
+    Keys:
+    .enter, .13 if (event.keyCode !== 13) return (change 13 to another key code for other key modifiers)
+    Modifiers Keys:
+    .ctrl, .alt, .shift, .meta  if (!event.ctrlKey) return (change ctrlKey to altKey, shiftKey, or metaKey, respectively)
