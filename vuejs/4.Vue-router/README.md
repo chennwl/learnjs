@@ -262,11 +262,8 @@ const app = new Vue({ router }).$mount('#app');
 ```
 ## 编程式导航
 ### 除了使用 `<router-link>` 创建 `a` 标签来定义导航链接，还可以借助 `router` 的实例方法，通过编写代码来实现。
-- 想要导航到不同的 URL，则使用 `router.push` 方法。这个方法会向 `history` 栈添加一个新的记录，所以，当用户点击浏览器后退按钮时，则回到之前的 URL。
-```javascript
-router.push(location, onComplete?, onAbort?);
-//在 Vue 实例内部，可以通过 $router 访问路由实例。因此可以调用 this.$router.push
-```
+- 想要导航到不同的 URL，则使用 `router.push` 方法。这个方法会向 `history` 栈添加一个新的记录，所以，当用户点击浏览器后退按钮时，则回到之前的 URL。`router.push(location, onComplete?, onAbort?);`
+    - 在 Vue 实例内部，可以通过 $router 访问路由实例。因此可以调用 `this.$router.push`
     - <table>
         <thead>
         <tr><th>声明式</th>
