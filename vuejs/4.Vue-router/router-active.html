@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>路由参数</title>
+	<script src="../vue.js"></script>
+	<script src="../vue-router.js"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>动态路由匹配</h1>
+		<p>
+			<router-link to='/user/Foo'>UserFoo</router-link>
+			<router-link to='/user/Bar'>UserBar</router-link>
+		</p>
+		<router-view></router-view>
+	</div>
+	<script>
+		//通过对象 $route.params 来获取参数
+		const User = { template: '<div><h2>{{$route.params.userid}}</h2></div>' };
+
+	    const routes = [
+	        {path: '/user/:userid', component: User}
+	    ]
+
+	    const router = new VueRouter({
+	        routes
+	    })
+
+	    new Vue({
+	        router
+	    }).$mount('#app')
+	</script>
+</body>
+</html>
