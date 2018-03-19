@@ -169,10 +169,204 @@ console.log(store.state.count) // => 1
     <div id="app"><p>文本one1</p></div>
     ```
     + mapGetters 辅助函数
+        - mapGetters 辅助函数仅仅是将 `store` 中的 `getter` 映射到局部计算属性：
+        ```javascript
+        import { mapGetters } from 'vuex'   //Vuex.mapGetters
+
+        export default {
+          // ...
+          computed: {
+          // 使用对象展开运算符将 getter 混入 computed 对象中
+            mapGetters([
+              'doneTodosCount',
+              'anotherGetter',
+              // ...
+            ])
+          }
+        }
+        ```
+        - 将一个 getter 属性另取一个名字，使用对象形式：
+        ```javascript
+        mapGetters({
+          // 映射 `this.doneCount` 为 `store.getters.doneTodosCount`
+          doneCount: 'doneTodosCount'
+        });
+        ```
 - Mutation
+    + 更改 Vuex 的 `store` 中的状态的唯一方法是提交 `mutation`。每个 mutation 都有一个字符串的 **事件类型 (type)** 和 一个 **回调函数 (handler)**。这个回调函数就是我们实际进行数据更改的地方，并且它会接受 state 作为第一个参数
+    ```javascript
+    const store = new Vuex.Store({
+      state: {
+        count: 1
+      },
+      mutations: {
+        //increment为事件类型，回调函数为(state){}
+        increment (state) {
+          // 变更状态
+          state.count++
+        }
+      }
+    });
 
+    store.commit('increment');  //更改 store 中的状态
+    ```
+    + 提交载荷（Payload）：可以向 `store.commit` 传入额外的参数，即 `mutation` 的 载荷（payload）
+    ```html
+    <div id="app">{{ count }}</div>     <!-- 22 -->
+    ```
+    ```javascript
+    const store = new Vuex.Store({
+        state: {
+            count: 2
+        },
+        mutations: {
+            increment (state, payload){
+                state.count += payload.amount
+            }
+        }
+    });
+
+    new Vue({
+        el: '#app',
+        store,
+        computed:
+        // {
+            // count(){
+            //  return this.$store.state.count
+            // }
+        // }
+
+        // mapState
+        Vuex.mapState([
+            'count'
+        ])
+    });
+
+    // 提交载荷
+    store.commit('increment', {
+        amount: 20
+    });
+    ```
+    + 对象风格的提交方式
+    ```javascript
+    //包含type属性的对象提交mutation
+    store.commit({
+      type: 'increment',
+      amount: 10
+    });
+    //当使用对象风格的提交方式，整个对象都作为载荷传给 mutation 函数，因此 handler 保持不变
+    ```
+    + Mutation 需遵守 Vue 的响应规则
+        1. 最好提前在 `store` 中初始化好所有所需属性。
+        2. 当需要在对象上添加新属性时，应该
+            - 使用 `Vue.set(obj, 'newProp', 123)`, 或者
+            - 以新对象替换老对象。例如，利用 stage-3 的对象展开运算符可以这样写：`state.obj = { ...state.obj, newProp: 123 }`
+    + 使用常量替代 Mutation 事件类型
+    ```javascript
+    // mutation-types.js
+    export const SOME_MUTATION = 'SOME_MUTATION'
+    // store.js
+    import Vuex from 'vuex'
+    import { SOME_MUTATION } from './mutation-types'
+
+    const store = new Vuex.Store({
+      state: { ... },
+      mutations: {
+        // 我们可以使用 ES2015 风格的计算属性命名功能来使用一个常量作为函数名
+        [SOME_MUTATION] (state) {
+          // mutate state
+        }
+      }
+    });
+    ```
+    + Mutation 必须是同步函数
+    + 在组件中提交 Mutation（都需要在根节点注入 `store`）
+        - 可以在组件中使用 `this.$store.commit('xxx')` 提交 mutation
+        - 使用 `mapMutations` 辅助函数将组件中的 `methods` 映射为 `store.commit` 调用
+        ```javascript
+        import { mapMutations } from 'vuex'
+
+        export default {
+          // ...
+          methods: {
+            ...mapMutations([
+              'increment', // 将 `this.increment()` 映射为 `this.$store.commit('increment')`
+
+              // `mapMutations` 也支持载荷：
+              'incrementBy' // 将 `this.incrementBy(amount)` 映射为 `this.$store.commit('incrementBy', amount)`
+            ]),
+            ...mapMutations({
+              add: 'increment' // 将 `this.add()` 映射为 `this.$store.commit('increment')`
+            })
+          }
+        }
+        ```
 - Action
+    + Action 类似于 mutation，不同在于：
+        - Action 提交的是 mutation，而不是直接变更状态。
+        - Action 可以包含任意异步操作
+        ```javascript
+        const store = new Vuex.Store({
+          state: {
+            count: 0
+          },
+          mutations: {
+            increment (state) {
+              state.count++
+            }
+          },
+          actions: {
+            increment (context) {   //context对象具有与store实例相同的方法和属性
+              context.commit('increment')
+            }
+          }
+        });
+        ```
+    + 分发 Action
+        - Action 通过 `store.dispatch` 方法触发：`store.dispatch('increment')`
+        ```javascript
+        //可以在 action 内部执行异步操作
+        actions: {
+          incrementAsync ({ commit }) { // ES6的参数解构来简化代码
+            setTimeout(() => {
+              commit('increment')
+            }, 1000)
+          }
+        }
+        ```
+        - 支持同样的载荷方式和对象方式进行分发：
+        ```javascript
+        // 以载荷形式分发
+        store.dispatch('incrementAsync', {
+          amount: 10
+        })
 
+        // 以对象形式分发
+        store.dispatch({
+          type: 'incrementAsync',
+          amount: 10
+        });
+        ```
+        - 实际的购物车示例：
+        ```javascript
+        actions: {
+          //在这里state是store.state,products为mutations当中回调函数的参数
+          checkout ({ commit, state }, products) {
+            // 把当前购物车的物品备份起来
+            const savedCartItems = [...state.cart.added]
+            // 发出结账请求，然后乐观地清空购物车
+            commit(types.CHECKOUT_REQUEST)
+            // 购物 API 接受一个成功回调和一个失败回调
+            shop.buyProducts(
+              products,
+              // 成功操作
+              () => commit(types.CHECKOUT_SUCCESS),
+              // 失败操作
+              () => commit(types.CHECKOUT_FAILURE, savedCartItems)
+            )
+          }
+        }
+        ```
 - Module
 
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>VuexActions</title>
+	<script src="../vue.js"></script>
+	<script src="../vuex-3.0.1.js"></script>
+</head>
+<body>
+	<div id="app">{{ count }}</div>
+	<script>
+		const store = new Vuex.Store({
+			state: {
+				count: 2
+			},
+			mutations: {
+				increment (state, payload){
+					state.count += payload.amount
+				}
+			},
+			actions: {
+				// incrementAsync(context, payload){
+				// 	console.log(payload)
+				// 	setTimeout(() => {
+				//       	context.commit('increment', payload)
+				//     }, 1000)
+				// }
+
+				incrementAsync({commit, state}, payload){	// ES2015的参数解构来简化代码
+					console.log(state);
+					setTimeout(() => {
+				      	commit('increment',payload)
+				    }, 5000)
+				}
+			}
+		});
+
+		new Vue({
+			el: '#app',
+			store,
+			computed:{
+				count(){
+					return this.$store.state.count
+				}
+			}
+		});
+
+		// 提交载荷
+		// store.dispatch('incrementAsync', {amount: 1000});
+
+		store.dispatch({
+			type: 'incrementAsync',
+			amount: 1000
+		});
+
+	</script>
+</body>
+</html>

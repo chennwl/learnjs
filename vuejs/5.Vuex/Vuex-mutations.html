@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>VuexMutations</title>
+	<script src="../vue.js"></script>
+	<script src="../vuex-3.0.1.js"></script>
+</head>
+<body>
+	<div id="app">{{ count }}</div>
+	<script>
+		const store = new Vuex.Store({
+			state: {
+				count: 2
+			},
+			mutations: {
+				increment (state, payload){
+					state.count += payload.amount
+				}
+			}
+		});
+
+		new Vue({
+			el: '#app',
+			store,
+			computed:
+			// {
+				// count(){
+				// 	return this.$store.state.count
+				// }
+			// }
+
+			// mapState
+			Vuex.mapState([
+				'count'
+			])
+		});
+
+		// 提交载荷
+		store.commit('increment', {
+			amount: 20
+		});
+	</script>
+</body>
+</html>
