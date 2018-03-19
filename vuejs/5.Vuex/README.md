@@ -349,6 +349,7 @@ console.log(store.state.count) // => 1
         ```
         - 实际的购物车示例：
         ```javascript
+        //进行一系列的异步操作，并且通过提交 mutation 来记录 action 产生的副作用（即状态变更）
         actions: {
           //在这里state是store.state,products为mutations当中回调函数的参数
           checkout ({ commit, state }, products) {
