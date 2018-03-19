@@ -335,7 +335,7 @@ router.go(100)
 </div>
 ```
 
-## 命名路由
+## 命名路由(<router-link :to="{ name: 'home' }"></router-link>)
 在路由映射表中添加属性 `name`，用以对该路由映射规则命名，在编程式导航跳转路由时可以用 `router.push({name: '名称'})`
 ```javascript
 import Vue from 'vue'
@@ -348,7 +348,7 @@ const Foo = { template: '<div>This is Foo</div>' }
 const Bar = { template: '<div>This is Bar {{ $route.params.id }}</div>' }
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'history',  //依赖 HTML5 History API 和服务器配置
   base: __dirname,
   routes: [
     { path: '/', name: 'home', component: Home },
@@ -374,8 +374,8 @@ new Vue({
 }).$mount('#app')
 ```
 
-## 命名视图
-当同时（同级）想展示多个视图，而不是嵌套展示，例如创建一个布局，有 sidebar（侧导航） 和 main（主内容） 两个视图，这个时候命名视图就派上用场了。可以在界面中拥有多个单独命名的视图，而不是只有一个单独的出口。如果 `router-view`没有设置名字，那么默认为 `default`。
+## 命名视图(<router-view name="a"></router-view>)
+当同时（同级）想展示多个视图，而不是嵌套展示，例如创建一个布局，有 sidebar（侧导航） 和 main（主内容） 两个视图，这个时候命名视图就派上用场了。可以在界面中拥有多个单独命名的视图，而不是只有一个单独的出口。如果 `router-view` 没有设置名字，那么默认为 `default`。
 ```html
 <router-view class="view one"></router-view>
 <router-view class="view two" name="a"></router-view>
@@ -536,13 +536,25 @@ const router = new VueRouter({
     { path: '/a', redirect: to => {
       // 方法接收 目标路由 作为参数
       // return 重定向的 字符串路径/路径对象
+      const { hash, params, query } = to
+      if (query.to === 'foo') {
+        return { path: '/foo', query: null }
+      }
+      if (hash === '#baz') {
+        return { name: 'baz', hash: '' }
+      }
+      if (params.id) {
+        return '/with-params/:id'
+      } else {
+        return '/bar'
+      }
     }}
   ]
 });
 ```
 
 ### 别名
-别名指的是：/a 的别名是 /b，意味着，当用户访问 /b 时，URL 会保持为 /b，但是路由匹配则为 /a，就像用户访问 /a 一样
+- 别名指的是：/a 的别名是 /b，意味着，当用户访问 /b 时，URL 会保持为 /b，但是路由匹配则为 /a，就像用户访问 /a 一样
 ```javascript
 const router = new VueRouter({
   routes: [
@@ -550,6 +562,216 @@ const router = new VueRouter({
   ]
 });
 ```
-『别名』的功能可以自由地将 UI 结构映射到任意的 URL，而不是受限于配置的嵌套路由结构
+-『别名』的功能可以自由地将 UI 结构映射到任意的 URL，而不是受限于配置的嵌套路由结构
+- 示例：
+```javascript
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
+
+const Home = { template: '<div><h1>Home</h1><router-view></router-view></div>' }
+const Foo = { template: '<div>foo</div>' }
+const Bar = { template: '<div>bar</div>' }
+const Baz = { template: '<div>baz</div>' }
+
+const router = new VueRouter({
+  mode: 'history',
+  base: __dirname,
+  routes: [
+    { path: '/home', component: Home,
+      children: [
+        // absolute alias
+        { path: 'foo', component: Foo, alias: '/foo' },
+        // relative alias (alias to /home/bar-alias)
+        { path: 'bar', component: Bar, alias: 'bar-alias' },
+        // multiple aliases
+        { path: 'baz', component: Baz, alias: ['/baz', 'baz-alias'] }
+      ]
+    }
+  ]
+})
+
+new Vue({
+  router,
+  template: `
+    <div id="app">
+      <h1>Route Alias</h1>
+      <ul>
+        <li><router-link to="/foo">
+          /foo (renders /home/foo)
+        </router-link></li>
+        <li><router-link to="/home/bar-alias">
+          /home/bar-alias (renders /home/bar)
+        </router-link></li>
+        <li><router-link to="/baz">
+          /baz (renders /home/baz)</router-link>
+        </li>
+        <li><router-link to="/home/baz-alias">
+          /home/baz-alias (renders /home/baz)
+        </router-link></li>
+      </ul>
+      <router-view class="view"></router-view>
+    </div>
+  `
+}).$mount('#app');
+```
+
 
 ## 向路由组件传递props
+- 在组件中使用 `$route` 会使之与其对应路由形成高度耦合，从而使组件只能在某些特定的 URL 上使用，限制了其灵活性： 
+```javascript
+// 与 $route 的耦合
+const User = {
+  template: '<div>User {{ $route.params.id }}</div>'
+}
+const router = new VueRouter({
+  routes: [
+    { path: '/user/:id', component: User }
+  ]
+});
+```
+- 使用 `props` 将组件和路由解耦：
+```javascript
+const User = {
+  props: ['id'],
+  template: '<div>User {{ id }}</div>'
+}
+const router = new VueRouter({
+  routes: [
+    { path: '/user/:id', component: User, props: true },
+
+    // 对于包含命名视图的路由，必须分别为每个命名视图添加 `props` 选项：
+    {
+      path: '/user/:id',
+      components: { default: User, sidebar: Sidebar },
+      props: { default: true, sidebar: false }
+    }
+  ]
+});
+```
+- 布尔模式：如果 `props` 被设置为 `true`，`route.params` 将会被设置为组件属性
+- 对象模式：如果 `props` 是一个对象，它会被按原样设置为组件属性。当 `props` 是静态的时候有用
+```javascript
+const router = new VueRouter({
+  routes: [
+    { path: '/promotion/from-newsletter', component: Promotion, props: { newsletterPopup: false } }
+  ]
+});
+```
+- 函数模式：可以创建一个函数返回 `props`。这样便可以将参数转换成另一种类型，将静态值与基于路由的值结合等等
+```javascript
+const router = new VueRouter({
+  routes: [
+    //URL /search?q=vue 会将 {query: 'vue'} 作为属性传递给 SearchUser 组件
+    { path: '/search', component: SearchUser, props: (route) => ({ query: route.query.q }) }
+  ]
+});
+```
+
+## HTML5 History模式
+- vue-router 默认 `hash` 模式 —— 使用 URL 的 `hash` 来模拟一个完整的 URL，于是当 URL 改变时，页面不会重新加载。
+- 如果不想要很丑的 `hash`，可以用路由的 `history` 模式，这种模式充分利用 `history.pushState` API 来完成 URL 跳转而无须重新加载页面。
+```javascript
+const router = new VueRouter({
+  mode: 'history',
+  routes: [...]
+});
+```
+当使用 history 模式时，URL 就像正常的 url，例如 `http://site.com/user/id`，也好看！这种模式需要后台配置支持
+### 后端配置例子
+- Apache
+```html
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+```
+- nginx
+```javascript
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+- 原生Node.js
+```javascript
+const http = require('http')
+const fs = require('fs')
+const httpPort = 80
+
+http.createServer((req, res) => {
+  fs.readFile('index.htm', 'utf-8', (err, content) => {
+    if (err) {
+      console.log('We cannot open "index.htm" file.')
+    }
+
+    res.writeHead(200, {
+      'Content-Type': 'text/html; charset=utf-8'
+    })
+
+    res.end(content)
+  })
+}).listen(httpPort, () => {
+  console.log('Server listening on: http://localhost:%s', httpPort)
+});
+```
+- 基于 Node.js 的 Express
+- Internet Information Services (IIS)
+  1. 安装IIS
+  2. 在网站根目录中创建一个 web.config 文件，内容如下：
+  ```xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <configuration>
+    <system.webServer>
+      <rewrite>
+        <rules>
+          <rule name="Handle History Mode and custom 404/500" stopProcessing="true">
+            <match url="(.*)" />
+            <conditions logicalGrouping="MatchAll">
+              <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+              <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+            </conditions>
+            <action type="Rewrite" url="/" />
+          </rule>
+        </rules>
+      </rewrite>
+    </system.webServer>
+  </configuration>
+  ```
+- Caddy
+```javascript
+rewrite {
+    regexp .*
+    to {path} /
+}
+```
+- Firebase 主机：在 firebase.json 中加入：
+```json
+{
+  "hosting": {
+    "public": "dist",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
+```
+
+### 警告
+给个警告，因为这么做以后，服务器就不再返回 404 错误页面，因为对于所有路径都会返回 index.html 文件。为了避免这种情况，应该在 Vue 应用里面覆盖所有的路由情况，然后在给出一个 404 页面
+```javascript
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    { path: '*', component: NotFoundComponent }
+  ]
+});
+```
+
