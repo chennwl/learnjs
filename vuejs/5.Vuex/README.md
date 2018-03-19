@@ -339,7 +339,7 @@ console.log(store.state.count) // => 1
         // 以载荷形式分发
         store.dispatch('incrementAsync', {
           amount: 10
-        })
+        });
 
         // 以对象形式分发
         store.dispatch({
@@ -368,6 +368,28 @@ console.log(store.state.count) // => 1
           }
         }
         ```
+    + 在组件中分发 Action（都需要在根节点注入 `store`）
+        - 在组件中使用 `this.$store.dispatch('xxx')` 分发 action
+        - 使用 `mapActions` 辅助函数将组件的 `methods` 映射为 `store.dispatch` 调用
+        ```javascript
+        import { mapActions } from 'vuex'
+
+        export default {
+          // ...
+          methods: {
+            ...mapActions([
+              'increment', // 将 `this.increment()` 映射为 `this.$store.dispatch('increment')`
+
+              // `mapActions` 也支持载荷：
+              'incrementBy' // 将 `this.incrementBy(amount)` 映射为 `this.$store.dispatch('incrementBy', amount)`
+            ]),
+            ...mapActions({
+              add: 'increment' // 将 `this.add()` 映射为 `this.$store.dispatch('increment')`
+            })
+          }
+        }
+        ```
+    + 组合 Action
 - Module
 
 
