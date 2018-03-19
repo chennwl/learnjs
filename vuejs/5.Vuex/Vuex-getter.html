@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>VuexGetter</title>
+	<script src="../vue.js"></script>
+	<script src="../vuex-3.0.1.js"></script>
+</head>
+<body>
+	<div id="app">
+		<p v-for="item in doneTodos">{{ item.text + doneTodosCount }}</p>
+	</div>
+	<script>
+		const store = new Vuex.Store({
+	      	state: {
+	        	todos: [
+	          		{ id: 1, text: '文本one', done: true },
+	          		{ id: 2, text: '文本two', done: false }
+	        	]
+	      	},
+	      	getters: {
+	      		// 这里第一个参数为 state
+	        	doneTodos: state => {
+	          		return state.todos.filter(todo => todo.done);
+	        	},
+	        	// 接受其他 getter 作为第二个参数
+	        	doneTodosCount: (state, getters) => {
+			    	return getters.doneTodos.length
+				},
+				// 通过让 getter 返回一个函数，来实现给 getter 传参。对 store 里的数组进行查询时非常有用
+				getTodoById: (state) => (id) => {	//多重箭头
+					return state.todos.find(todo => todo.id === id);
+				}
+				/**
+				* function(state){
+					return function(id){
+						return state.todos.find(function(todo){
+							return todo.id === id
+						});
+					}
+				}
+				*/
+	      	}
+	    });
+
+		console.log(store.getters.doneTodos);	// => [{ id: 1, text: '文本one', done: true }]
+
+		console.log(store.getters.doneTodosCount); // => 1
+
+		console.log(store.getters.getTodoById(2));	// => { id: 2, text: '文本two', done: false }
+
+		var vm = new Vue({
+			el: '#app',
+			store,
+			computed: {
+				doneTodos () {
+					return this.$store.getters.doneTodos
+				},
+				doneTodosCount () {
+				    return this.$store.getters.doneTodosCount		//在组件中使用getters
+				}
+			}
+		});
+	</script>
+</body>
+</html>

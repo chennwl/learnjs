@@ -459,7 +459,7 @@ new Vue({
   </my-checkbox>
   ```
 
-- 非父子组件的通信
+- 非父子组件的通信(global event bus)
 
 ```javascript
 //使用一个空的Vue实例作为事件总栈

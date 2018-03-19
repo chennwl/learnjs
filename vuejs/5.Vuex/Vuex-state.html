@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>VuexState</title>
+	<script src="../vue.js"></script>
+	<script src="../vuex-3.0.1.js"></script>
+</head>
+<body>
+	<div id="app"></div>
+	<script>
+		const store = new Vuex.Store({
+			state: {
+				count: 2
+			},
+			mutations: {
+				increment(state){
+					state.count++;
+				}
+			}
+		});
+
+		const Counter = {
+			template: `<div>{{ count }}</div>`,
+			computed:
+			// {
+			    // count() {
+			    // 	//且子组件能通过 this.$store 访问到
+			    //   	return this.$store.state.count
+			    // }
+			// }
+
+
+			// Vuex.mapState({
+		 //    	// count: state => state.count 	//箭头函数
+		 //    	// 传字符串参数 'count' 等同于 `state => state.count`
+		 //    	count: 'count'
+		 //    })
+
+		    Vuex.mapState([
+		    	'count'		//当映射的计算属性的名称与 `state` 的子节点名称相同，可传入字符串数组
+		    ])
+
+		}
+
+		const app = new Vue({
+			el: '#app',
+			// 在根实例中注册 store 选项，把 store 对象提供给 “store” 选项，这可以把 store 的实例注入所有的子组件
+			store,
+			components: { Counter },
+			template: `
+			    <div class="app">
+			      	<counter></counter>
+			    </div>
+			 	`
+		});
+
+		store.commit('increment');
+
+	</script>
+</body>
+</html>

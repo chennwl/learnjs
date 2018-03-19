@@ -1,4 +1,4 @@
-# 路由
+# 路由基础
 通过 URL 映射到对应页面的功能实现，Vue 的路由使用要先引入 vue-router.js
 
 ## 基本路由入门
@@ -670,7 +670,7 @@ const router = new VueRouter({
 ```
 
 ## HTML5 History模式
-- vue-router 默认 `hash` 模式 —— 使用 URL 的 `hash` 来模拟一个完整的 URL，于是当 URL 改变时，页面不会重新加载。
+- vue-router 默认 `hash(#)` 模式 —— 使用 URL 的 `hash` 来模拟一个完整的 URL，于是当 URL 改变时，页面不会重新加载。
 - 如果不想要很丑的 `hash`，可以用路由的 `history` 模式，这种模式充分利用 `history.pushState` API 来完成 URL 跳转而无须重新加载页面。
 ```javascript
 const router = new VueRouter({
@@ -719,7 +719,8 @@ http.createServer((req, res) => {
   console.log('Server listening on: http://localhost:%s', httpPort)
 });
 ```
-- 基于 Node.js 的 Express
+- 基于 Node.js 的 Express：可以使用 [connect-history-api-fallback 中间件](https://github.com/bripkens/connect-history-api-fallback)。
+
 - Internet Information Services (IIS)
   1. 安装IIS
   2. 在网站根目录中创建一个 web.config 文件，内容如下：
@@ -775,3 +776,10 @@ const router = new VueRouter({
 });
 ```
 
+# 路由进阶
+## 导航守卫
+## 路由元信息
+## 过渡动效
+## 数据获取
+## 滚动行为
+## 懒加载

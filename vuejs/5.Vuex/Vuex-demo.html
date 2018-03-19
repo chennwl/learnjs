@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Vuex简单示例</title>
+	<script src="../vue.js"></script>
+	<script src="../vuex-3.0.1.js"></script>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/javascript">
+		const store = new Vuex.Store({
+			state: {
+				count: 0
+			},
+			mutations: {
+				increment(state){
+					state.count++;		//通过提交 mutation 的方式去改变state
+				}
+			}
+		});
+
+		// store.commit 方法触发状态变更
+		store.commit('increment');
+		//通过 store.state 来获取状态对象
+		console.log(store.state.count) // => 1
+	</script>
+</body>
+</html>
