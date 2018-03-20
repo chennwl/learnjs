@@ -32,7 +32,7 @@ p.then(multiply)    //calculating 123 x 123...，这里是程序一运行就执�
     log('Got value: ' + result);        //Got value: 1831093128
 });
 ```
-- Promise可以并行执行异步任务
+- Promise可以并行执行异步任务(all, race)
 ```javascript
 //任务并行执行，用Primise.all()实现
 var p1 = new Promise(function (resolve, reject) {
@@ -57,4 +57,58 @@ Promise.race([p1, p2]).then(function (result) {
     //由于p1执行较快，Promise的then()将获得结果'P1'。p2仍在继续执行，但执行结果将被丢
     console.log(result); // 'P1'
 });
+```
+```javascript
+//race
+var p1 = new Promise((resolve) => {
+    setTimeout(() => {
+        console.log('异步任务1执行完成');
+        resolve("第一个promise");
+    }, 3000);
+});
+
+var p2 = new Promise((resolve) => {
+    setTimeout(() => {
+        console.log('异步任务2执行完成');
+        resolve("第二个promise");
+    }, 1000);
+});
+
+Promise.race([p1, p2])
+    .then((result) => {
+        console.log(result);
+    });
+
+// 异步任务2执行完成
+// 第二个promise
+// 异步任务1执行完成  => 不执行后面的reslove()
+
+/*请求某个图片资源*/
+function requestImg(){
+    var p = new Promise(function(resolve, reject){
+        var img = new Image();
+        img.onload = function(){
+            resolve(img);
+        }
+        img.src = 'xxxxxx';
+    });
+    return p;
+}
+//延时函数，用于给请求计时
+function timeout(){
+    var p = new Promise(function(resolve, reject){
+        setTimeout(function(){
+            reject('图片请求超时');
+        }, 5000);
+    });
+    return p;
+}
+Promise
+    .race([requestImg(), timeout()])
+    .then(function(results){
+        console.log(results);
+    })
+    .catch(function(err){
+        console.log(err); //在这里会报出“图片请求超时”的信息，因为图片地址是 'xxxxxx'
+    });
 ```

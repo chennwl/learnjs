@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>严格模式下的v-model</title>
+	<script src="../vue.js"></script>
+	<script src="../vuex-3.0.1.js"></script>
+</head>
+<body>
+	<div id="app">
+	    <input :value="message" @input="updateMessage" />
+	    <p>{{ message }}</p>
+	</div>
+	<script type="text/javascript">
+		var store = new Vuex.Store({
+		    state: {
+		        obj: {
+		        	message: 20
+		        }
+		    },
+		    strict: true,
+		    //mutation函数
+		    mutations: {
+		      updateMessage (state, message) {
+		        state.obj.message = message
+		      }
+		    }
+		});
+
+		new Vue({
+		    el: '#app',
+		    store,
+		    computed:
+		    {
+		    	message(){
+		    		return this.$store.state.obj.message
+		    	}
+		    },
+		    // Vuex.mapState({
+		    //     message: state => state.obj.message
+		    // }),
+		    methods: {
+		      updateMessage (e) {
+		        this.$store.commit('updateMessage', e.target.value)
+		      }
+		    }
+		});
+	</script>
+</body>
+</html>
