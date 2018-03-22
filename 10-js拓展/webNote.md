@@ -188,6 +188,87 @@
     - position、display、float、width、height、margin、padding、top、left、right、bottom
 
 22. 弹性盒flex
+    - Webkit 内核的浏览器，必须加上`-webkit`前缀
+    ```html
+    .box{
+      display: -webkit-flex; /* Safari */
+      display: flex;
+    }
+    ```
+    - 容器的属性
+        + `flex-direction`属性决定主轴(main axis)的方向（即项目的排列方向）
+        ```html
+        .box {
+          flex-direction: row(默认，水平) | row-reverse | column(垂直) | column-reverse;
+        }
+        ```
+        + `flex-wrap`属性定义，如果一条轴线排不下项目，如何换行
+        ```html
+        .box{
+           flex-wrap: nowrap(默认，不换行) | wrap(换行，第一行在上面) | wrap-reverse;
+        }
+        ```
+        + `flex-flow`属性是`flex-direction`属性和`flex-wrap`属性的简写形式，默认值为`row nowrap`
+        ```html
+        .box {
+          flex-flow: <flex-direction> || <flex-wrap>;
+        }
+        ```
+        + `justify-content`属性定义了项目在主轴上的对齐方式
+        ```html
+        .box {
+          justify-content: flex-start(默认，左对齐) | flex-end(右对齐) | center(居中) | space-between(两端对齐，项目之间的间隔都相等) | space-around(每个项目两侧的间隔相等。所以，项目之间的间隔比项目与边框的间隔大一倍);
+        }
+        ```
+        + `align-items`属性定义项目在交叉轴上如何对齐
+        ```html
+        .box {
+          align-items: flex-start | flex-end | center | baseline(项目的第一行文字的基线对齐) | stretch(默认，如果项目未设置高度或设为auto，将占满整个容器的高度);
+        }
+        ```
+        + `align-content`属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用
+        ```html
+        .box {
+          align-content: flex-start | flex-end | center | space-between | space-around | stretch(默认，轴线占满整个交叉轴);
+        }
+        ```
+    - 容器内项目的属性
+        + `order`属性定义项目的排列顺序。数值越小，排列越靠前，默认为0
+        ```html
+        .item {
+          order: <integer>;
+        }
+        ```
+        + `flex-grow`属性定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大
+        ```html
+        .item {
+          flex-grow: <number>; /* default 0 */
+        }
+        ```
+        + `flex-shrink`属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小
+        ```html
+        .item {
+          flex-shrink: <number>; /* default 1 */
+        }
+        ```
+        + `flex-basis`属性定义了在分配多余空间之前，项目占据的主轴空间（main size）。浏览器根据这个属性，计算主轴是否有多余空间。它的默认值为`auto`，即项目的本来大小
+        ```html
+        .item {
+          flex-basis: <length> | auto; /* default auto */
+        }
+        ```
+        + `flex`属性是`flex-grow`, `flex-shrink` 和 `flex-basis`的简写，默认值为`0 1 auto`。后两个属性可选
+        ```html
+        .item {
+          flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+        }
+        ```
+        + `align-self`属性允许单个项目有与其他项目不一样的对齐方式，可覆盖`align-items`属性。默认值为auto
+        ```html
+        .item {
+          align-self: auto | flex-start | flex-end | center | baseline | stretch;
+        }
+        ```
 
 23. IE6兼容性
     - IE6怪异解析之padding与border算入宽高。解决方法：加入文档声明`<!doctype html>`
@@ -208,13 +289,12 @@
     - `margin` 和 `padding`
     - 图片默认有间距 => 使用float为img布局
     - 透明度
-    ```css
-    {
-        fiter: alpha(opacity=80); // IE
-        oapcity: .8;        // 支持CSS3的浏览器
+    ```html
+    .name {
+        fiter: alpha(opacity=80); /* IE  */
+        oapcity: .8;        /* 支持CSS3的浏览器 */
     }
     ```
-
 25.JS兼容性
     - 获取目标对象的方法不同；获取目标元素的方法也不同
     ```javascript
@@ -225,7 +305,7 @@
         oEvent.target;  //标准
     }
     ```
-    - 在IE中不能操作tr的innerHTML
+    - 在IE中不能操作tr的`innerHTML`
     - 标准绑定事件：`addEventListener;`，而IE使用的是`attachEvent;`
     - 获取style标签中的CSS样式值
     ```javascript
