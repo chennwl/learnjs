@@ -177,7 +177,7 @@ console.log(store.state.count) // => 1
           // ...
           computed: {
           // 使用对象展开运算符将 getter 混入 computed 对象中
-            mapGetters([
+          ...mapGetters([
               'doneTodosCount',
               'anotherGetter',
               // ...
@@ -187,7 +187,7 @@ console.log(store.state.count) // => 1
         ```
         - 将一个 getter 属性另取一个名字，使用对象形式：
         ```javascript
-        mapGetters({
+        ...mapGetters({
           // 映射 `this.doneCount` 为 `store.getters.doneTodosCount`
           doneCount: 'doneTodosCount'
         });
