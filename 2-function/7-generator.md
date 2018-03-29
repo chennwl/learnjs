@@ -59,7 +59,7 @@ catch (err) {
     }
     var g = gen(1);
     g.next()    //{ value: 3, done: false }     返回x+2的值(3)
-    g.next(2)   // { value: 2, done: true }     传入的参数2会被generator函数内的变量y接收，因此value返回的就是2
+    g.next(2);   // { value: 2, done: true }     传入的参数2会被generator函数内的变量y接收，因此value返回的就是2
     ```
     - 错误处理：generator函数内部还可以部署错误处理代码，捕获函数体外抛出的错误。
     ```javascript
