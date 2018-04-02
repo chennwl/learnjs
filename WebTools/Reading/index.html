@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<!--css-->
+		<link rel="stylesheet" type="text/css" href="libs/ionic/css/ionic.min.css" />
+		<link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="libs/font-awesome-4.6.3/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="libs/easyUi/themes/default/easyui.css" />
+		<link rel="stylesheet" type="text/css" href="libs/css/index.css" />
+
+		<!--js-->
+		<script src="libs/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="libs/ionic/js/ionic.bundle.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="libs/easyUi/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+
+		<!--auto js-->
+		<script src="libs/js/global.js" type="text/javascript" charset="utf-8"></script>
+		<script src="libs/js/angular.global.js" type="text/javascript" charset="utf-8"></script>
+		<script src="libs/js/index.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body ng-app="indexApp" ng-controller="indexController">
+		<div id="mask">
+			<span class="fa fa-spinner fa-spin fa-5x"></span>
+		</div>
+		<!--显示图片 -->
+		<div id="showAllBox">
+
+		</div>
+		<!---显示视频 -->
+		<div id="showVideoBox" class="easyui-draggable easyui-resizable">
+			<span class="glyphicon glyphicon-remove"></span>
+			<video src="#" controls="controls" preload="metadata" width="100%" autoplay="autoplay"></video>
+		</div>
+		<div id="serachBox">
+			<div class="searchTop">
+				<div class="col-xs-1" ng-click="hideSearchBox()">
+					<span class="fa fa-angle-left"></span>
+				</div>
+				<div class="col-xs-9">
+					<input type="text" name="serachText" id="serachText" placeholder="输入搜索内容" />
+				</div>
+				<div class="col-xs-2" ng-click="search()">
+					<span class="fa fa-search"></span>
+				</div>
+			</div>
+			<div class="serachContent">
+				<ion-content>
+					<div class="serachContentBox" ng-repeat="result in searchResult" ng-click="showSearchDetails(result)">
+						<div class="profileImg">
+							<img ng-src="{{result.profile_image}}" />
+						</div>
+						<span>{{result.name}}</span>
+						<p>{{result.text}}</p>
+					</div>
+				</ion-content>
+			</div>
+		</div>
+		<ion-side-menus>
+			<!-- 菜单ionic中间内容 -->
+			<ion-side-menu-content>
+				<!--头部内容-->
+				<div id="header">
+					<div class="col-xs-1">
+						<span class="glyphicon glyphicon-list" ng-click="openMenuBtn()"></span>
+					</div>
+					<div class="col-xs-9">
+						<span class="title">READING</span>
+					</div>
+					<div class="col-xs-2" style="text-align: right;" ng-click="showSearchBox()">
+						<span class="glyphicon glyphicon-search" id="showSearchBtn"></span>
+					</div>
+				</div>
+				<!--正式中间内容-->
+				<ion-content id="centerContainer">
+					<!--中间内容左右滑动box-->
+					<ion-slide-box show-pager="false" on-slide-changed="slide(index)">
+						<!--滑动第一页图片区-->
+						<ion-slide>
+							<ion-content>
+								<div class="emptyBox">
+
+								</div>
+								<!--下拉刷新-->
+								<ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh(10,'photoArr')">
+								</ion-refresher>
+								<!--到底刷新-->
+								<ion-infinite-scroll on-infinite="loadMore(10,'photoArr')" distance="1%" style="position: fixed;bottom: 0px;z-index: 100;">
+								</ion-infinite-scroll>
+
+								<!--Different Style-->
+								<div class="photoContentBox" ng-repeat="photo in photoArr" ng-click="showAll(photo,$index)">
+									<div class="profileImg">
+										<img ng-src="{{photo.profile_image}}" />
+									</div>
+									<h5>{{photo.name}}</h5>
+									<span>{{photo.create_time}}</span>
+									<br />
+									<p>{{photo.text}}</p>
+								</div>
+
+							</ion-content>
+						</ion-slide>
+
+						<!--滑动第二页段子区-->
+						<ion-slide>
+							<ion-content>
+								<div class="emptyBox">
+
+								</div>
+								<!--下拉刷新-->
+								<ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh(29,'roadArr')">
+								</ion-refresher>
+								<!--到底刷新-->
+								<ion-infinite-scroll on-infinite="loadMore(29,'roadArr')" distance="1%" style="position: fixed;bottom: 0px;z-index: 100;">
+								</ion-infinite-scroll>
+
+								<div class="roadContentBox" ng-repeat="road in roadArr">
+									<div class="profileImg">
+										<img ng-src="{{road.profile_image}}" />
+									</div>
+									<h5>{{road.name}}</h5>
+									<span>{{road.create_time}}</span>
+									<br />
+									<p>{{road.text}}</p>
+								</div>
+							</ion-content>
+						</ion-slide>
+
+						<!--滑动第三页音乐区-->
+						<ion-slide on-slide-changed="slideHasChanged(index)">
+							<ion-content>
+								<div class="emptyBox">
+
+								</div>
+								<!--下拉刷新-->
+								<ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh(31,'musicArr')">
+								</ion-refresher>
+								<!--到底刷新-->
+								<ion-infinite-scroll on-infinite="loadMore(31,'musicArr')" distance="1%" style="position: fixed;bottom: 0px;z-index: 100;">
+								</ion-infinite-scroll>
+
+								<div class="musicContentBox" ng-repeat="music in musicArr">
+									<div class="post">
+										<img ng-src="{{music.image3}}" />
+									</div>
+									<div class="infoBox">
+										<h5>{{music.text}}</h5>
+										<h5>{{music.name}}</h5>
+										<h5><span class="glyphicon glyphicon-thumbs-up"></span>{{music.love}}</h5>
+									</div>
+									<audio ng-src="{{music.voice_uri|trusted}}" controls="controls" preload="metadata"></audio>
+								</div>
+							</ion-content>
+						</ion-slide>
+
+						<!--滑动第四页视频区-->
+						<ion-slide on-slide-changed="slideHasChanged(index)">
+							<ion-content>
+								<div class="emptyBox">
+
+								</div>
+								<!--下拉刷新-->
+								<ion-refresher pulling-text="下拉刷新..." on-refresh="doRefresh(41,'videoArr')">
+								</ion-refresher>
+								<!--到底刷新-->
+								<ion-infinite-scroll on-infinite="loadMore(41,'videoArr')" distance="1%" style="position: fixed;bottom: 0px;z-index: 100;">
+								</ion-infinite-scroll>
+
+								<div class="musicContentBox" ng-repeat="video in videoArr">
+									<div class="videoContentBox" ng-click="playVideo(video)">
+										<div class="profileImg">
+											<img ng-src="{{video.profile_image}}" />
+										</div>
+										<span>{{video.name}}</span>
+										<i><span class="glyphicon glyphicon-thumbs-up"></span>{{video.love}}</i>
+										<p>{{video.text}}</p>
+										<!--<video ng-src="{{video.video_uri|trusted}}" controls="controls" preload="metadata"></video>-->
+									</div>
+								</div>
+							</ion-content>
+						</ion-slide>
+
+					</ion-slide-box>
+
+				</ion-content>
+
+				<!--脚部-->
+				<footer>
+					<div ng-click="changeChannel('photo')"><span class="glyphicon glyphicon-picture"></span><br />photo</div>
+					<div ng-click="changeChannel('laught')"><span class="glyphicon glyphicon-road"></span><br />laught</div>
+					<div ng-click="changeChannel('music')"><span class="glyphicon glyphicon-music"></span><br />music</div>
+					<div ng-click="changeChannel('video')"><span class="glyphicon glyphicon-film"></span><br />video</div>
+				</footer>
+			</ion-side-menu-content>
+
+			<!-- 左侧菜单 -->
+			<ion-side-menu side="left" class="leftMenu">
+				<ul class="list">
+					<li class="item" style="height: 200px;">
+
+					</li>
+					<li class="item" ng-click="slideTo(0)">
+						PHOTO
+					</li>
+					<li class="item" ng-click="slideTo(1)">
+						LAUGHT
+					</li>
+					<li class="item" ng-click="slideTo(2)">
+						MUSIC
+					</li>
+					<li class="item" ng-click="slideTo(3)">
+						VIDEO
+					</li>
+				</ul>
+			</ion-side-menu>
+		</ion-side-menus>
+		</div>
+	</body>
+
+</html>

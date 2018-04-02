@@ -1,0 +1,347 @@
+@import"common";
+#header{
+    width: 100%;
+    height: 49px;
+    line-height: 49px;
+    border-bottom: 1px solid #d1d1d1;
+    .title{
+        padding-left: 43%;
+        font-size: 18px;
+    }
+}
+#showAllBox{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background: #FFFFFF;
+    z-index: 100;
+    display: none;
+    overflow: auto;
+    height: 100%;
+    img{
+        width: 100%;
+        vertical-align: middle;
+    }
+}
+#showVideoBox{
+    position: absolute;
+    width: 96%;
+    left: 2%;
+    top: 30%;
+    height: auto;
+    overflow: hidden;
+    background: #FFFFFF;
+    box-shadow: 0px 1px 6px -1px #000;
+    z-index: 100;
+    padding: 5px;
+    font-family: "microsoft yahei";
+    font-size: 12px;
+    display: none;
+    span{
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        z-index: 101;
+        font-size: 22px;
+        color: white;
+        display: none;
+        opacity: 0.4;
+    }
+    video{
+        width: 100%;
+    }
+//  .profileImg{
+//      border-radius: 10%;
+//      padding-right: 10px;
+//      overflow: hidden;
+//      margin-bottom: 5px;
+//      img{
+//          margin-right: 5px;
+//      }
+//  }
+//  p{
+//      text-shadow: 0px 1px 3px #000000;
+//  }
+}
+#showVideoBox:hover span{
+    display: block;
+}
+#serachBox{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background: rgba(0,0,0,0.4);
+    z-index: 199;
+    display: none;
+    background: #FFFFFF;
+    .searchTop{
+        position: absolute;
+        top: 0px;
+        width: 100%;
+        height: 50px;
+        background: #FFFFFF;
+        line-height: 50px;
+        box-shadow: 0px 0px 8px 0px #000000;
+        div:nth-child(1){
+            span{
+                font-size: 20px;
+            }
+        }
+        div:nth-child(2){
+            input{
+//              border: 1px solid #D1D1D1;
+                border-radius: 5%;
+                width: 100%;
+                height: 25px;
+                margin: 4% auto;float: right;
+                font-size: 12px;
+                position: relative;
+                left: 30px;
+            }
+        }
+        div:nth-child(3){
+            text-align: right;
+        }
+    }
+    .serachContent{
+        position: absolute;
+        top: 50px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        .serachContentBox{
+            width: 96%;
+            margin: 5px auto;
+            box-shadow: 0px 1px 21px 1px #d1d1d1;    
+            .profileImg{
+                width: 30px;
+                height: 30px;
+                float: left;
+                overflow: hidden;
+                border-radius: 5%;
+                margin-right: 10px;
+                img{
+                    width: 100%;
+                }
+            }
+            span{
+                height: 30px;
+                line-height: 30px;
+            }
+            p{
+                text-indent: 1em;
+                margin-top: 3px;
+            }
+        }
+    }
+}
+#centerContainer{
+    top: 50px;
+    bottom: 50px;
+    .photoContentBox{
+        width: 96%;
+        font-size: 12px;
+        border: 1px solid #D1D1D1;
+        background: #FFFFFF;
+//      height: 240px;
+        margin: 0 auto;
+        overflow: hidden;
+        margin-top: 5px;
+        .imageBox{
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            display: inline-block;
+            img{
+                width: 100%;
+            }
+        }
+//      h5{
+//          width:60%;
+//          overflow: hidden;
+//          text-overflow:ellipsis;
+//          white-space: nowrap;
+//          display: inline-block;
+//          float: left;
+//      }
+        h6{
+            float: right;
+            padding-right: 4px;
+        }
+        //Different Style
+        .profileImg{
+            width: 50px;
+            height: 50px;
+            margin-top: 10px;
+            margin-left: 10px;
+            float: left;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+        h5{
+           
+        }
+        span{
+            display: block
+        }
+        p{
+            padding-left: 5px;
+            padding-right: 5px;
+            text-indent: 1em;
+        }
+    }
+    .roadContentBox{
+        width: 96%;
+        border: 1px solid #D1D1D1;
+        background: #FFFFFF;
+        margin: 0 auto;
+        overflow: hidden;
+        margin-top: 5px;
+        font-size: 12px;
+        .profileImg{
+            width: 50px;
+            height: 50px;
+            margin-top: 10px;
+            margin-left: 10px;
+            float: left;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+        h5{
+           
+        }
+        span{
+            display: block
+        }
+        p{
+            padding-left: 5px;
+            padding-right: 5px;
+            text-indent: 1em;
+        }  
+    }
+    .musicContentBox{
+        width: 96%;
+        background: #FFFFFF;
+        margin: 0 auto;
+        overflow: hidden;
+        margin-top: 5px;
+        font-size: 12px;
+        position: relative;
+        .post{
+            width: 100%;
+            overflow: hidden;
+            img{
+                width: 100%;
+            }
+        }
+        .infoBox{
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            text-shadow: 0px 1px 3px #000000;
+        }
+        audio{
+            width: 100%;
+        }
+        h5{
+            font-size: 12px;
+        }
+    }
+    .videoContentBox{
+        width: 96%;
+//      border: 1px solid #D1D1D1;
+        background: #FFFFFF;
+        margin: 0 auto;
+        overflow: hidden;
+        margin-top: 5px;
+        font-size: 12px;
+        position: relative;
+        box-shadow: 0px -1px 1px -1px #000;
+        p{
+            margin-top: 3px;
+        }
+        .profileImg{
+            width: 30px;
+            height: 30px;
+            border-radius: 15%;
+            overflow: hidden;
+            float: left;
+            img{
+                width: 100%;
+            }
+        }
+        span{
+            display: inline-block;
+            height: 30px;
+            padding-left: 10px;
+            line-height: 30px;
+        }
+        i{
+            float: right;
+        }
+        video{
+            width: 100%;
+        }
+    }
+    .emptyBox{
+        width: 100%;
+        height: 1000px;
+    }
+}
+.leftMenu{
+//  background: seagreen;
+    ul,li{
+//      background: transparent;
+    }
+    .weatherBox{
+        p:nth-child(1){
+            font-size: 30px;
+        }
+        p:nth-child(3){
+            width: 200px;
+            overflow:auto;
+            text-overflow:inherit;
+            white-space:normal;
+            display: inline-block;
+        }
+        input{
+            width: 80px;
+            float: right;
+            margin-right: 0px;
+            color: #D1D1D1;
+        }
+    }
+}
+.opacity8{
+    opacity: 0.8;
+}
+footer{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 50px;
+    z-index: 1;
+    background: #FFFFFF;
+    div{
+        width: 25%;
+        height: 50px;
+        float: left;
+        line-height: 17px;
+        text-align: center;
+        padding-top: 3px;
+        span{
+            font-size: 22px;
+            margin-bottom: 0px;
+            padding-bottom: 0px;   
+        }
+    }
+}

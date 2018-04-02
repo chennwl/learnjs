@@ -1,0 +1,22 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "microsoft yahei"; }
+
+#mask {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background: rgba(255, 255, 255, 0.3);
+  display: none;
+  z-index: 999; }
+  #mask span {
+    position: absolute;
+    top: 44%;
+    left: 44%;
+    transform: translate(-50%, -50%);
+    color: black; }
+
+/*# sourceMappingURL=common.css.map */

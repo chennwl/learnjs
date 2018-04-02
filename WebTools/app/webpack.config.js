@@ -10,9 +10,9 @@ module.exports = {
   	devtool: 'inline-source-map',
   	devServer: {
 	    contentBase: './dist',	//告诉开发服务器(dev server)，在哪里查找文件：
-		port: 9000,
-		hot: true
-	},
+		  port: 9000,
+		  hot: true
+	  },
    	module: {
      	rules: [
        		{
@@ -21,16 +21,16 @@ module.exports = {
        		}
      	]
     },
-  	plugins: [
-  	 	new CleanWebpackPlugin(['dist']),
+  	plugins: [     // 插件
+  	 	new CleanWebpackPlugin(['dist']),    // 创建插件的实例
   		new HtmlWebpackPlugin({
   			title: 'Output Management'
   		}),
   		new webpack.NamedModulesPlugin(),
      	new webpack.HotModuleReplacementPlugin()
   	],
- 	output: {
-    	filename: '[name].bundle.js',
+ 	  output: {
+      filename: '[name].bundle.js',
     	path: path.resolve(__dirname, 'dist'),
     	publicPath: '/'
   	},
