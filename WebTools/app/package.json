@@ -6,8 +6,8 @@
   "scripts": {
     "watch": "webpack --watch",
     "server": "node server.js",
-    "start": "webpack-dev-server --open --config webpack.dev.js",   //npm start 为启动并运行dev server
-    "build": "webpack --config webpack.prod.js"     //npm run build 为生产环境脚本
+    "start": "webpack-dev-server --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
   },
   "keywords": [
     "webpack"

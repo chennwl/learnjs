@@ -9,7 +9,7 @@ module.exports = merge(common, {
 		new UglifyJSPlugin({
 			sourceMap: true
 		}),
-		new webpack.DefinePlugin({
+		new webpack.DefinePlugin({	// 为所有的依赖定义process.env.NODE_ENV
 			'process.env.NODE_ENV': JSON.stringify('production')
 		})
 	]

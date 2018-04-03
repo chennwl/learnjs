@@ -11,6 +11,9 @@ module.exports = merge(common, {
 	},
 	plugins: [
 		new webpack.NamedModulesPlugin(),	// 查看要修补的依赖
-     	new webpack.HotModuleReplacementPlugin()
+     	new webpack.HotModuleReplacementPlugin(),
+     	new webpack.DefinePlugin({	// 为所有的依赖定义process.env.NODE_ENV
+			'process.env.NODE_ENV': JSON.stringify('development')
+		})
 	]
 });
