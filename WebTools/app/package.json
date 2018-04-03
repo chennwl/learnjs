@@ -2,17 +2,17 @@
   "name": "app",
   "version": "1.0.0",
   "description": "",
-  "main": "runoob1.js",
+  "main": "webpack.config.js",
   "scripts": {
     "watch": "webpack --watch",
-    "start": "webpack-dev-server --open",
     "server": "node server.js",
-    "build": "webpack"
+    "start": "webpack-dev-server --open --config webpack.dev.js",   //npm start 为启动并运行dev server
+    "build": "webpack --config webpack.prod.js"     //npm run build 为生产环境脚本
   },
   "keywords": [
     "webpack"
   ],
-  "author": "wl",
+  "author": "cwl",
   "license": "ISC",
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.19",
@@ -28,6 +28,7 @@
     "webpack-cli": "^2.0.12",
     "webpack-dev-middleware": "^3.0.1",
     "webpack-dev-server": "^3.1.1",
+    "webpack-merge": "^4.1.2",
     "xml-loader": "^1.2.1"
   },
   "dependencies": {
