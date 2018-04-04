@@ -1,11 +1,15 @@
+/**
+ * 开发环境配置
+ */
+
 const merge = require('webpack-merge');		// 合并配置插件
 const webpack = require('webpack');
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
 	devtool: 'inline-source-map',	//开发环境用
-	devServer: {
-	    contentBase: './dist',	//告诉开发服务器(dev server)，在哪里查找文件：
+	devServer: {	// 提供了一个简单的 web 服务器
+	    contentBase: './dist',	// 告诉开发服务器(dev server)，在哪里查找文件
 		port: 9000,
 		hot: true     // 热更新所用
 	},

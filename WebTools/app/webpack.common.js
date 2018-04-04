@@ -1,3 +1,7 @@
+/**
+ * 生产环境构建 用的共同配置文件
+ */
+
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');

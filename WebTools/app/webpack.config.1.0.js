@@ -1,3 +1,6 @@
+/*
+从起步到Tree Shaking使用的webpack配置文件
+ */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //通过npm安装的插件
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -36,5 +39,5 @@ module.exports = {
     	path: path.resolve(__dirname, 'dist'),
     	publicPath: '/'
   	},
-  	mode: 'development'
+  	mode: 'development'    // 当前环境
 };

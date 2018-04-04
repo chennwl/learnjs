@@ -1,3 +1,7 @@
+/**
+ * 生产环境配置
+ */
+
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');  //删除未引用代码的压缩工具
