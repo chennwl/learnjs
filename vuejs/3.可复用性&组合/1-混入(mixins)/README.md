@@ -4,30 +4,32 @@
 ```javascript
 // 定义一个混入对象
 var myMixin = {
+  //创建的时候执行
     created: function () {
-        this.hello();
+      this.hello();
     },
     methods: {
-        hello: function () {
-            console.log('hello from mixin!')
-        }
+      hello: function () {
+          console.log('hello from mixin!')  //第二执行
+      }
     },
-    data: function(){   //data要是函数
-        return {
-            name: 'hello world'
-        }
+    data: function(){ //data要是函数
+    return {
+      name: 'hello world'
     }
+  }
 }
 
 var test = {
-    created: function(){
-        console.log(this.name);     // =>"hello world"
-    },
-    data: function(){   //data要是函数
-        return {
-            name: 'hello vue'
-        }
+  //创建的时候执行
+  created: function(){
+    console.log(this.name);   // =>hello world先执行，是因为 name 值改变了
+  },
+  data: function(){ //data要是函数
+    return {
+      name: 'hello vue'
     }
+  }
 }
 
 // 定义一个使用混入对象的组件
@@ -35,12 +37,12 @@ var Component = Vue.extend({
     mixins: [test, myMixin] //后面同样的数据值会合并前面的
 })
 
-var component = new Component() // => "hello from mixin!"
-console.log(component.name); // =>"hello world"
+var component = new Component();  //data会合并，同名钩子函数会合并，是按顺序执行
+console.log(component.name); // =>hello world
 ```
 
 ## 选项合并
-当组件和混入对象含有同名选项时，这些选项将以恰当的方式混合(Vue.extend()使用同样的策略合并)
+当组件和混入对象含有同名选项时，这些选项将以恰当的方式混合(`Vue.extend()`使用同样的策略合并)
 
 - 数据对象data会在内部进行浅合并（一层属性深度），在和组件的数据发生冲突时以组件数据优先
 ```javascript

@@ -114,8 +114,8 @@ Vue.nextTick()
   });
 ```
 
-- `Vue.set( target, key, value )`：设置对象的属性。如果对象是响应式的，确保属性被创建后也是响应式的，同时触发视图更新。这个方法主要用于避开 Vue 不能检测属性被添加的限制。(对象不能是 Vue 实例，或者 Vue 实例的根数据对象)
-- `Vue.delete( target, key )`：删除对象的属性。如果对象是响应式的，确保删除能触发更新视图(目标对象不能是一个 Vue 实例或 Vue 实例的根数据对象)
+- `Vue.set( target, key, value )`：设置对象的属性。如果对象是响应式的，确保属性被创建后也是响应式的，同时触发视图更新。这个方法主要用于避开 Vue 不能检测属性被添加的限制。(**target不能是 Vue 实例，或者 Vue 实例的根数据对象** )
+- `Vue.delete( target, key )`：删除对象的属性。如果对象是响应式的，确保删除能触发更新视图(**target不能是一个 Vue 实例或 Vue 实例的根数据对象**)
 - `Vue.directive( id, [definition] )` ：注册或获取全局指令
 ```javasctipt
 // 注册

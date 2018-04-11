@@ -150,14 +150,14 @@ Vue.directive('color-swatch', function (el, binding) {
 ```
 
 ## $set介绍
-当实例对象 `data` 先设置好了结构，比如：`data: {dataform: {}}`，在后期想添加一个属性 `username` 时，这个 `username` 不会自动绑定到视图当中，所以调用 `$set(原对象，新属性名，属性值)` 进行绑定到视图当中
+当实例对象 `data` 先设置好了结构，比如：`data: {dataform: {}}`，在后期想添加一个属性 `username` 时，这个 `username` 不会自动绑定到视图当中，所以调用 `vm.$set(原对象，新属性名，属性值)` 进行绑定到视图当中
 ```html
 <div id="set-example">
     <input type="button" value="set" @click="set">
     <p><span>{{dataform.username}}</span></p>
 </div>
 <script>
-    new Vue({
+    var vm = new Vue({
         el: '#set-example',
         data: {
             dataform: {}

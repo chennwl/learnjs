@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>API示例</title>
+	<script src="../vue.min.js"></script>
+</head>
+<body>
+	<fieldset>
+		<legend>Vue.extend(options)，创建一个“子类”。参数是一个包含组件选项的对象</legend>
+		<div id="mount-point"></div>
+		<script type="text/javascript">
+			// 创建构造器
+			var Profile = Vue.extend({
+			  template: '<p>{{firstName}} {{lastName}} aka {{alias}}</p>',
+			  data: function () {
+			    return {
+			      firstName: 'iondas',
+			      lastName: 'White',
+			      alias: 'Heisenberg'
+			    }
+			  }
+			})
+			// 创建 Profile 实例，并挂载到一个元素上。
+			new Profile().$mount('#mount-point');
+		</script>
+	</fieldset>
+
+	<fieldset>
+		<legend>实例方法 vm.$nextTick([callback, context])，在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM</legend>
+		<div id="app">
+			<example></example>
+		</div>
+		<script type="text/javascript">
+		/* config配置参数 */
+		// Vue.config.silent = true;	//取消 Vue 所有的日志与警告
+		// Vue.config['performance'] = true;		//设置为 false 以阻止 vue 在启动时生成生产提示
+
+		var vm = new Vue({
+			el: "#app",
+			components: {
+				example: {
+					template: '<span @click.once="updateMessage">{{ message }}</span>',
+					data: function () {
+					    return {
+					      message: '没有更新'
+					    }
+					},
+					methods: {
+					    updateMessage: function () {
+					      	this.message = '更新完成'
+					      	console.log(this.$el.textContent) // => '没有更新'
+					      	// this.$nextTick(function () {
+					       //  	console.log(this.$el.textContent) // => '更新完成'
+					      	// });
+					      	this.$nextTick()
+					      		.then(() => {		// 箭头函数的 this 是继承来的，默认指向在定义它时所处的对象
+					      			console.log(this.$el.textContent) // => '更新完成'
+					      		});
+
+					      	Vue.nextTick(function(){
+								console.log("全局API Vue.nextTick()");
+							});
+					 	}
+					}
+				}
+			}
+		});
+		</script>
+	</fieldset>
+
+	<fieldset>
+		<legend>Vue.set(target, key, value)设置值，Vue.delete(target, key)删除值，target不能是 Vue 实例或者 Vue 实例的根数据对象</legend>
+		<div id="example-1">
+			<p>{{ someObject.b }}</p>	<!-- Vue.set(vm.someObejct, "b", 3)可设置值响应变化 -->
+		</div>
+		<script type="text/javascript">
+			var example1 = new Vue({
+				el: "#example-1",
+				data: {
+					someObject: {
+
+					}
+				}
+			})
+		</script>
+	</fieldset>
+</body>
+</html>

@@ -21,7 +21,10 @@
 			data: {
 				name: '生命周期',
 				text: '测试文本',
-				number: 0
+				number: 0,
+				someObject: {		// Vue 不允许动态添加根级响应式属性。
+
+				}
 			},
 			components: {
 				'my-template': {

@@ -54,17 +54,20 @@
 		    </div>
 		    <script>
 		    	 Vue.directive('function', {
+		    	 	//只调用一次，指令第一次绑定到元素时调用
+		    	 	bind: function(element, binding, vnode){
+			            console.log('bind');
+			            element.style.color = binding.value.color //binding.value为{color: 'red'}
+			        },
 			        //默认触发此方法 Vue.directive('function',  function(element){})
 			        inserted: function(element, binding, vnode){
 			            console.log('inserted');
 			        },
-			        bind: function(element, binding, vnode){
-			            console.log('bind');
-			            element.style.color = binding.value.color //binding.value为{color: 'red'}
-			        },
+			        //所在组件的 VNode 更新时调用，但是可能发生在其子 VNode 更新之前，如更新 vm.text值会触发
 			        update: function(element, binding, vnode){
 			            console.log('update');
 			        },
+			        //指令所在组件的 VNode 及其子 VNode 全部更新后调用
 			        componentUpdated: function(element, binding, vnode){
 			            console.log('componentUpdated');
 			        }
@@ -124,21 +127,29 @@
 			</script>
 		</fieldset>
 
-		<h3>$set介绍</h3>
+		<fieldset>
+			<legend>函数简写，在 bind 和 update 时触发相同行为</legend>
+			<script type="text/javascript">
+				Vue.directive('color-swatch', function (el, binding) {
+				  el.style.backgroundColor = binding.value
+				});
+			</script>
+		</fieldset>
+
+		<h3>实例方法 vm.$set(target, key, value)介绍，target不能是根数据对象</h3>
 		<div id="set-example">
 			<input type="button" value="set" @click="set">
         	<p><span>{{dataform.username}}</span></p>
 		</div>
 		<script>
-			new Vue({
+			var vm = new Vue({
 		        el: '#set-example',
 		        data: {
 		            dataform: {}
 		        },
 		        methods: {
 		            set: function(){
-		                // 直接赋值不会显示在视图上
-		                // this.dataform.username = '123'
+		                // 直接赋值不会显示在视图上 this.dataform.username = '123'
 		                //改用 $set 更新可以在视图上显示
 		                this.$set(this.dataform, 'username', '新添加的字符串')
 		            }
