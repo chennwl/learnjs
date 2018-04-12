@@ -43,14 +43,14 @@ Vue通过建立一个虚拟 DOM 对真实 DOM 发生的变化保持追踪。在 
 createElement(
   // {String | Object | Function}
   // 一个 HTML 标签字符串，组件选项对象，或者一个返回值
-  // 类型为 String/Object 的函数，必要参数
+  // 类型为 String/Object/Function，必要参数
   'div',
 
   // {Object}
   // 一个包含模板相关属性的数据对象
   // 这样，可以在 template 中使用这些属性。可选参数。
   {
-    // 看下一节
+
   },
 
   // {String | Array}
@@ -209,7 +209,7 @@ new Vue({
 ```
 - 约束
 
-    组件树中的所有的VNodes必须是唯一的。如果需要重复很多的元素或者组件，可以用工厂函数来实现。
+    组件树中的所有的VNodes必须是唯一的。如果需要重复很多的元素/组件，可以用工厂函数来实现。
     ```javascript
     render: function (createElement) {
       return createElement('div',
@@ -393,7 +393,7 @@ new Vue({
 ## 函数式组件
 - 示例：标记组件为 `functional`，这意味它是无状态 (没有 `data`)，无实例 (没有 `this` 上下文)
 ```javascript
-//函数式组件
+// 函数式组件示例
 Vue.component('my-component', {
   functional: true,
   // 为了弥补缺少的实例
@@ -407,6 +407,11 @@ Vue.component('my-component', {
   }
 });
 ```
+```html
+<!-- 单文件组件，基于模板的函数式组件声明方式 -->
+<template functional>
+</template>
+```
   - 组件需要的一切都是通过上下文传递，包括：
     * `props`：提供 `props` 的对象
     * `children`: VNode 子节点的数组
@@ -417,6 +422,27 @@ Vue.component('my-component', {
     * `injections`: (2.3.0+) 如果使用了 `inject` 选项，则该对象包含了应当被注入的属性。
   - 在添加 `functional: true` 之后，锚点标题组件的 `render` 函数之间简单更新增加 `context` 参数，`this.$slots.default` 更新为 `context.children`，之后`this.level` 更新为 `context.props.level`
 - 向子元素或子组件传递特性和事件
+```javascript
+Vue.component('my-functional-button', {
+  functional: true,
+  render: function (createElement, context) {
+    // 完全透明的传入任何特性、事件监听器、子结点等。
+    // 传入 context.data 作为第二个参数，就把 my-functional-button 上面所有的特性和事件监听器都传递下去了
+    return createElement('button', context.data, context.children)
+  }
+});
+```
 - `slots()` 和 `children` 对比
+```html
+<my-functional-component>
+  <p slot="foo">
+    first
+  </p>
+  <p>second</p>
+</my-functional-component>
+```
+在这里，`children` 会给出两个段落标签，而 `slots().default` 只会传递第二个匿名段落标签，`slots().foo` 会传递第一个具名段落标签
 
 ## 模板编译
+- `Vue.complie(template)`
+- 参数：{string} template

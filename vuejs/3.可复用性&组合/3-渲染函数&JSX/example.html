@@ -82,7 +82,13 @@
 								    color: 'red',
 								    fontSize: '20px'
 								}
-				        	}, this.$slots.default)
+				        	}, this.$slots.default),
+				        	createElement('div',
+				        		// 需要重复很多的元素/组件，使用工厂函数实现
+				        		Array.apply(null, {length: 10}).map(function(){
+				        			return createElement('p', 'hi')
+				        		})
+				        	)
 			      		]
 			    	)
 			  	},
