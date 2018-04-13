@@ -470,3 +470,118 @@ if (version === 2) {
   + 类型：`boolean`
   + 详细：使组件无状态 (没有 `data` ) 和无实例 (没有 `this` 上下文)。他们用一个简单的 `render` 函数返回虚拟节点使他们更容易渲染
 - `model`(2.2.0新增)
+  + 类型：`{ prop?: string, event?: string }`
+  + 详细：允许一个自定义组件在使用 `v-model` 时定制 `prop` 和 `event`。默认情况下，一个组件上的 `v-model` 会把 `value` 用作 `prop` 且把 `input` 用作 `event`，但是一些输入类型比如单选框和复选框按钮可能想使用 `value` `prop` 来达到不同的目的。使用 `model` 选项可以回避这些情况产生的冲突
+  + 示例：
+  ```javasctipt
+  Vue.component('my-checkbox', {
+    model: {
+      prop: 'checked',
+      event: 'change'
+    },
+    props: {
+      // this allows using the `value` prop for a different purpose
+      value: String,
+      // use `checked` as the prop which take the place of `value`
+      checked: {
+        type: Number,
+        default: 0
+      }
+    },
+    // ...
+  })
+  ```
+  ```html
+  <my-checkbox v-model="foo" value="some value"></my-checkbox>
+  ```
+  等价于
+  ```html
+  <my-checkbox
+    :checked="foo"
+    @change="val => { foo = val }"
+    value="some value">
+  </my-checkbox>
+  ```
+- `inheritAttrs`(2.4.0新增)
+- `comments`(2.4.0新增)
+
+## 实例特性
+- `vm.$data`
+  + 类型：Object
+  + 详细：Vue 实例观察的数据对象。Vue 实例代理了对其 `data` 对象属性的访问
+- `vm.$props`(2.2.0新增)
+  + 类型：Object
+  + 详细：当前组件接收到的 `props` 对象。Vue 实例代理了对其 `props` 对象属性的访问
+- `vm.$el`
+  + 类型：HTMLElement
+  + 详细：Vue 实例使用的根 DOM 元素
+- `vm.$options`
+  + 类型：Object
+  + 详细：用于当前 Vue 实例的初始化选项。需要在选项中包含自定义属性时会有用处：
+  ```javasctipt
+  new Vue({
+    customOption: 'foo',
+    created: function () {
+      console.log(this.$options.customOption) // => 'foo'
+    }
+  });
+  ```
+- `vm.$parent`
+  + 类型：Vue instance
+  + 详细：父实例，如果当前实例有的话。
+- `vm.$root`
+  + 类型：Vue instance
+  + 详细：当前组件树的根 Vue 实例。如果当前实例没有父实例，此实例将会是其自己。
+- `vm.$children`
+  + 类型：`Array<Vue instance>`
+  + 详细：当前实例的直接子组件。`$children` 并不保证顺序，也不是响应式的。如果想尝试使用 `$children` 来进行数据绑定，可以考虑使用一个数组配合 `v-for` 来生成子组件，并且使用 `Array` 作为真正的来源
+- `vm.$slots`
+  + 类型：`{ [name: string]: ?Array<VNode> }`
+  + 详细：用来访问被插槽分发的内容。每个具名插槽 有其相应的属性 (例如：`slot="foo"` 中的内容将会在 `vm.$slots.foo` 中被找到)。`default` 属性包括了所有没有被包含在具名插槽中的节点
+  + 示例：
+  ```html
+  <blog-post>
+    <h1 slot="header">
+      About Me
+    </h1>
+
+    <p>Here's some page content, which will be included in vm.$slots.default, because it's not inside a named slot.</p>
+
+    <p slot="footer">
+      Copyright 2016 Evan You
+    </p>
+
+    <p>If I have some content down here, it will also be included in vm.$slots.default.</p>.
+  </blog-post>
+  ```
+  ```javasctipt
+  Vue.component('blog-post', {
+    render: function (createElement) {
+      var header = this.$slots.header
+      var body   = this.$slots.default
+      var footer = this.$slots.footer
+      return createElement('div', [
+        createElement('header', header),
+        createElement('main', body),
+        createElement('footer', footer)
+      ])
+    }
+  });
+  ```
+- `vm.$scopedSlots`(2.1.0新增)
+  + 类型：`{ [name: string]: props => VNode | Array<VNode> }`
+  + 详细：用来访问作用域插槽。对于包括 默认 slot 在内的每一个插槽，该对象都包含一个返回相应 VNode 的函数
+- `vm.$refs`
+  + 类型：Object
+  + 详细：一个对象，持有注册过 `ref` 特性 的所有 DOM 元素和组件实例
+- `vm.$isServer`
+  + 类型：boolean
+  + 详细：当前 Vue 实例是否运行于服务器
+- `vm.$attrs`
+  + 类型：`{ [key: string]: string }`
+  + 详细：包含了父作用域中不作为 `prop` 被识别 (且获取) 的特性绑定 (`class` 和 `style` 除外)。当一个组件没有声明任何 `prop` 时，这里会包含所有父作用域的绑定 (class 和 style 除外)，并且可以通过 `v-bind="$attrs"` 传入内部组件——在创建高级别的组件时非常有用
+- `vm.$listeners`
+  + 类型：`{ [key: string]: Function | Array<Function> }`
+  + 详细：包含了父作用域中的 (不含 `.native` 修饰器的) `v-on` 事件监听器。它可以通过 `v-on="$listeners"` 传入内部组件——在创建更高层次的组件时非常有用
+
+
